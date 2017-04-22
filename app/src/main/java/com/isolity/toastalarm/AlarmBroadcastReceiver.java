@@ -16,7 +16,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
         Toast.makeText(context, "Received ", Toast.LENGTH_LONG).show();
     }
 
-//    private void showToast() {
+//    private void showToast() { b
 //        Context context = getApplicationContext();
 //        CharSequence text = "Hello toast!";
 //        int duration = Toast.LENGTH_SHORT;
