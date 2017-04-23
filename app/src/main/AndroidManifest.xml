@@ -2,7 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.isolity.toastalarm">
 
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
 
     <application
         android:allowBackup="true"
@@ -19,8 +23,34 @@
         </activity>
 
 
-        <receiver android:name=".AlarmBroadcastReceiver"
-            android:process=":remote" />
+        <receiver android:name=".ToastAlarmBroadcastReceiver"
+            android:process=":remote">
+            <!--①の時間が遅れる問題は時間が自動設定されているときに発生するので、
+            システム時間が変更された時に発生する broadcast を受け取るようにします。-->
+            <intent-filter>
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+                <action android:name="android.intent.action.TIME_SET" />
+                <action android:name="android.intent.action.DATE_CHANGED" />
+            </intent-filter>
+
+            <!--②はデバイス起動時とアプリ更新時に発生する broadcast を受け取ってください。
+            アンインストール時はアプリ自体がなくなるので指定する必要はありません。-->
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_REPLACED" />
+                <data
+                    android:path="com.isolity.toastalarm"
+                    android:scheme="package" />
+            </intent-filter>
+
+
+            <!--<intent-filter>-->
+                <!--<action android:name="ToastAlarmAction"></action>-->
+            <!--</intent-filter>-->
+        </receiver>
+        <service android:name=".ToastAlarmService" ></service>
 
 
     </application>
