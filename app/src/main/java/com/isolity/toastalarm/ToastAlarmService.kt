@@ -12,10 +12,12 @@ import android.os.Handler
 import android.os.SystemClock
 import android.support.v4.content.WakefulBroadcastReceiver
 import android.app.AlarmManager
+import com.isolity.toastalarm.model.TimeOfDay
+import java.util.*
 
 
 /**
- * Created by shohei52a on 2017/04/22.
+ * Created by shoarai on 2017/04/22.
  */
 
 //class ToastAlarmService : Service() {
@@ -61,39 +63,77 @@ import android.app.AlarmManager
 //}
 
 class ToastAlarmService : IntentService("ToastAlarmService") {
-    private val TAG = ToastAlarmService::class.java.simpleName
 
     private var mHandler: Handler = Handler()
 
     override fun onHandleIntent(intent: Intent) {
+        Log.v(TAG, "onHandleIntent!!!")
+
         var context = applicationContext
         mHandler.post(Runnable {
             Toast.makeText(context, "Toast Message from IntentService", Toast.LENGTH_LONG).show()
+
+            ToastAlarmService.startAlarm(context)
         })
 
 //        Toast.makeText(applicationContext, "ToastAlarmService.Received", Toast.LENGTH_LONG).show()
-        Log.d(TAG, "time:" + SystemClock.elapsedRealtime())
+//        Log.d(TAG, "time:" + SystemClock.elapsedRealtime())
     }
 
+
     companion object {
-        /**
-         * サービスを処理する AlarmManager を開始する。
-         * @param context
-         */
+        // This value is defined and consumed by app code, so any value will work.
+        // There's no significance to this sample using 0.
+        private val REQUEST_CODE = 0
+        private val TAG = ToastAlarmService::class.java.simpleName
+
+        var alarmMgr: AlarmManager? = null
+        var alarmIntent: PendingIntent? = null
+
         fun startAlarm(context: Context) {
-            // 実行するサービスを指定する
-            val pendingIntent = PendingIntent.getService(context, 0,
-                    Intent(context, ToastAlarmService::class.java),
+            ToastAlarmSettingManager.alarmSettings.forEach { alarmSetting ->
+                var calendar = getNextAlarmCalendar(alarmSetting.timeOfDay!!)
+                startOneAlarm(context, calendar)
+            }
+        }
+
+        fun getNextAlarmCalendar(time: TimeOfDay): Calendar {
+            val calendar = Calendar.getInstance()
+            calendar.set(Calendar.HOUR_OF_DAY, time.hour)
+            calendar.set(Calendar.MINUTE, time.minute)
+            calendar.set(Calendar.SECOND, 0)
+
+            val now = Calendar.getInstance()
+            if (calendar.before(now)) {
+                calendar.add(Calendar.DAY_OF_YEAR, 1);
+            }
+
+//            if (System.currentTimeMillis() > calendar.getTimeInMillis()) {
+//            }
+
+            return calendar
+        }
+
+        fun stopAlarm() {
+            alarmMgr!!.cancel(alarmIntent)
+        }
+
+        fun startOneAlarm(context: Context, calendar: Calendar) {
+            alarmMgr = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+            var intent = Intent(context, ToastAlarmService::class.java)
+            alarmIntent = PendingIntent.getService(
+                    context, REQUEST_CODE, intent,
                     PendingIntent.FLAG_UPDATE_CURRENT)
 
-            // 10秒毎にサービスの処理を実行する
-            val am = context
-                    .getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            am.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                    SystemClock.elapsedRealtime(), (5 * 1000).toLong(), pendingIntent)
+            alarmMgr!!.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, alarmIntent)
+
+//            am.setRepeating(AlarmManager.RTC_WAKEUP,
+//                    SystemClock.elapsedRealtime(), (5 * 1000).toLong(), alarmIntent)
         }
     }
 }
+
 
 //class ToastAlarmService : IntentService {
 //    private var mContext: Context? = null
