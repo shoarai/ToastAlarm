@@ -3,11 +3,10 @@ package com.isolity.toastalarm
 import android.app.TimePickerDialog
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.system.Os.close
 import android.widget.*
-import com.isolity.toastalarm.ToastAlarmSettingManager.alarmSettings
+import com.isolity.toastalarm.ToastAlarmSettingManager.timeAlarms
 
-import com.isolity.toastalarm.model.AlarmSetting
+import com.isolity.toastalarm.model.TimeAlarm
 import com.isolity.toastalarm.model.TimeOfDay
 import com.isolity.toastalarm.view.TimePickerDialogFragment
 
@@ -53,7 +52,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showAlarmSetting() {
-        val alarmSettings = alarmSettings
+        val alarmSettings = timeAlarms
         showAlarmSetting(alarmSettings)
     }
 
@@ -67,11 +66,11 @@ class MainActivity : AppCompatActivity() {
         ToastAlarmService.stopAlarm();
     }
 
-    private fun showAlarmSetting(alarmSettings: Array<AlarmSetting>) {
-        if (alarmSettings.size == 0) {
+    private fun showAlarmSetting(timeAlarms: Array<TimeAlarm>) {
+        if (timeAlarms.size == 0) {
             return
         }
-        timeTextView.text = alarmSettings[0].timeOfDay.toString()
+        timeTextView.text = timeAlarms[0].timeOfDay.toString()
     }
 
     private fun showTimePickerDialog() {
@@ -81,11 +80,10 @@ class MainActivity : AppCompatActivity() {
         val timePicker = TimePickerDialogFragment(TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
             //時刻が選択されたときの処理
             var time = TimeOfDay(hourOfDay, minute)
-            var alarm = AlarmSetting()
-            alarm.timeOfDay = time
+            var alarm = TimeAlarm(time)
             ToastAlarmSettingManager.set(alarm)
 
-            showAlarmSetting(alarmSettings)
+            showAlarmSetting(timeAlarms)
         })
 
         timePicker.show(supportFragmentManager, "timePicker")

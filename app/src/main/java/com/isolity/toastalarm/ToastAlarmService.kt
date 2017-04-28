@@ -1,16 +1,12 @@
 package com.isolity.toastalarm
 
-import android.app.Service;
 import android.content.Intent;
-import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast
 import android.app.IntentService
 import android.app.PendingIntent
 import android.content.Context
 import android.os.Handler
-import android.os.SystemClock
-import android.support.v4.content.WakefulBroadcastReceiver
 import android.app.AlarmManager
 import com.isolity.toastalarm.model.TimeOfDay
 import java.util.*
@@ -91,7 +87,7 @@ class ToastAlarmService : IntentService("ToastAlarmService") {
         var alarmIntent: PendingIntent? = null
 
         fun startAlarm(context: Context) {
-            ToastAlarmSettingManager.alarmSettings.forEach { alarmSetting ->
+            ToastAlarmSettingManager.timeAlarms.forEach { alarmSetting ->
                 var calendar = getNextAlarmCalendar(alarmSetting.timeOfDay!!)
                 startOneAlarm(context, calendar)
             }

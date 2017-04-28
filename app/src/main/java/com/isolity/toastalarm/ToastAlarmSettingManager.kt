@@ -1,6 +1,6 @@
 package com.isolity.toastalarm
 
-import com.isolity.toastalarm.model.AlarmSetting
+import com.isolity.toastalarm.model.TimeAlarm
 import com.isolity.toastalarm.model.TimeOfDay
 import java.util.*
 
@@ -9,25 +9,25 @@ import java.util.*
  */
 
 object ToastAlarmSettingManager {
-    var alarmSettings: Array<AlarmSetting>
+    var timeAlarms: Array<TimeAlarm>
 
     init {
         val alarmSetting = getNow()
-        alarmSettings = arrayOf(alarmSetting)
+        timeAlarms = arrayOf(alarmSetting)
     }
 
-    fun set(alarmSetting: AlarmSetting) {
-        alarmSettings[0] = alarmSetting
+    fun set(timeAlarm: TimeAlarm) {
+        timeAlarms[0] = timeAlarm
     }
 
-    fun getFirst(): AlarmSetting = alarmSettings[0]
-    fun setFirst(alarmSetting: AlarmSetting) {
-        alarmSettings[0] = alarmSetting
+    fun getFirst(): TimeAlarm = timeAlarms[0]
+    fun setFirst(timeAlarm: TimeAlarm) {
+        timeAlarms[0] = timeAlarm
     }
 
-    fun getNext(): AlarmSetting? {
-        var nextAlarm  = null
-        alarmSettings.forEach { alarmSetting->
+    fun getNext(): TimeAlarm? {
+        var nextAlarm = null
+        timeAlarms.forEach { alarmSetting ->
 
         }
 
@@ -36,15 +36,15 @@ object ToastAlarmSettingManager {
 //            calendar.add(Calendar.DAY_OF_YEAR, 1);
 //        }
 
-        return  nextAlarm
+        return nextAlarm
     }
 
-    private  fun getNow(): AlarmSetting {
-        val alarmSetting = AlarmSetting()
+    private fun getNow(): TimeAlarm {
         val calendar = Calendar.getInstance()
-        alarmSetting.timeOfDay =
-                TimeOfDay(calendar.get(Calendar.HOUR_OF_DAY),
-                        calendar.get(Calendar.MINUTE))
+        var timeOfDay = TimeOfDay(
+                calendar.get(Calendar.HOUR_OF_DAY),
+                calendar.get(Calendar.MINUTE))
+        val alarmSetting = TimeAlarm(timeOfDay)
         return alarmSetting
     }
 }
