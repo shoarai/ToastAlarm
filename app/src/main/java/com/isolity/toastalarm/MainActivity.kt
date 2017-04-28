@@ -18,6 +18,23 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         initView()
+
+
+        var listAdapter = TimeAlarmListAdapter(applicationContext)
+        listAdapter.timeAlarms = listOf(
+                ToastAlarmSettingManager.getFirst(),
+                ToastAlarmSettingManager.getFirst())
+
+        var listView:ListView = findViewById(R.id.time_alarm_list_view) as ListView
+        listView.adapter = listAdapter
+
+
+//        var timeAlarmView = TimeAlarmView(applicationContext)
+//
+//        var timeAlarm = ToastAlarmSettingManager.getFirst()
+//        timeAlarmView.setTimeAlarm(timeAlarm)
+//        setContentView(timeAlarmView)
+
         // DEBUG
 //        closeApplication()
     }
@@ -28,27 +45,18 @@ class MainActivity : AppCompatActivity() {
         showAlarmSetting()
     }
 
-    val timeTextView: TextView by lazy {
-        findViewById(R.id.time_text) as TextView
-    }
-
-    val startAlarmSwitch: Switch by lazy {
-        findViewById(R.id.start_alarm_switch) as Switch
-    }
-
-
     private fun initView() {
-        timeTextView.setOnClickListener {
-            showTimePickerDialog()
-        }
+//        timeTextView.setOnClickListener {
+//            showTimePickerDialog()
+//        }
 
-        startAlarmSwitch.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                startAlarm()
-            } else {
-                stopAlarm();
-            }
-        }
+//        startAlarmSwitch.setOnCheckedChangeListener { _, isChecked ->
+//            if (isChecked) {
+//                startAlarm()
+//            } else {
+//                stopAlarm();
+//            }
+//        }
     }
 
     private fun showAlarmSetting() {
@@ -70,7 +78,7 @@ class MainActivity : AppCompatActivity() {
         if (timeAlarms.size == 0) {
             return
         }
-        timeTextView.text = timeAlarms[0].timeOfDay.toString()
+//        timeTextView.text = timeAlarms[0].timeOfDay.toString()
     }
 
     private fun showTimePickerDialog() {
