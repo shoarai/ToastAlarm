@@ -24,11 +24,11 @@ class TimeAlarmView : FrameLayout {
     }
 
     init {
-        LayoutInflater.from(context).inflate(R.layout.view_time_alarm,this)
+        LayoutInflater.from(context).inflate(R.layout.view_time_alarm, this)
     }
 
     fun setTimeAlarm(timeAlarm: TimeAlarm) {
         timeTextView.text = timeAlarm.timeOfDay.toString()
-        powerSwitchView.setChecked(timeAlarm.isPowerOn)
+        powerSwitchView.isChecked = timeAlarm.isPowerOn
     }
 }

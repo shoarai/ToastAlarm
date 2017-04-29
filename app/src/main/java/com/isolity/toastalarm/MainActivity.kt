@@ -10,7 +10,7 @@ import com.isolity.toastalarm.model.TimeAlarm
 import com.isolity.toastalarm.model.TimeOfDay
 import com.isolity.toastalarm.model.WeeklyAlarm
 import com.isolity.toastalarm.view.TimePickerDialogFragment
-
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -24,12 +24,16 @@ class MainActivity : AppCompatActivity() {
         var listAdapter = WeeklyAlarmListAdapter(applicationContext)
 
         var weeklyAlarm = WeeklyAlarm()
+        var alarm = TimeAlarm(TimeOfDay(23, 23))
+        alarm.powerOn()
         weeklyAlarm.timeAlarms = arrayOf(
                 ToastAlarmSettingManager.getNow(),
-                ToastAlarmSettingManager.getFirst(),
-                ToastAlarmSettingManager.getNow())
-        weeklyAlarm.weeks = arrayOf(0, 1, 2)
+                alarm,
+                ToastAlarmSettingManager.getNow()
+        )
+        weeklyAlarm.weeks = setOf(Calendar.TUESDAY, Calendar.FRIDAY)
         listAdapter.weeklyAlarms = listOf(
+                weeklyAlarm,
                 weeklyAlarm,
                 weeklyAlarm
         )

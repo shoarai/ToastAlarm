@@ -6,5 +6,5 @@ package com.isolity.toastalarm.model
 
 class WeeklyAlarm {
     var timeAlarms: Array<TimeAlarm> = emptyArray()
-    var weeks: Array<Int> = emptyArray()
+    var weeks: Set<Int> = emptySet()
 }
