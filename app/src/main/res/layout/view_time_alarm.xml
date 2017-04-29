@@ -19,6 +19,6 @@
     <Switch
         android:id="@+id/power_switch"
         android:layout_width="50dp"
-        android:layout_height="73dp" />
+        android:layout_height="match_parent" />
 
 </LinearLayout>

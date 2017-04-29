@@ -8,6 +8,7 @@ import com.isolity.toastalarm.ToastAlarmSettingManager.timeAlarms
 
 import com.isolity.toastalarm.model.TimeAlarm
 import com.isolity.toastalarm.model.TimeOfDay
+import com.isolity.toastalarm.model.WeeklyAlarm
 import com.isolity.toastalarm.view.TimePickerDialogFragment
 
 
@@ -20,19 +21,27 @@ class MainActivity : AppCompatActivity() {
         initView()
 
 
-        var listAdapter = TimeAlarmListAdapter(applicationContext)
-        listAdapter.timeAlarms = listOf(
-                ToastAlarmSettingManager.getFirst(),
-                ToastAlarmSettingManager.getFirst())
+        var listAdapter = WeeklyAlarmListAdapter(applicationContext)
 
-        var listView:ListView = findViewById(R.id.time_alarm_list_view) as ListView
+        var weeklyAlarm = WeeklyAlarm()
+        weeklyAlarm.timeAlarms = arrayOf(
+                ToastAlarmSettingManager.getNow(),
+                ToastAlarmSettingManager.getFirst(),
+                ToastAlarmSettingManager.getNow())
+        weeklyAlarm.weeks = arrayOf(0, 1, 2)
+        listAdapter.weeklyAlarms = listOf(
+                weeklyAlarm,
+                weeklyAlarm
+        )
+
+        var listView = findViewById(R.id.weekly_alarm_list_view) as ListView
         listView.adapter = listAdapter
 
 
 //        var timeAlarmView = TimeAlarmView(applicationContext)
 //
-//        var timeAlarm = ToastAlarmSettingManager.getFirst()
-//        timeAlarmView.setTimeAlarm(timeAlarm)
+//        var timeAlarms = ToastAlarmSettingManager.getFirst()
+//        timeAlarmView.setTimeAlarms(timeAlarms)
 //        setContentView(timeAlarmView)
 
         // DEBUG

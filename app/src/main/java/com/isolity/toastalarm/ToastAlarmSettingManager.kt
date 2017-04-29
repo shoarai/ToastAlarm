@@ -39,7 +39,7 @@ object ToastAlarmSettingManager {
         return nextAlarm
     }
 
-    private fun getNow(): TimeAlarm {
+     fun getNow(): TimeAlarm {
         val calendar = Calendar.getInstance()
         var timeOfDay = TimeOfDay(
                 calendar.get(Calendar.HOUR_OF_DAY),

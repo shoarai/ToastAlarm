@@ -11,11 +11,11 @@ import com.isolity.toastalarm.view.TimeAlarmView
  * Created by shoarai on 2017/04/28.
  */
 
-
 class TimeAlarmListAdapter(private val context: Context) : BaseAdapter() {
-    var timeAlarms:List<TimeAlarm> = emptyList()
 
-    override fun getCount():Int = timeAlarms.size
+    var timeAlarms: List<TimeAlarm> = emptyList()
+
+    override fun getCount(): Int = timeAlarms.size
 
     override fun getItem(position: Int): Any? = timeAlarms[position]
 

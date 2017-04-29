@@ -14,9 +14,9 @@
         tools:layout_editor_absoluteY="8dp">
 
         <ListView
-            android:id="@+id/time_alarm_list_view"
+            android:id="@+id/weekly_alarm_list_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true" />
     </RelativeLayout>
