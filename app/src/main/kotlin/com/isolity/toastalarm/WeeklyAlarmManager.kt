@@ -14,21 +14,30 @@ object WeeklyAlarmManager {
     var weeklyAlarms: Array<WeeklyAlarm> = emptyArray()
         private set
 
-    init {
+    private fun getAlarmsForDebug(): Array<WeeklyAlarm> {
         var weeklyAlarm = WeeklyAlarm()
-        var alarm = TimeAlarm(TimeOfDay(23, 23))
-        alarm.powerOn()
-        weeklyAlarm.timeAlarms = arrayOf(
-                ToastAlarmSettingManager.getNow(),
-                alarm,
-                ToastAlarmSettingManager.getNow()
+        var alarm1 = TimeAlarm(TimeOfDay(8, 53))
+        alarm1.powerOn()
+        var alarm2 = TimeAlarm(TimeOfDay(12, 5))
+        alarm2.powerOn()
+        weeklyAlarm.timeAlarms = arrayOf(alarm1, alarm2)
+        weeklyAlarm.weeks = setOf(
+                Calendar.MONDAY,
+                Calendar.TUESDAY,
+                Calendar.WEDNESDAY,
+                Calendar.THURSDAY,
+                Calendar.FRIDAY
         )
-        weeklyAlarm.weeks = setOf(Calendar.TUESDAY, Calendar.FRIDAY)
 
-        weeklyAlarms = arrayOf(
-                weeklyAlarm,
-                weeklyAlarm,
-                weeklyAlarm)
+        var alarm3 = TimeAlarm(TimeOfDay(23, 53))
+        var weeklyAlarm2 = WeeklyAlarm()
+        weeklyAlarm2.timeAlarms = arrayOf(alarm3)
+
+        return arrayOf(weeklyAlarm,weeklyAlarm2)
+    }
+
+    init {
+        weeklyAlarms = getAlarmsForDebug()
     }
 
     fun hasPowerOn(): Boolean {

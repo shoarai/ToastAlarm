@@ -1,10 +1,12 @@
 package com.isolity.toastalarm.view
 
+import android.app.TimePickerDialog
 import android.content.Context
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import android.widget.Switch
 import android.widget.TextView
+import android.widget.TimePicker
 import com.isolity.toastalarm.R
 import com.isolity.toastalarm.model.TimeAlarm
 
@@ -30,8 +32,19 @@ class TimeAlarmView : FrameLayout {
     fun setTimeAlarm(timeAlarm: TimeAlarm) {
         timeTextView.text = timeAlarm.timeOfDay.toString()
         powerSwitch.isChecked = timeAlarm.isPowerOn
-    }
 
+//        timeTextView.setOnClickListener {
+//            //            showTimePickerDialog(timeAlarm.timeOfDay)
+//
+//            var timeOfDay = timeAlarm.timeOfDay
+//            var dialog = TimePickerDialog(
+//                    context, TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
+//
+//            }, timeOfDay.hour, timeOfDay.minute, true)
+//
+//            dialog.show()
+//        }
+    }
 
 //    private fun startAlarm() {
 //        ToastAlarmService.startAlarm(applicationContext)

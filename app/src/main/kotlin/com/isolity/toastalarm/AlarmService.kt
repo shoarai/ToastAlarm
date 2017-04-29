@@ -8,6 +8,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.os.Handler
 import android.app.AlarmManager
+import android.os.SystemClock
 import com.isolity.toastalarm.model.TimeOfDay
 import java.util.*
 
@@ -67,15 +68,19 @@ class AlarmService : IntentService("AlarmService") {
 
         var context = applicationContext
         mHandler.post(Runnable {
-            Toast.makeText(context, "Toast Message from IntentService", Toast.LENGTH_LONG).show()
+            Log.v(TAG, "time:" + SystemClock.elapsedRealtime())
 
-//            ToastAlarmService.startAlarm(context)
+            var now = getNowTime()
+            Toast.makeText(context, "${now} by Toast Alarm", Toast.LENGTH_LONG).show()
+
+            WeeklyAlarmServiceManager.startAlarm(context)
         })
-
-//        Toast.makeText(applicationContext, "ToastAlarmService.Received", Toast.LENGTH_LONG).show()
-//        Log.d(TAG, "time:" + SystemClock.elapsedRealtime())
     }
 
+    fun getNowTime(): String {
+        var now = Calendar.getInstance()
+        return now.get(Calendar.HOUR).toString() + ":" + now.get(Calendar.MINUTE)
+    }
 
     companion object {
         // This value is defined and consumed by app code, so any value will work.
