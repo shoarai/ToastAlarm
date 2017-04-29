@@ -2,6 +2,7 @@ package com.isolity.toastalarm.view
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.CheckBox
 import android.widget.FrameLayout
 import android.widget.ListView
@@ -17,6 +18,10 @@ import java.util.*
 class WeeklyAlarmView : FrameLayout {
     constructor(context: Context?) : super(context)
 
+    val timeAlarmListView: ListView by lazy {
+        findViewById(R.id.time_alarm_list_view) as ListView
+    }
+
     init {
         LayoutInflater.from(context).inflate(R.layout.view_weekly_alarm, this)
     }
@@ -24,21 +29,40 @@ class WeeklyAlarmView : FrameLayout {
     fun setWeeklyAlarm(weeklyAlarm: WeeklyAlarm) {
         var listAdapter = TimeAlarmListAdapter(context)
         listAdapter.timeAlarms = weeklyAlarm.timeAlarms.toList()
-
-        var listView = findViewById(R.id.time_alarm_list_view) as ListView
-        listView.adapter = listAdapter
-
+        timeAlarmListView.adapter = listAdapter
 
         showWeekCheckboxState(weeklyAlarm.weeks)
+    }
+
+    override fun onWindowFocusChanged(hasWindowFocus: Boolean) {
+        super.onWindowFocusChanged(hasWindowFocus)
+
+        if (hasWindowFocus) {
+            fitListViewHeightToItems()
+        }
+    }
+
+    fun fitListViewHeightToItems() {
+        val listViewItem = timeAlarmListView.adapter.getView(0, null, timeAlarmListView)
+        listViewItem.measure(
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED))
+
+        val listViewItemHeight = listViewItem.measuredHeight
+        val listViewWrapperHeight = listViewItemHeight * timeAlarmListView.count
+
+        var params = timeAlarmListView.layoutParams
+        params.height = listViewWrapperHeight
+        timeAlarmListView.layoutParams = params
     }
 
     fun showWeekCheckboxState(weeks: Set<Int>) {
         weeks.forEach { week ->
             var id = getWeekCheckboxId(week)
-            id?.apply {
-                var weekCheckbox = findViewById(id) as CheckBox
-                weekCheckbox.isChecked = true
-            }
+            if (id === null) return
+
+            var weekCheckbox = findViewById(id) as CheckBox
+            weekCheckbox.isChecked = true
         }
     }
 
