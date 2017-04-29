@@ -16,30 +16,9 @@ object ToastAlarmSettingManager {
         timeAlarms = arrayOf(alarmSetting)
     }
 
-    fun set(timeAlarm: TimeAlarm) {
-        timeAlarms[0] = timeAlarm
-    }
-
     fun getFirst(): TimeAlarm = timeAlarms[0]
-    fun setFirst(timeAlarm: TimeAlarm) {
-        timeAlarms[0] = timeAlarm
-    }
 
-    fun getNext(): TimeAlarm? {
-        var nextAlarm = null
-        timeAlarms.forEach { alarmSetting ->
-
-        }
-
-//        val now = Calendar.getInstance()
-//        if (calendar.before(now)) {
-//            calendar.add(Calendar.DAY_OF_YEAR, 1);
-//        }
-
-        return nextAlarm
-    }
-
-     fun getNow(): TimeAlarm {
+    fun getNow(): TimeAlarm {
         val calendar = Calendar.getInstance()
         var timeOfDay = TimeOfDay(
                 calendar.get(Calendar.HOUR_OF_DAY),

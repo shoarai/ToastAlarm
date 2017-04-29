@@ -19,15 +19,7 @@ class ToastAlarmBroadcastReceiver : BroadcastReceiver() {
         Log.v(TAG, "onReceive")
 
         if (intent.action.equals("android.intent.action.BOOT_COMPLETED")) {
-            // Set the alarm here.
             ToastAlarmService.startAlarm(context)
         }
-
-//// 他のアプリ更新時は対象外とする
-//        if (intent.action == Intent.ACTION_PACKAGE_REPLACED) {
-//            if (intent.dataString != "package:" + context.packageName) {
-//                return
-//            }
-//        }
     }
 }

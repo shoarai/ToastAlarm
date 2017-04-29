@@ -1,4 +1,4 @@
-package com.isolity.toastalarm
+package com.isolity.toastalarm.adapter
 
 import android.content.Context
 import android.view.View

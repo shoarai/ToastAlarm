@@ -7,7 +7,7 @@ import android.widget.CheckBox
 import android.widget.FrameLayout
 import android.widget.ListView
 import com.isolity.toastalarm.R
-import com.isolity.toastalarm.TimeAlarmListAdapter
+import com.isolity.toastalarm.adapter.TimeAlarmListAdapter
 import com.isolity.toastalarm.model.WeeklyAlarm
 import java.util.*
 
@@ -42,7 +42,7 @@ class WeeklyAlarmView : FrameLayout {
         }
     }
 
-    fun fitListViewHeightToItems() {
+    private fun fitListViewHeightToItems() {
         val listViewItem = timeAlarmListView.adapter.getView(0, null, timeAlarmListView)
         listViewItem.measure(
                 View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
@@ -56,7 +56,7 @@ class WeeklyAlarmView : FrameLayout {
         timeAlarmListView.layoutParams = params
     }
 
-    fun showWeekCheckboxState(weeks: Set<Int>) {
+    private fun showWeekCheckboxState(weeks: Set<Int>) {
         weeks.forEach { week ->
             var id = getWeekCheckboxId(week)
             if (id === null) return
