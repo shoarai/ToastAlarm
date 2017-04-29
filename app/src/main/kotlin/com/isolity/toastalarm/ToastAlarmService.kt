@@ -104,9 +104,6 @@ class ToastAlarmService : IntentService("ToastAlarmService") {
                 calendar.add(Calendar.DAY_OF_YEAR, 1);
             }
 
-//            if (System.currentTimeMillis() > calendar.getTimeInMillis()) {
-//            }
-
             return calendar
         }
 
