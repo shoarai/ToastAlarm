@@ -58,7 +58,7 @@ import java.util.*
 //    }
 //}
 
-class ToastAlarmService : IntentService("ToastAlarmService") {
+class AlarmService : IntentService("AlarmService") {
 
     private var mHandler: Handler = Handler()
 
@@ -69,7 +69,7 @@ class ToastAlarmService : IntentService("ToastAlarmService") {
         mHandler.post(Runnable {
             Toast.makeText(context, "Toast Message from IntentService", Toast.LENGTH_LONG).show()
 
-            ToastAlarmService.startAlarm(context)
+//            ToastAlarmService.startAlarm(context)
         })
 
 //        Toast.makeText(applicationContext, "ToastAlarmService.Received", Toast.LENGTH_LONG).show()
@@ -81,49 +81,40 @@ class ToastAlarmService : IntentService("ToastAlarmService") {
         // This value is defined and consumed by app code, so any value will work.
         // There's no significance to this sample using 0.
         private val REQUEST_CODE = 0
-        private val TAG = ToastAlarmService::class.java.simpleName
+        private val TAG = AlarmService::class.java.simpleName
 
         var alarmMgr: AlarmManager? = null
         var alarmIntent: PendingIntent? = null
 
-        fun startAlarm(context: Context) {
-            ToastAlarmSettingManager.timeAlarms.forEach { alarmSetting ->
-                var calendar = getNextAlarmCalendar(alarmSetting.timeOfDay!!)
-                startOneAlarm(context, calendar)
-            }
-        }
-
-        fun getNextAlarmCalendar(time: TimeOfDay): Calendar {
-            val calendar = Calendar.getInstance()
-            calendar.set(Calendar.HOUR_OF_DAY, time.hour)
-            calendar.set(Calendar.MINUTE, time.minute)
-            calendar.set(Calendar.SECOND, 0)
-
-            val now = Calendar.getInstance()
-            if (calendar.before(now)) {
-                calendar.add(Calendar.DAY_OF_YEAR, 1);
-            }
-
-            return calendar
-        }
-
-        fun stopAlarm() {
-            alarmMgr!!.cancel(alarmIntent)
-        }
-
-        fun startOneAlarm(context: Context, calendar: Calendar) {
+        fun startAlarm(context: Context, calendar: Calendar) {
             alarmMgr = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-            var intent = Intent(context, ToastAlarmService::class.java)
+            var intent = Intent(context, AlarmService::class.java)
             alarmIntent = PendingIntent.getService(
                     context, REQUEST_CODE, intent,
                     PendingIntent.FLAG_UPDATE_CURRENT)
 
-            alarmMgr!!.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, alarmIntent)
-
-//            am.setRepeating(AlarmManager.RTC_WAKEUP,
-//                    SystemClock.elapsedRealtime(), (5 * 1000).toLong(), alarmIntent)
+            alarmMgr?.setExact(AlarmManager.RTC, calendar.timeInMillis, alarmIntent)
         }
+
+        fun stopAlarm() {
+            alarmMgr?.cancel(alarmIntent)
+        }
+
+//        fun getNextAlarmCalendar(time: TimeOfDay): Calendar {
+//            val calendar = Calendar.getInstance()
+//            calendar.set(Calendar.HOUR_OF_DAY, time.hour)
+//            calendar.set(Calendar.MINUTE, time.minute)
+//            calendar.set(Calendar.SECOND, 0)
+//
+//            val now = Calendar.getInstance()
+//            if (calendar.before(now)) {
+//                calendar.add(Calendar.DAY_OF_YEAR, 1);
+//            }
+//
+//            return calendar
+//        }
+
     }
 }
 

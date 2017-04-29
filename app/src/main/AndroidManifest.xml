@@ -22,7 +22,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".ToastAlarmBroadcastReceiver"
+        <receiver android:name=".AlarmBroadcastReceiver"
             android:process=":false">
             <!--Add the receiver to your app's manifest file with an intent filter that filters on the ACTION_BOOT_COMPLETED action:-->
             <!--②はデバイス起動時とアプリ更新時に発生する broadcast を受け取ってください。

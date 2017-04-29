@@ -1,17 +1,12 @@
 package com.isolity.toastalarm.view
 
-import android.app.TimePickerDialog
 import android.content.Context
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import android.widget.Switch
 import android.widget.TextView
-import android.widget.Toast
 import com.isolity.toastalarm.R
-import com.isolity.toastalarm.ToastAlarmService
-import com.isolity.toastalarm.ToastAlarmSettingManager
 import com.isolity.toastalarm.model.TimeAlarm
-import com.isolity.toastalarm.model.TimeOfDay
 
 /**
  * Created by shoarai on 2017/04/28.

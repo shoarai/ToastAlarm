@@ -9,17 +9,18 @@ import android.util.Log
  * Created by shoarai on 2017/04/17.
  */
 
-class ToastAlarmBroadcastReceiver : BroadcastReceiver() {
+class AlarmBroadcastReceiver : BroadcastReceiver() {
 
     companion object{
-        private val TAG = ToastAlarmBroadcastReceiver::class.java.simpleName
+        private val TAG = AlarmBroadcastReceiver::class.java.simpleName
     }
 
     override fun onReceive(context: Context, intent: Intent) {
         Log.v(TAG, "onReceive")
 
         if (intent.action.equals("android.intent.action.BOOT_COMPLETED")) {
-            ToastAlarmService.startAlarm(context)
+            WeeklyAlarmServiceManager.startAlarm(context)
+//            ToastAlarmService.startAlarm(context)
         }
     }
 }

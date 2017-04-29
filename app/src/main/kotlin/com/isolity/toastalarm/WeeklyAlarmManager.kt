@@ -3,6 +3,7 @@ package com.isolity.toastalarm
 import com.isolity.toastalarm.model.TimeAlarm
 import com.isolity.toastalarm.model.TimeOfDay
 import com.isolity.toastalarm.model.WeeklyAlarm
+import java.lang.IllegalStateException
 import java.util.*
 
 /**
@@ -32,16 +33,17 @@ object WeeklyAlarmManager {
 
     fun hasPowerOn(): Boolean {
         weeklyAlarms.forEach { weeklyAlarm ->
-            weeklyAlarm.timeAlarms.forEach { timeAlarm ->
-                if (timeAlarm.isPowerOn)
+            weeklyAlarm.timeAlarms.forEach {
+                if (it.isPowerOn)
                     return true
             }
         }
         return false
     }
 
-    fun getNextAlarmCalendar(): Calendar? {
-        var calendar: Calendar? = null;
+    fun getNextAlarmCalendar(): Calendar {
+        var calendar: Calendar? = null
+
         weeklyAlarms.forEach {
             var cal = getNextAlarmCalendar(it)
             if (cal === null) {
@@ -51,11 +53,16 @@ object WeeklyAlarmManager {
                 calendar = cal
             }
         }
-        return calendar
+
+        if (calendar === null) {
+            throw IllegalStateException("Not found alarm on power")
+        }
+        return calendar as Calendar
     }
 
     private fun getNextAlarmCalendar(weeklyAlarm: WeeklyAlarm): Calendar? {
         var calendar: Calendar? = null
+
         weeklyAlarm.weeks.forEach { week ->
             weeklyAlarm.timeAlarms
                     .filter { it.isPowerOn }
@@ -66,6 +73,7 @@ object WeeklyAlarmManager {
                         }
                     }
         }
+
         return calendar
     }
 
