@@ -4,6 +4,7 @@ import com.isolity.toastalarm.model.TimeAlarm
 import com.isolity.toastalarm.model.TimeOfDay
 import com.isolity.toastalarm.model.WeeklyAlarm
 import java.lang.IllegalStateException
+import java.sql.Time
 import java.util.*
 
 /**
@@ -48,8 +49,8 @@ object WeeklyAlarmManager {
         return false
     }
 
-    fun setWeek(id: Int, week: Int, isSet: Boolean) {
-        var weeklyAlarm = weeklyAlarms.find { it.id === id }
+    fun setWeek(weeklyAlarmId: Int, week: Int, isSet: Boolean) {
+        var weeklyAlarm = weeklyAlarms.find { it.id === weeklyAlarmId }
         if (weeklyAlarm === null) {
             throw IllegalArgumentException("week is not found")
         }
@@ -57,6 +58,29 @@ object WeeklyAlarmManager {
             weeklyAlarm.weeks.add(week)
         } else {
             weeklyAlarm.weeks.remove(week)
+        }
+    }
+
+    fun setTimeOfDay(weeklyAlarmId: Int, timeAlarmId: Int, timeOfDay: TimeOfDay) {
+
+    }
+
+    fun setPower(timeAlarmId: Int, power: Boolean) {
+        var timeAlarm: TimeAlarm? = null
+        weeklyAlarms.forEach {
+            var time = it.timeAlarms.find { it.id === timeAlarmId }
+            if (time !== null) {
+                timeAlarm = time
+            }
+        }
+        if (timeAlarm === null) {
+            throw IllegalArgumentException("timeAlarm is not found")
+        }
+
+        if (power) {
+            timeAlarm?.powerOn()
+        } else {
+            timeAlarm?.powerOff()
         }
     }
 

@@ -8,7 +8,9 @@ import android.widget.Switch
 import android.widget.TextView
 import android.widget.TimePicker
 import com.isolity.toastalarm.R
+import com.isolity.toastalarm.WeeklyAlarmManager
 import com.isolity.toastalarm.model.TimeAlarm
+import com.isolity.toastalarm.model.WeeklyAlarm
 
 /**
  * Created by shoarai on 2017/04/28.
@@ -33,9 +35,7 @@ class TimeAlarmView : FrameLayout {
         timeTextView.text = timeAlarm.timeOfDay.toString()
         powerSwitch.isChecked = timeAlarm.isPowerOn
 
-//        timeTextView.setOnClickListener {
-//            //            showTimePickerDialog(timeAlarm.timeOfDay)
-//
+        timeTextView.setOnClickListener {
 //            var timeOfDay = timeAlarm.timeOfDay
 //            var dialog = TimePickerDialog(
 //                    context, TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
@@ -43,7 +43,11 @@ class TimeAlarmView : FrameLayout {
 //            }, timeOfDay.hour, timeOfDay.minute, true)
 //
 //            dialog.show()
-//        }
+        }
+
+        powerSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+            WeeklyAlarmManager.setPower(timeAlarm.id, isChecked)
+        }
     }
 
 //    private fun startAlarm() {
