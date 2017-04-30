@@ -6,7 +6,9 @@ import android.view.View
 import android.widget.CheckBox
 import android.widget.FrameLayout
 import android.widget.ListView
+import android.widget.Toast
 import com.isolity.toastalarm.R
+import com.isolity.toastalarm.WeeklyAlarmManager
 import com.isolity.toastalarm.adapter.TimeAlarmListAdapter
 import com.isolity.toastalarm.model.WeeklyAlarm
 import java.util.*
@@ -31,7 +33,32 @@ class WeeklyAlarmView : FrameLayout {
         listAdapter.timeAlarms = weeklyAlarm.timeAlarms.toList()
         timeAlarmListView.adapter = listAdapter
 
+        timeAlarmListView.setOnItemClickListener { parent, view, position, id ->
+            Toast.makeText(context, "setWeeklyAlarm:$position", Toast.LENGTH_SHORT).show()
+        }
+
         showWeekCheckboxState(weeklyAlarm.weeks)
+
+        getWeeks().forEach {
+            var checkboxId = getWeekCheckboxId(it)
+            var checkbox = findViewById(checkboxId) as CheckBox
+            checkbox.setOnCheckedChangeListener { buttonView, isChecked ->
+                var week = getWeek(buttonView.id)
+                WeeklyAlarmManager.setWeek(weeklyAlarm.id, week, isChecked)
+            }
+        }
+    }
+
+    private fun getWeeks(): Array<Int> {
+        return arrayOf(
+                Calendar.SUNDAY,
+                Calendar.MONDAY,
+                Calendar.TUESDAY,
+                Calendar.WEDNESDAY,
+                Calendar.THURSDAY,
+                Calendar.FRIDAY,
+                Calendar.SATURDAY
+        )
     }
 
     override fun onWindowFocusChanged(hasWindowFocus: Boolean) {
@@ -66,7 +93,7 @@ class WeeklyAlarmView : FrameLayout {
         }
     }
 
-    private fun getWeekCheckboxId(week: Int): Int? {
+    private fun getWeekCheckboxId(week: Int): Int {
         return when (week) {
             Calendar.SUNDAY -> R.id.week_sun_checkbox
             Calendar.MONDAY -> R.id.week_mon_checkbox
@@ -75,7 +102,20 @@ class WeeklyAlarmView : FrameLayout {
             Calendar.THURSDAY -> R.id.week_thu_checkbox
             Calendar.FRIDAY -> R.id.week_fri_checkbox
             Calendar.SATURDAY -> R.id.week_sat_checkbox
-            else -> null
+            else -> throw Error("Not found")
+        }
+    }
+
+    private fun getWeek(id: Int): Int {
+        return when (id) {
+            R.id.week_sun_checkbox -> Calendar.SUNDAY
+            R.id.week_mon_checkbox -> Calendar.MONDAY
+            R.id.week_tue_checkbox -> Calendar.TUESDAY
+            R.id.week_wed_checkbox -> Calendar.WEDNESDAY
+            R.id.week_thu_checkbox -> Calendar.THURSDAY
+            R.id.week_fri_checkbox -> Calendar.FRIDAY
+            R.id.week_sat_checkbox -> Calendar.SATURDAY
+            else -> throw Error("Not found")
         }
     }
 }

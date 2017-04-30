@@ -40,14 +40,16 @@ class MainActivity : AppCompatActivity() {
         weeklyAlarmListView.adapter = listAdapter
 
         weeklyAlarmListView.setOnItemClickListener { parent, view, pos, id ->
-            // 選択アイテムを取得
-            val listView = parent as ListView
-            val item = listView.getItemAtPosition(pos) as String
+            Toast.makeText(applicationContext, "weeklyAlarm: $pos", Toast.LENGTH_SHORT).show()
 
-            // 通知ダイアログを表示
-            Toast.makeText(this@MainActivity,
-                    item, Toast.LENGTH_LONG
-            ).show()
+            // 選択アイテムを取得
+//            val listView = parent as ListView
+//            val item = listView.getItemAtPosition(pos) as String
+//
+//            // 通知ダイアログを表示
+//            Toast.makeText(this@MainActivity,
+//                    item, Toast.LENGTH_LONG
+//            ).show()
         }
     }
 

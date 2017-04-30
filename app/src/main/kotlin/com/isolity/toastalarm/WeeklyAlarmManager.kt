@@ -15,25 +15,23 @@ object WeeklyAlarmManager {
         private set
 
     private fun getAlarmsForDebug(): Array<WeeklyAlarm> {
-        var weeklyAlarm = WeeklyAlarm()
-        var alarm1 = TimeAlarm(TimeOfDay(8, 53))
+        var weeklyAlarm = WeeklyAlarm(0)
+        var alarm1 = TimeAlarm(0, TimeOfDay(8, 53))
         alarm1.powerOn()
-        var alarm2 = TimeAlarm(TimeOfDay(12, 5))
+        var alarm2 = TimeAlarm(1, TimeOfDay(12, 5))
         alarm2.powerOn()
         weeklyAlarm.timeAlarms = arrayOf(alarm1, alarm2)
-        weeklyAlarm.weeks = setOf(
-                Calendar.MONDAY,
-                Calendar.TUESDAY,
-                Calendar.WEDNESDAY,
-                Calendar.THURSDAY,
-                Calendar.FRIDAY
-        )
+        weeklyAlarm.addWeek(Calendar.MONDAY)
+        weeklyAlarm.addWeek(Calendar.TUESDAY)
+        weeklyAlarm.addWeek(Calendar.WEDNESDAY)
+        weeklyAlarm.addWeek(Calendar.THURSDAY)
+        weeklyAlarm.addWeek(Calendar.FRIDAY)
 
-        var alarm3 = TimeAlarm(TimeOfDay(23, 53))
-        var weeklyAlarm2 = WeeklyAlarm()
+        var alarm3 = TimeAlarm(3, TimeOfDay(23, 53))
+        var weeklyAlarm2 = WeeklyAlarm(1)
         weeklyAlarm2.timeAlarms = arrayOf(alarm3)
 
-        return arrayOf(weeklyAlarm,weeklyAlarm2)
+        return arrayOf(weeklyAlarm, weeklyAlarm2)
     }
 
     init {
@@ -48,6 +46,18 @@ object WeeklyAlarmManager {
             }
         }
         return false
+    }
+
+    fun setWeek(id: Int, week: Int, isSet: Boolean) {
+        var weeklyAlarm = weeklyAlarms.find { it.id === id }
+        if (weeklyAlarm === null) {
+            throw IllegalArgumentException("week is not found")
+        }
+        if (isSet) {
+            weeklyAlarm.weeks.add(week)
+        } else {
+            weeklyAlarm.weeks.remove(week)
+        }
     }
 
     fun getNextAlarmCalendar(): Calendar {
