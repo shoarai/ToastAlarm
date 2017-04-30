@@ -23,15 +23,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        WeeklyAlarmStorage.context = applicationContext
+
         var weeklyAlarms = WeeklyAlarmManager.weeklyAlarms
         showWeeklyAlarmList(weeklyAlarms)
 
         // DEBUG
 //        closeApplication()
-    }
-
-    override fun onStart() {
-        super.onStart()
     }
 
     private fun showWeeklyAlarmList(weeklyAlarms: Array<WeeklyAlarm>) {

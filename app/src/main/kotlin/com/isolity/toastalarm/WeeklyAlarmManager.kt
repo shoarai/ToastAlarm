@@ -36,7 +36,8 @@ object WeeklyAlarmManager {
     }
 
     init {
-        weeklyAlarms = getAlarmsForDebug()
+//        weeklyAlarms = getAlarmsForDebug()
+        weeklyAlarms = WeeklyAlarmStorage.getWeeklyAlarm()
     }
 
     fun hasPowerOn(): Boolean {
@@ -59,6 +60,8 @@ object WeeklyAlarmManager {
         } else {
             weeklyAlarm.weeks.remove(week)
         }
+
+        updateStorage()
     }
 
     fun setTimeOfDay(weeklyAlarmId: Int, timeAlarmId: Int, timeOfDay: TimeOfDay) {
@@ -82,6 +85,8 @@ object WeeklyAlarmManager {
         } else {
             timeAlarm?.powerOff()
         }
+
+        updateStorage()
     }
 
     fun getNextAlarmCalendar(): Calendar {
@@ -101,6 +106,10 @@ object WeeklyAlarmManager {
             throw IllegalStateException("Not found alarm on power")
         }
         return calendar as Calendar
+    }
+
+    private fun updateStorage() {
+        WeeklyAlarmStorage.saveWeeklyAlarm(weeklyAlarms)
     }
 
     private fun getNextAlarmCalendar(weeklyAlarm: WeeklyAlarm): Calendar? {
