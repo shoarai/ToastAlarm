@@ -11,7 +11,7 @@ import android.util.Log
 
 class AlarmBroadcastReceiver : BroadcastReceiver() {
 
-    companion object{
+    companion object {
         private val TAG = AlarmBroadcastReceiver::class.java.simpleName
     }
 
@@ -20,7 +20,6 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
 
         if (intent.action.equals("android.intent.action.BOOT_COMPLETED")) {
             WeeklyAlarmServiceManager.startAlarm(context)
-//            ToastAlarmService.startAlarm(context)
         }
     }
 }

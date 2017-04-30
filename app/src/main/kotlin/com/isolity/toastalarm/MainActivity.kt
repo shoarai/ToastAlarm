@@ -2,12 +2,10 @@ package com.isolity.toastalarm
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.widget.*
 import com.isolity.toastalarm.adapter.WeeklyAlarmListAdapter
 import com.isolity.toastalarm.model.WeeklyAlarm
 import android.widget.Toast
-import android.widget.AdapterView
 
 /**
  * Created by shoarai on 2017/04/17.
@@ -38,7 +36,8 @@ class MainActivity : AppCompatActivity() {
         weeklyAlarmListView.adapter = listAdapter
 
         weeklyAlarmListView.setOnItemClickListener { parent, view, pos, id ->
-            Toast.makeText(applicationContext, "weeklyAlarm: $pos", Toast.LENGTH_SHORT).show()
+            var viewId = view.getId()
+            Toast.makeText(applicationContext, "weeklyAlarm: $viewId", Toast.LENGTH_SHORT).show()
 
             // 選択アイテムを取得
 //            val listView = parent as ListView

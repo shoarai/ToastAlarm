@@ -3,9 +3,11 @@ package com.isolity.toastalarm
 import android.content.Context
 import com.isolity.toastalarm.model.WeeklyAlarm
 import android.preference.PreferenceManager
-import android.content.SharedPreferences
 import com.google.gson.Gson
+import com.isolity.toastalarm.model.TimeAlarm
+import com.isolity.toastalarm.model.TimeOfDay
 import java.lang.IllegalStateException
+import java.util.*
 
 
 /**
@@ -33,7 +35,31 @@ object WeeklyAlarmStorage {
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
         val gson = Gson()
         val weeklyAlarmsString = prefs.getString(storageKey, "")
-        val instance = gson.fromJson<Array<WeeklyAlarm>>(weeklyAlarmsString, Array<WeeklyAlarm>::class.java)
-        return instance
+        if (weeklyAlarmsString.isBlank()) {
+            return getDefaultWeeklyAlarm()
+        }
+        val weeklyAlarms = gson.fromJson<Array<WeeklyAlarm>>(
+                weeklyAlarmsString, Array<WeeklyAlarm>::class.java)
+        return weeklyAlarms
+    }
+
+    fun getDefaultWeeklyAlarm(): Array<WeeklyAlarm> {
+        var weeklyAlarm = WeeklyAlarm(0)
+        var alarm1 = TimeAlarm(0, TimeOfDay(8, 0))
+        alarm1.powerOn()
+        var alarm2 = TimeAlarm(1, TimeOfDay(12, 0))
+        alarm2.powerOn()
+        weeklyAlarm.timeAlarms = arrayOf(alarm1, alarm2)
+        weeklyAlarm.addWeek(Calendar.MONDAY)
+        weeklyAlarm.addWeek(Calendar.TUESDAY)
+        weeklyAlarm.addWeek(Calendar.WEDNESDAY)
+        weeklyAlarm.addWeek(Calendar.THURSDAY)
+        weeklyAlarm.addWeek(Calendar.FRIDAY)
+
+        var alarm3 = TimeAlarm(3, TimeOfDay(23, 53))
+        var weeklyAlarm2 = WeeklyAlarm(1)
+        weeklyAlarm2.timeAlarms = arrayOf(alarm3)
+
+        return arrayOf(weeklyAlarm, weeklyAlarm2)
     }
 }

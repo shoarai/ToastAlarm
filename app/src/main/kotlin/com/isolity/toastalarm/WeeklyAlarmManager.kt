@@ -1,10 +1,10 @@
 package com.isolity.toastalarm
 
+import android.content.Context
 import com.isolity.toastalarm.model.TimeAlarm
 import com.isolity.toastalarm.model.TimeOfDay
 import com.isolity.toastalarm.model.WeeklyAlarm
 import java.lang.IllegalStateException
-import java.sql.Time
 import java.util.*
 
 /**
@@ -15,28 +15,7 @@ object WeeklyAlarmManager {
     var weeklyAlarms: Array<WeeklyAlarm> = emptyArray()
         private set
 
-    private fun getAlarmsForDebug(): Array<WeeklyAlarm> {
-        var weeklyAlarm = WeeklyAlarm(0)
-        var alarm1 = TimeAlarm(0, TimeOfDay(8, 53))
-        alarm1.powerOn()
-        var alarm2 = TimeAlarm(1, TimeOfDay(12, 5))
-        alarm2.powerOn()
-        weeklyAlarm.timeAlarms = arrayOf(alarm1, alarm2)
-        weeklyAlarm.addWeek(Calendar.MONDAY)
-        weeklyAlarm.addWeek(Calendar.TUESDAY)
-        weeklyAlarm.addWeek(Calendar.WEDNESDAY)
-        weeklyAlarm.addWeek(Calendar.THURSDAY)
-        weeklyAlarm.addWeek(Calendar.FRIDAY)
-
-        var alarm3 = TimeAlarm(3, TimeOfDay(23, 53))
-        var weeklyAlarm2 = WeeklyAlarm(1)
-        weeklyAlarm2.timeAlarms = arrayOf(alarm3)
-
-        return arrayOf(weeklyAlarm, weeklyAlarm2)
-    }
-
     init {
-//        weeklyAlarms = getAlarmsForDebug()
         weeklyAlarms = WeeklyAlarmStorage.getWeeklyAlarm()
     }
 
@@ -103,13 +82,18 @@ object WeeklyAlarmManager {
         }
 
         if (calendar === null) {
-            throw IllegalStateException("Not found alarm on power")
+            throw IllegalStateException("Alarm on power is not found")
         }
         return calendar as Calendar
     }
 
+    var context : Context? =null
+
     private fun updateStorage() {
         WeeklyAlarmStorage.saveWeeklyAlarm(weeklyAlarms)
+        if (context !== null) {
+            WeeklyAlarmServiceManager.startAlarm(context as Context)
+        }
     }
 
     private fun getNextAlarmCalendar(weeklyAlarm: WeeklyAlarm): Calendar? {

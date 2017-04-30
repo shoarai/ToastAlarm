@@ -10,7 +10,6 @@ import android.widget.TimePicker
 import com.isolity.toastalarm.R
 import com.isolity.toastalarm.WeeklyAlarmManager
 import com.isolity.toastalarm.model.TimeAlarm
-import com.isolity.toastalarm.model.WeeklyAlarm
 
 /**
  * Created by shoarai on 2017/04/28.
