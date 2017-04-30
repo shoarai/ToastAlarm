@@ -34,7 +34,7 @@ class WeeklyAlarmView : FrameLayout {
         timeAlarmListView.adapter = listAdapter
 
         timeAlarmListView.setOnItemClickListener { parent, view, position, id ->
-            Toast.makeText(context, "setWeeklyAlarm:$position", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "timeAlarmListView:$position", Toast.LENGTH_SHORT).show()
         }
 
         showWeekCheckboxState(weeklyAlarm.weeks)

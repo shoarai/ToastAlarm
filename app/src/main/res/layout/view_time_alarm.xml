@@ -9,8 +9,7 @@
     android:paddingLeft="2dp"
     android:paddingRight="2dp"
     android:paddingTop="5dp"
-    android:weightSum="1"
-    android:descendantFocusability="blocksDescendants">
+    android:weightSum="1">
 
     <Space
         android:layout_width="80dp"
