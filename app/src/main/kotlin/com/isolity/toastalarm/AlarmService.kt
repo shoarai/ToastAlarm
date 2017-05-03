@@ -29,13 +29,13 @@ class AlarmService : IntentService("AlarmService") {
             Log.v(TAG, "time:" + SystemClock.elapsedRealtime())
 
             var now = getNowTime()
-            Toast.makeText(context, "${now} by Toast Alarm", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "$now !!", Toast.LENGTH_LONG).show()
 
             WeeklyAlarmServiceManager.startAlarm(context)
         })
     }
 
-    fun getNowTime(): String {
+    private fun getNowTime(): String {
         var now = Calendar.getInstance()
         return now.get(Calendar.HOUR).toString() + ":" + now.get(Calendar.MINUTE)
     }

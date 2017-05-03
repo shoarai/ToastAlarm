@@ -4,6 +4,7 @@ import android.app.TimePickerDialog
 import android.content.Context
 import android.view.LayoutInflater
 import android.widget.FrameLayout
+import android.widget.ListView
 import android.widget.Switch
 import android.widget.TextView
 import com.isolity.toastalarm.R
@@ -18,13 +19,8 @@ import com.isolity.toastalarm.model.TimeOfDay
 class TimeAlarmView : FrameLayout {
     constructor(context: Context?) : super(context)
 
-    val timeTextView by lazy {
-        findViewById(R.id.time_text_view) as TextView
-    }
-
-    val powerSwitch by lazy {
-        findViewById(R.id.power_switch) as Switch
-    }
+    val timeTextView : TextView by bindView(R.id.time_text_view)
+    val powerSwitch : Switch by bindView(R.id.power_switch)
 
     init {
         LayoutInflater.from(context).inflate(R.layout.view_time_alarm, this)

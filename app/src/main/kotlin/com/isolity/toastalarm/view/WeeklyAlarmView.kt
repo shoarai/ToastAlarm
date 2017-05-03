@@ -20,9 +20,7 @@ import java.util.*
 class WeeklyAlarmView : FrameLayout {
     constructor(context: Context?) : super(context)
 
-    val timeAlarmListView: ListView by lazy {
-        findViewById(R.id.time_alarm_list_view) as ListView
-    }
+    val timeAlarmListView: ListView by bindView(R.id.time_alarm_list_view)
 
     init {
         LayoutInflater.from(context).inflate(R.layout.view_weekly_alarm, this)
