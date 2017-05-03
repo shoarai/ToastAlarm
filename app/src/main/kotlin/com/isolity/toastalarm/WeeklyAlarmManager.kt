@@ -20,12 +20,16 @@ object WeeklyAlarmManager {
     }
 
     fun hasPowerOn(): Boolean {
-        weeklyAlarms.forEach { weeklyAlarm ->
-            weeklyAlarm.timeAlarms.forEach {
-                if (it.isPowerOn)
-                    return true
-            }
-        }
+        weeklyAlarms
+                .filter {
+                    it.weeks.isNotEmpty()
+                }
+                .forEach {
+                    it.timeAlarms.forEach {
+                        if (it.isPowerOn)
+                            return true
+                    }
+                }
         return false
     }
 
@@ -99,7 +103,7 @@ object WeeklyAlarmManager {
         return calendar as Calendar
     }
 
-    var context : Context? =null
+    var context: Context? = null
 
     private fun updateStorage() {
         WeeklyAlarmStorage.saveWeeklyAlarm(weeklyAlarms)

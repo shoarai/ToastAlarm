@@ -29,6 +29,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         WeeklyAlarmStorage.context = applicationContext
+        WeeklyAlarmManager.context = applicationContext
 
         var weeklyAlarms = WeeklyAlarmManager.weeklyAlarms
         showWeeklyAlarmList(weeklyAlarms)

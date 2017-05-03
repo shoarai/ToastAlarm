@@ -38,6 +38,7 @@ class TimeAlarmView : FrameLayout {
             var timeOfDay = timeAlarm.timeOfDay
             TimePickerManager.show(timeOfDay.hour, timeOfDay.minute, TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
                 var newTimeOfDay = TimeOfDay(hourOfDay, minute)
+
                 WeeklyAlarmManager.setTimeOfDay(timeAlarm.id, newTimeOfDay)
                 timeTextView.text = newTimeOfDay.toString()
             })
