@@ -6,6 +6,7 @@ package com.isolity.toastalarm.model
 
 class WeeklyAlarm(val id:Int) {
     var timeAlarms: Array<TimeAlarm> = emptyArray()
+
     var weeks: MutableSet<Int> = mutableSetOf()
         private set
 

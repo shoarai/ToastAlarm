@@ -9,11 +9,6 @@ import android.content.Context
 object WeeklyAlarmServiceManager {
 
     fun startAlarm(context: Context) {
-//            ToastAlarmSettingManager.timeAlarms.forEach { alarmSetting ->
-//                var calendar = getNextAlarmCalendar(alarmSetting.timeOfDay!!)
-//                startOneAlarm(context, calendar)
-//            }
-
         if (WeeklyAlarmManager.hasPowerOn()) {
             var calendar = WeeklyAlarmManager.getNextAlarmCalendar()
             AlarmService.startAlarm(context, calendar)

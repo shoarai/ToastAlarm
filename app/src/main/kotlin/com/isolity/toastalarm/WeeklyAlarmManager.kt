@@ -43,8 +43,20 @@ object WeeklyAlarmManager {
         updateStorage()
     }
 
-    fun setTimeOfDay(weeklyAlarmId: Int, timeAlarmId: Int, timeOfDay: TimeOfDay) {
+    fun setTimeOfDay(timeAlarmId: Int, timeOfDay: TimeOfDay) {
+        var timeAlarm: TimeAlarm? = null
+        weeklyAlarms.forEach {
+            var time = it.timeAlarms.find { it.id === timeAlarmId }
+            if (time !== null) {
+                timeAlarm = time
+            }
+        }
+        if (timeAlarm === null) {
+            throw IllegalArgumentException("timeAlarm is not found")
+        }
 
+        timeAlarm?.timeOfDay = timeOfDay
+        updateStorage()
     }
 
     fun setPower(timeAlarmId: Int, power: Boolean) {

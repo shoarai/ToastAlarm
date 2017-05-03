@@ -6,10 +6,10 @@ import android.view.LayoutInflater
 import android.widget.FrameLayout
 import android.widget.Switch
 import android.widget.TextView
-import android.widget.TimePicker
 import com.isolity.toastalarm.R
 import com.isolity.toastalarm.WeeklyAlarmManager
 import com.isolity.toastalarm.model.TimeAlarm
+import com.isolity.toastalarm.model.TimeOfDay
 
 /**
  * Created by shoarai on 2017/04/28.
@@ -35,41 +35,16 @@ class TimeAlarmView : FrameLayout {
         powerSwitch.isChecked = timeAlarm.isPowerOn
 
         timeTextView.setOnClickListener {
-//            var timeOfDay = timeAlarm.timeOfDay
-//            var dialog = TimePickerDialog(
-//                    context, TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
-//
-//            }, timeOfDay.hour, timeOfDay.minute, true)
-//
-//            dialog.show()
+            var timeOfDay = timeAlarm.timeOfDay
+            TimePickerManager.show(timeOfDay.hour, timeOfDay.minute, TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
+                var newTimeOfDay = TimeOfDay(hourOfDay, minute)
+                WeeklyAlarmManager.setTimeOfDay(timeAlarm.id, newTimeOfDay)
+                timeTextView.text = newTimeOfDay.toString()
+            })
         }
 
         powerSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
             WeeklyAlarmManager.setPower(timeAlarm.id, isChecked)
         }
     }
-
-//    private fun startAlarm() {
-//        ToastAlarmService.startAlarm(applicationContext)
-//        Toast.makeText(applicationContext, "Set Alarm", Toast.LENGTH_SHORT).show()
-//    }
-//
-//    private fun stopAlarm() {
-//        ToastAlarmService.stopAlarm();
-//    }
-//
-//    private fun showTimePickerDialog() {
-//        val alarmSetting = ToastAlarmSettingManager.getFirst()
-//        var time = alarmSetting.timeOfDay
-//
-//        val timePicker = TimePickerDialogFragment(TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
-//            //時刻が選択されたときの処理
-//            var time = TimeOfDay(hourOfDay, minute)
-//            var alarm = TimeAlarm(time)
-//            ToastAlarmSettingManager.set(alarm)
-//
-//        })
-//
-//        timePicker.show(supportFragmentManager, "timePicker")
-//    }
 }

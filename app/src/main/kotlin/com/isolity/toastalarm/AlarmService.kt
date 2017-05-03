@@ -17,48 +17,6 @@ import java.util.*
  * Created by shoarai on 2017/04/22.
  */
 
-//class ToastAlarmService : Service() {
-//
-//    override fun onBind(intent: Intent): IBinder? {
-//        return null
-//    }
-//
-//    override fun onCreate() {
-//        val thr = Thread(null, mTask, "ToastAlarmServiceThread")
-//        thr.start()
-//        Log.v(TAG, "onCreate")
-//    }
-//
-//    // アラーム用サービス
-//    internal var mTask: Runnable = Runnable {
-//        // アラームを受け取るActivityを指定
-//        val alarmBroadcast = Intent()
-//        // ここでActionをセットする(Manifestに書いたものと同じであれば何でもよい)
-//        alarmBroadcast.action = "ToastAlarmAction"
-//        // レシーバーへ渡す
-//        sendBroadcast(alarmBroadcast)
-//        // 役目を終えたサービスを止める
-//        this@ToastAlarmService.stopSelf()
-//        Log.v(TAG, "サービス停止")
-//    }
-//
-//    private val TAG = ToastAlarmService::class.java.simpleName
-//}
-
-
-//class ToastAlarmService : IntentService("ToastAlarmService") {
-//
-//    override fun onHandleIntent(intent: Intent?) {
-//        try {
-//            Toast.makeText(this, "ToastAlarmService.Received", Toast.LENGTH_LONG).show()
-//            // サービス内部の処理
-//        } finally {
-//            // Wakelockの解除処理が必ず呼ばれるようにしておく
-//            WakefulBroadcastReceiver.completeWakefulIntent(intent!!)
-//        }
-//    }
-//}
-
 class AlarmService : IntentService("AlarmService") {
 
     private var mHandler: Handler = Handler()
@@ -105,23 +63,50 @@ class AlarmService : IntentService("AlarmService") {
         fun stopAlarm() {
             alarmMgr?.cancel(alarmIntent)
         }
-
-//        fun getNextAlarmCalendar(time: TimeOfDay): Calendar {
-//            val calendar = Calendar.getInstance()
-//            calendar.set(Calendar.HOUR_OF_DAY, time.hour)
-//            calendar.set(Calendar.MINUTE, time.minute)
-//            calendar.set(Calendar.SECOND, 0)
-//
-//            val now = Calendar.getInstance()
-//            if (calendar.before(now)) {
-//                calendar.add(Calendar.DAY_OF_YEAR, 1);
-//            }
-//
-//            return calendar
-//        }
-
     }
 }
+
+//class ToastAlarmService : Service() {
+//
+//    override fun onBind(intent: Intent): IBinder? {
+//        return null
+//    }
+//
+//    override fun onCreate() {
+//        val thr = Thread(null, mTask, "ToastAlarmServiceThread")
+//        thr.start()
+//        Log.v(TAG, "onCreate")
+//    }
+//
+//    // アラーム用サービス
+//    internal var mTask: Runnable = Runnable {
+//        // アラームを受け取るActivityを指定
+//        val alarmBroadcast = Intent()
+//        // ここでActionをセットする(Manifestに書いたものと同じであれば何でもよい)
+//        alarmBroadcast.action = "ToastAlarmAction"
+//        // レシーバーへ渡す
+//        sendBroadcast(alarmBroadcast)
+//        // 役目を終えたサービスを止める
+//        this@ToastAlarmService.stopSelf()
+//        Log.v(TAG, "サービス停止")
+//    }
+//
+//    private val TAG = ToastAlarmService::class.java.simpleName
+//}
+
+
+//class ToastAlarmService : IntentService("ToastAlarmService") {
+//
+//    override fun onHandleIntent(intent: Intent?) {
+//        try {
+//            Toast.makeText(this, "ToastAlarmService.Received", Toast.LENGTH_LONG).show()
+//            // サービス内部の処理
+//        } finally {
+//            // Wakelockの解除処理が必ず呼ばれるようにしておく
+//            WakefulBroadcastReceiver.completeWakefulIntent(intent!!)
+//        }
+//    }
+//}
 
 
 //class ToastAlarmService : IntentService {
