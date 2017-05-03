@@ -31,7 +31,7 @@ object WeeklyAlarmServiceManager {
 //            Toast.makeText(context, "Start alarm: $hours:$minutes", 0).show()
         } else {
             AlarmService.stopAlarm()
-            Toast.makeText(context, "Stop all alarm", 0).show()
+//            Toast.makeText(context, "Stop all alarm", 0).show()
         }
     }
 
