@@ -12,21 +12,56 @@ import java.util.*
  */
 
 object WeeklyAlarmManager {
-    var weeklyAlarms: Array<WeeklyAlarm> = emptyArray()
+    var weeklyAlarms: MutableList<WeeklyAlarm> = mutableListOf()
         private set
 
     init {
-        weeklyAlarms = WeeklyAlarmStorage.getWeeklyAlarm()
+        weeklyAlarms = WeeklyAlarmStorage.getWeeklyAlarm().toMutableList()
+    }
+
+    fun addWeeklyAlarm(): WeeklyAlarm {
+        var c = Calendar.getInstance()
+        var timeOfDay = TimeOfDay(
+                c.get((Calendar.HOUR_OF_DAY)),
+                c.get((Calendar.MINUTE)))
+        var timeAlarm = TimeAlarm(createTimeAlarmId(), timeOfDay)
+        var weeklyAlarm = WeeklyAlarm(createWeeklyAlarmId(), timeAlarm)
+        weeklyAlarms.add(weeklyAlarm)
+
+//        updateStorage()
+
+        return weeklyAlarm
+    }
+
+    fun createWeeklyAlarmId(): Int {
+        for (i in 0..Int.MAX_VALUE) {
+            if (!weeklyAlarms.any { it.id === i }) {
+                continue
+            }
+            return i
+        }
+        throw IllegalAccessException("Can't create unique id")
+    }
+
+    fun createTimeAlarmId(): Int {
+        for (i in 0..Int.MAX_VALUE) {
+            if (!weeklyAlarms.any { it.timeAlarms.any { it.id === i } }) {
+                continue
+            }
+            return i
+        }
+        throw IllegalAccessException("Can't create unique id")
     }
 
     fun hasPowerOn(): Boolean {
         weeklyAlarms
                 .filter { it.weeks.isNotEmpty() }
-                .forEach { it.timeAlarms.forEach {
-                if (it.isPowerOn)
-                    return true
-            }
-        }
+                .forEach {
+                    it.timeAlarms.forEach {
+                        if (it.isPowerOn)
+                            return true
+                    }
+                }
         return false
     }
 
@@ -100,10 +135,10 @@ object WeeklyAlarmManager {
         return calendar as Calendar
     }
 
-    var context : Context? =null
+    var context: Context? = null
 
     private fun updateStorage() {
-        WeeklyAlarmStorage.saveWeeklyAlarm(weeklyAlarms)
+        WeeklyAlarmStorage.saveWeeklyAlarm(weeklyAlarms.toTypedArray())
         if (context !== null) {
             WeeklyAlarmServiceManager.startAlarm(context as Context)
         }

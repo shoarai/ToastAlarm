@@ -1,10 +1,13 @@
 package com.isolity.toastalarm.adapter
 
+import android.widget.BaseAdapter
+import android.content.Context
+
 /**
  * Created by shoarai on 2017/04/29.
  */
 
-class WeeklyAlarmListAdapter(private val context: android.content.Context) : android.widget.BaseAdapter() {
+class WeeklyAlarmListAdapter(private val context: Context) : BaseAdapter() {
 
     var weeklyAlarms: List<com.isolity.toastalarm.model.WeeklyAlarm> = emptyList()
 
