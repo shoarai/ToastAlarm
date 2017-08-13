@@ -49,7 +49,8 @@ object WeeklyAlarmStorage {
         var alarm2 = TimeAlarm(1, TimeOfDay(12, 0))
         alarm2.powerOn()
         var weeklyAlarm = WeeklyAlarm(0, alarm1)
-        weeklyAlarm.addTimeAlarm(alarm2)
+        // TODO: Support multiple alarm by week.
+//        weeklyAlarm.addTimeAlarm(alarm2)
         weeklyAlarm.addWeek(Calendar.MONDAY)
         weeklyAlarm.addWeek(Calendar.TUESDAY)
         weeklyAlarm.addWeek(Calendar.WEDNESDAY)

@@ -19,18 +19,9 @@ object WeeklyAlarmManager {
         weeklyAlarms = WeeklyAlarmStorage.getWeeklyAlarm().toMutableList()
     }
 
-    fun addWeeklyAlarm(): WeeklyAlarm {
-        var c = Calendar.getInstance()
-        var timeOfDay = TimeOfDay(
-                c.get((Calendar.HOUR_OF_DAY)),
-                c.get((Calendar.MINUTE)))
-        var timeAlarm = TimeAlarm(createTimeAlarmId(), timeOfDay)
-        var weeklyAlarm = WeeklyAlarm(createWeeklyAlarmId(), timeAlarm)
+    fun addWeeklyAlarm(weeklyAlarm: WeeklyAlarm) {
         weeklyAlarms.add(weeklyAlarm)
-
-//        updateStorage()
-
-        return weeklyAlarm
+        updateStorage()
     }
 
     fun createWeeklyAlarmId(): Int {

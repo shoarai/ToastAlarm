@@ -39,9 +39,10 @@ class MainActivity : AppCompatActivity() {
 
 
         addWeeklyAlarmButton.setOnClickListener {
-//            var weeklyAlarm = WeeklyAlarmManager.addWeeklyAlarm()
-//            var weeklyAlarms = WeeklyAlarmManager.weeklyAlarms.toTypedArray()
-//            showWeeklyAlarmList(weeklyAlarms)
+            var weeklyAlarm = WeeklyAlarmCreator.createWeeklyAlarm()
+            WeeklyAlarmManager.addWeeklyAlarm(weeklyAlarm)
+            var weeklyAlarms = WeeklyAlarmManager.weeklyAlarms.toTypedArray()
+            showWeeklyAlarmList(weeklyAlarms)
 
             Toast.makeText(applicationContext, "Add", Toast.LENGTH_SHORT).show()
         }
