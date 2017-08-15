@@ -4,7 +4,7 @@ import android.app.TimePickerDialog
 import android.content.Context
 import android.view.LayoutInflater
 import android.widget.FrameLayout
-import android.widget.ListView
+import android.widget.ImageButton
 import android.widget.Switch
 import android.widget.TextView
 import com.isolity.toastalarm.R
@@ -19,8 +19,9 @@ import com.isolity.toastalarm.model.TimeOfDay
 class TimeAlarmView : FrameLayout {
     constructor(context: Context?) : super(context)
 
-    val timeTextView : TextView by bindView(R.id.time_text_view)
-    val powerSwitch : Switch by bindView(R.id.power_switch)
+    val timeTextView: TextView by bindView(R.id.time_text_view)
+    val powerSwitch: Switch by bindView(R.id.power_switch)
+    val deleteButton: ImageButton by bindView(R.id.delete_button)
 
     init {
         LayoutInflater.from(context).inflate(R.layout.view_time_alarm, this)
@@ -42,6 +43,10 @@ class TimeAlarmView : FrameLayout {
 
         powerSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
             WeeklyAlarmManager.setPower(timeAlarm.id, isChecked)
+        }
+
+        deleteButton.setOnClickListener {
+            WeeklyAlarmManager.remove(timeAlarm.id)
         }
     }
 }

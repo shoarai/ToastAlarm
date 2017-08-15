@@ -24,6 +24,20 @@ object WeeklyAlarmManager {
         updateStorage()
     }
 
+    fun remove(timeAlarmId: Int) {
+        val alarmToDelete = findByTimeAlarmId(timeAlarmId)
+        // TODO: Support multiple timealarm
+        weeklyAlarms.remove(alarmToDelete)
+
+        updateStorage()
+    }
+
+    private fun findByTimeAlarmId(timeAlarmId: Int): WeeklyAlarm {
+        return weeklyAlarms.first {
+            it.timeAlarms.any { it.id == timeAlarmId }
+        }
+    }
+
     fun hasPowerOn(): Boolean {
         weeklyAlarms
                 .filter { it.weeks.isNotEmpty() }
@@ -108,11 +122,19 @@ object WeeklyAlarmManager {
 
     var context: Context? = null
 
+    // DEBUG: ========
+    var update: (() -> Unit)? = null
+    // ===============
+
     private fun updateStorage() {
         WeeklyAlarmStorage.saveWeeklyAlarm(weeklyAlarms.toTypedArray())
         if (context !== null) {
             WeeklyAlarmServiceManager.startAlarm(context as Context)
         }
+
+
+        // DEBUG:
+        update?.invoke()
     }
 
     private fun getNextAlarmCalendar(weeklyAlarm: WeeklyAlarm): Calendar? {

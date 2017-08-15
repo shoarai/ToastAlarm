@@ -7,7 +7,6 @@ import android.util.Log
 import android.widget.ListView
 import android.widget.Toast
 import com.isolity.toastalarm.adapter.WeeklyAlarmListAdapter
-import com.isolity.toastalarm.model.WeeklyAlarm
 import com.isolity.toastalarm.view.TimePickerManager
 
 /**
@@ -33,14 +32,18 @@ class MainActivity : AppCompatActivity() {
         WeeklyAlarmStorage.context = applicationContext
         WeeklyAlarmManager.context = applicationContext
 
-        var weeklyAlarms = WeeklyAlarmManager.weeklyAlarms.toTypedArray()
-        showWeeklyAlarmList(weeklyAlarms)
+        showWeeklyAlarmList()
 
 
         TimePickerManager.fragmentManager = supportFragmentManager
 
 
         addWeeklyAlarmButton.setOnClickListener { onClickAddButton() }
+
+
+        WeeklyAlarmManager.update = {
+            showWeeklyAlarmList()
+        }
 
         // DEBUG
 //        closeApplication()
@@ -52,14 +55,16 @@ class MainActivity : AppCompatActivity() {
         Log.v(TAG, "start onClickAddButton")
         var weeklyAlarm = WeeklyAlarmCreator.createWeeklyAlarm()
         WeeklyAlarmManager.addWeeklyAlarm(weeklyAlarm)
-        var weeklyAlarms = WeeklyAlarmManager.weeklyAlarms.toTypedArray()
-        showWeeklyAlarmList(weeklyAlarms)
+        showWeeklyAlarmList()
 
         Toast.makeText(applicationContext, "Add", Toast.LENGTH_SHORT).show()
         Log.v(TAG, "end onClickAddButton")
     }
 
-    private fun showWeeklyAlarmList(weeklyAlarms: Array<WeeklyAlarm>) {
+    private fun showWeeklyAlarmList() {
+        Log.v(TAG, "start showWeeklyAlarmList")
+        var weeklyAlarms = WeeklyAlarmManager.weeklyAlarms.toTypedArray()
+
         var listAdapter = WeeklyAlarmListAdapter(applicationContext)
         listAdapter.weeklyAlarms = weeklyAlarms.toList()
         weeklyAlarmListView.adapter = listAdapter
@@ -68,6 +73,7 @@ class MainActivity : AppCompatActivity() {
 //            var viewId = view.getId()
 //            Toast.makeText(applicationContext, "weeklyAlarm: $viewId", Toast.LENGTH_SHORT).show()
 //        }
+        Log.v(TAG, "end showWeeklyAlarmList")
     }
 
     private fun closeApplication() {
