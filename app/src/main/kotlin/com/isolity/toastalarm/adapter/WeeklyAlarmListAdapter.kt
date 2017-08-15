@@ -43,7 +43,7 @@ class WeeklyAlarmListAdapter(private val context: Context) : BaseAdapter() {
 
     var onClickDeleteButton: ((weeklyAlarmId: Int) -> Unit)? = null
 
-    fun update() {
+    fun notifyAlarmSetChanged() {
         notifyDataSetChanged()
     }
 }

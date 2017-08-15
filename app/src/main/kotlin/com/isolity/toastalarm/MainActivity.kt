@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity() {
         WeeklyAlarmManager.addWeeklyAlarm(weeklyAlarm)
 
 //        listAdapter.add(weeklyAlarm)
-        listAdapter.update()
+        listAdapter.notifyAlarmSetChanged()
 
         Toast.makeText(applicationContext, "Add", Toast.LENGTH_SHORT).show()
         Log.v(TAG, "end onClickAddButton")
@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity() {
 
         listAdapter.onClickDeleteButton = { weeklyAlarmId ->
             WeeklyAlarmManager.remove(weeklyAlarmId)
-            listAdapter.update()
+            listAdapter.notifyAlarmSetChanged()
         }
 
 //        weeklyAlarmListView.setOnItemClickListener { parent, view, pos, id ->
