@@ -6,7 +6,6 @@ package com.isolity.toastalarm.model
 
 class TimeAlarm(val id: Int, var timeOfDay: TimeOfDay) {
     var isPowerOn: Boolean = false
-        private set
 
     fun powerOn() {
         isPowerOn = true

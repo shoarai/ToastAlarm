@@ -2,9 +2,7 @@ package com.isolity.toastalarm
 
 import android.content.Context
 import android.util.Log
-import android.widget.Toast
 import java.util.*
-import java.util.concurrent.TimeUnit
 
 /**
  * Created by shoarai on 2017/04/29.
@@ -18,7 +16,8 @@ object WeeklyAlarmServiceManager {
         Log.v(TAG, "startAlarm")
 
         if (WeeklyAlarmManager.hasPowerOn()) {
-            var calendar = WeeklyAlarmManager.getNextAlarmCalendar()
+            var weeklyAlarms = WeeklyAlarmManager.weeklyAlarms
+            val calendar = WeeklyAlarmFilter.getNextAlarmCalendar(weeklyAlarms.toTypedArray())
             AlarmService.startAlarm(context, calendar)
 
 //            Toast.makeText(context, "Next alarm: " + toString(calendar), 0).show()

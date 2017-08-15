@@ -41,7 +41,7 @@ class TimeAlarmView : FrameLayout {
             })
         }
 
-        powerSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+        powerSwitch.setOnCheckedChangeListener { _, isChecked ->
             WeeklyAlarmManager.setPower(timeAlarm.id, isChecked)
         }
 

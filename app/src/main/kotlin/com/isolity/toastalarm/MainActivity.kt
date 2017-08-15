@@ -51,7 +51,9 @@ class MainActivity : AppCompatActivity() {
     private fun onClickAddButton() {
         Log.v(TAG, "start onClickAddButton")
         var weeklyAlarm = WeeklyAlarmCreator.createWeeklyAlarm()
-        WeeklyAlarmManager.addWeeklyAlarm(weeklyAlarm)
+//        WeeklyAlarmManager.addWeeklyAlarm(weeklyAlarm)
+
+        listAdapter.add(weeklyAlarm)
 
         Toast.makeText(applicationContext, "Add", Toast.LENGTH_SHORT).show()
         Log.v(TAG, "end onClickAddButton")
@@ -63,7 +65,7 @@ class MainActivity : AppCompatActivity() {
         weeklyAlarmListView.adapter = listAdapter
 
         WeeklyAlarmManager.update = {
-            listAdapter.notifyDataSetChanged()
+            //            listAdapter.notifyDataSetChanged()
         }
         Log.v(TAG, "end showWeeklyAlarmList")
     }

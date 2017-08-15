@@ -6,7 +6,6 @@ package com.isolity.toastalarm.model
 
 class WeeklyAlarm(val id: Int, timeAlarm: TimeAlarm) {
     var timeAlarms: MutableList<TimeAlarm> = mutableListOf(timeAlarm)
-        private set
 
     var weeks: MutableSet<Int> = mutableSetOf()
         private set
@@ -17,6 +16,10 @@ class WeeklyAlarm(val id: Int, timeAlarm: TimeAlarm) {
 
     fun removeWeek(week: Int) {
         weeks.remove(week)
+    }
+
+    fun setTimeAlarm(id: Int, timeOfDay: TimeOfDay) {
+        timeAlarms.first { it.id == id }.timeOfDay = timeOfDay
     }
 
     fun addTimeAlarm(timeAlarm: TimeAlarm) {

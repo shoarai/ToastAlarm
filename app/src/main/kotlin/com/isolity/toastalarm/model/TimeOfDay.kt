@@ -5,8 +5,6 @@ package com.isolity.toastalarm.model
  */
 
 class TimeOfDay(val hour: Int, val minute: Int) {
-
     override fun toString(): String =
-            String.format("%02d", hour) + ":" +
-                    String.format("%02d", minute)
+            String.format("%02d", hour) + ":" + String.format("%02d", minute)
 }

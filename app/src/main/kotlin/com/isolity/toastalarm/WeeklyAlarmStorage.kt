@@ -30,7 +30,7 @@ object WeeklyAlarmStorage {
 
     fun getWeeklyAlarm(): Array<WeeklyAlarm> {
         // DEBUG: ========
-        return getDefaultWeeklyAlarm()
+//        return getDefaultWeeklyAlarm()
         //================
 
 
@@ -38,17 +38,17 @@ object WeeklyAlarmStorage {
             throw IllegalStateException("context is null")
         }
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-        val gson = Gson()
         val weeklyAlarmsString = prefs.getString(storageKey, "")
         if (weeklyAlarmsString.isBlank()) {
             return getDefaultWeeklyAlarm()
         }
+        val gson = Gson()
         val weeklyAlarms = gson.fromJson<Array<WeeklyAlarm>>(
                 weeklyAlarmsString, Array<WeeklyAlarm>::class.java)
         return weeklyAlarms
     }
 
-    fun getDefaultWeeklyAlarm(): Array<WeeklyAlarm> {
+    private fun getDefaultWeeklyAlarm(): Array<WeeklyAlarm> {
         var alarm1 = TimeAlarm(0, TimeOfDay(8, 0))
         alarm1.powerOn()
         var alarm2 = TimeAlarm(1, TimeOfDay(12, 0))

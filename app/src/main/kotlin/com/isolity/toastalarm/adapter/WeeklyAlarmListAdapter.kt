@@ -13,7 +13,7 @@ import com.isolity.toastalarm.view.WeeklyAlarmView
 
 class WeeklyAlarmListAdapter(private val context: Context) : BaseAdapter() {
 
-    var weeklyAlarms: List<WeeklyAlarm> = emptyList()
+    var weeklyAlarms: MutableList<WeeklyAlarm> = mutableListOf()
 
     override fun getCount(): Int = weeklyAlarms.size
 
@@ -25,4 +25,20 @@ class WeeklyAlarmListAdapter(private val context: Context) : BaseAdapter() {
             (convertView as? WeeklyAlarmView ?: WeeklyAlarmView(context)).apply {
                 setWeeklyAlarm(weeklyAlarms[position])
             }
+
+    fun add(weeklyAlarm: WeeklyAlarm): Boolean {
+        val ress = weeklyAlarms.add(weeklyAlarm)
+        if (ress) {
+            notifyDataSetChanged()
+        }
+        return ress
+    }
+
+    fun remove(weeklyAlarm: WeeklyAlarm): Boolean {
+        val ress = weeklyAlarms.remove(weeklyAlarm)
+        if (ress) {
+            notifyDataSetChanged()
+        }
+        return ress
+    }
 }
