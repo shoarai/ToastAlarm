@@ -5,7 +5,6 @@ import android.support.design.widget.FloatingActionButton
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.widget.ListView
-import android.widget.Toast
 import com.isolity.toastalarm.adapter.WeeklyAlarmListAdapter
 import com.isolity.toastalarm.view.TimePickerManager
 
@@ -57,7 +56,7 @@ class MainActivity : AppCompatActivity() {
 
         listAdapter.notifyAlarmSetChanged()
 
-        Toast.makeText(applicationContext, "Add", Toast.LENGTH_SHORT).show()
+//        Toast.makeText(applicationContext, "Add", Toast.LENGTH_SHORT).show()
         Log.v(TAG, "end onClickAddButton")
     }
 
