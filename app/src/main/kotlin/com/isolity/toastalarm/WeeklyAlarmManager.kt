@@ -27,10 +27,17 @@ object WeeklyAlarmManager {
         updateStorage()
     }
 
-    fun remove(timeAlarmId: Int) {
+    fun removeByTimeAlarmId(timeAlarmId: Int) {
         // TODO: Support multiple timealarm
         val alarmToDelete = weeklyAlarmList.findWeeklyAlarmByTimeAlarmId(timeAlarmId)
         weeklyAlarmList.weeklyAlarms.remove(alarmToDelete)
+
+        updateStorage()
+    }
+
+    fun remove(weeklyAlarmId: Int) {
+        val alarmToDeleted = weeklyAlarmList.findWeeklyAlarm(weeklyAlarmId)
+        weeklyAlarmList.weeklyAlarms.remove(alarmToDeleted)
 
         updateStorage()
     }

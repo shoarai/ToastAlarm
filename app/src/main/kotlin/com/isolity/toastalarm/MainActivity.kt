@@ -9,6 +9,7 @@ import android.widget.Toast
 import com.isolity.toastalarm.adapter.WeeklyAlarmListAdapter
 import com.isolity.toastalarm.view.TimePickerManager
 
+
 /**
  * Created by shoarai on 2017/04/17.
  */
@@ -51,9 +52,10 @@ class MainActivity : AppCompatActivity() {
     private fun onClickAddButton() {
         Log.v(TAG, "start onClickAddButton")
         var weeklyAlarm = WeeklyAlarmCreator.createWeeklyAlarm()
-//        WeeklyAlarmManager.addWeeklyAlarm(weeklyAlarm)
+        WeeklyAlarmManager.addWeeklyAlarm(weeklyAlarm)
 
-        listAdapter.add(weeklyAlarm)
+//        listAdapter.add(weeklyAlarm)
+        listAdapter.update()
 
         Toast.makeText(applicationContext, "Add", Toast.LENGTH_SHORT).show()
         Log.v(TAG, "end onClickAddButton")
@@ -65,8 +67,23 @@ class MainActivity : AppCompatActivity() {
         weeklyAlarmListView.adapter = listAdapter
 
         WeeklyAlarmManager.update = {
-            //            listAdapter.notifyDataSetChanged()
+            listAdapter.notifyDataSetChanged()
         }
+
+        listAdapter.onClickDeleteButton = { weeklyAlarmId ->
+            WeeklyAlarmManager.remove(weeklyAlarmId)
+            listAdapter.update()
+        }
+
+//        weeklyAlarmListView.setOnItemClickListener { parent, view, pos, id ->
+//            val alarm = listAdapter.getItem(pos)
+//            when (view.id) {
+//                R.id.delete_button -> {
+//                    Toast.makeText(this, "", Toast.LENGTH_SHORT).show()
+//                }
+//            }
+//        }
+
         Log.v(TAG, "end showWeeklyAlarmList")
     }
 
