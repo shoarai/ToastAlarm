@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/background_dark"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorBaseDark"
     tools:context="com.isolity.toastalarm.MainActivity">
 
     <RelativeLayout
@@ -29,7 +30,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@android:drawable/ic_input_add"
+        android:tint="@color/colorBase"
         android:layout_gravity="center|bottom"
-        android:layout_marginBottom="10dp" />
+        android:layout_marginBottom="10dp"
+        app:backgroundTint="@color/colorControl" />
 
 </android.support.design.widget.CoordinatorLayout>
