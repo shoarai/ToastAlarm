@@ -25,6 +25,10 @@ class MainActivity : AppCompatActivity() {
         findViewById(R.id.add_weekly_alarm_button) as FloatingActionButton
     }
 
+    val listAdapter by lazy {
+        WeeklyAlarmListAdapter(applicationContext)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -32,20 +36,11 @@ class MainActivity : AppCompatActivity() {
         // HACK: Context
         WeeklyAlarmStorage.context = applicationContext
         WeeklyAlarmManager.context = applicationContext
-
-
         TimePickerManager.fragmentManager = supportFragmentManager
 
-        showWeeklyAlarmList()
-
+        initWeeklyAlarmList()
 
         addWeeklyAlarmButton.setOnClickListener { onClickAddButton() }
-
-
-        WeeklyAlarmManager.update = {
-            showWeeklyAlarmList()
-//            weeklyAlarmListView.refreshDrawableState()
-        }
 
         // DEBUG
 //        closeApplication()
@@ -57,24 +52,19 @@ class MainActivity : AppCompatActivity() {
         Log.v(TAG, "start onClickAddButton")
         var weeklyAlarm = WeeklyAlarmCreator.createWeeklyAlarm()
         WeeklyAlarmManager.addWeeklyAlarm(weeklyAlarm)
-//        showWeeklyAlarmList()
 
         Toast.makeText(applicationContext, "Add", Toast.LENGTH_SHORT).show()
         Log.v(TAG, "end onClickAddButton")
     }
 
-    private fun showWeeklyAlarmList() {
+    private fun initWeeklyAlarmList() {
         Log.v(TAG, "start showWeeklyAlarmList")
-        var weeklyAlarms = WeeklyAlarmManager.weeklyAlarms.toTypedArray()
-
-        var listAdapter = WeeklyAlarmListAdapter(applicationContext)
-        listAdapter.weeklyAlarms = weeklyAlarms.toList()
+        listAdapter.weeklyAlarms = WeeklyAlarmManager.weeklyAlarms
         weeklyAlarmListView.adapter = listAdapter
 
-//        weeklyAlarmListView.setOnItemClickListener { parent, view, pos, id ->
-//            var viewId = view.getId()
-//            Toast.makeText(applicationContext, "weeklyAlarm: $viewId", Toast.LENGTH_SHORT).show()
-//        }
+        WeeklyAlarmManager.update = {
+            listAdapter.notifyDataSetChanged()
+        }
         Log.v(TAG, "end showWeeklyAlarmList")
     }
 
@@ -83,5 +73,5 @@ class MainActivity : AppCompatActivity() {
 //        finish()
 //        moveTaskToBack(true);
     }
-
 }
+

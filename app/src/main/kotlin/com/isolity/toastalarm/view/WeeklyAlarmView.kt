@@ -29,6 +29,7 @@ class WeeklyAlarmView : FrameLayout {
     }
 
     fun setWeeklyAlarm(weeklyAlarm: WeeklyAlarm) {
+        // TODO: Support multiple time alarm
         setTimeAlarm(weeklyAlarm.timeAlarms[0])
 
         showWeekCheckboxState(weeklyAlarm.weeks)

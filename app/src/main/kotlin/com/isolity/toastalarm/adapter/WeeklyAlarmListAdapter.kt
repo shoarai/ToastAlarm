@@ -1,7 +1,11 @@
 package com.isolity.toastalarm.adapter
 
-import android.widget.BaseAdapter
 import android.content.Context
+import android.view.View
+import android.view.ViewGroup
+import android.widget.BaseAdapter
+import com.isolity.toastalarm.model.WeeklyAlarm
+import com.isolity.toastalarm.view.WeeklyAlarmView
 
 /**
  * Created by shoarai on 2017/04/29.
@@ -9,7 +13,7 @@ import android.content.Context
 
 class WeeklyAlarmListAdapter(private val context: Context) : BaseAdapter() {
 
-    var weeklyAlarms: List<com.isolity.toastalarm.model.WeeklyAlarm> = emptyList()
+    var weeklyAlarms: List<WeeklyAlarm> = emptyList()
 
     override fun getCount(): Int = weeklyAlarms.size
 
@@ -17,8 +21,8 @@ class WeeklyAlarmListAdapter(private val context: Context) : BaseAdapter() {
 
     override fun getItemId(position: Int): Long = 0
 
-    override fun getView(position: Int, convertView: android.view.View?, parent: android.view.ViewGroup?): android.view.View =
-            (convertView as? com.isolity.toastalarm.view.WeeklyAlarmView ?: com.isolity.toastalarm.view.WeeklyAlarmView(context)).apply {
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View =
+            (convertView as? WeeklyAlarmView ?: WeeklyAlarmView(context)).apply {
                 setWeeklyAlarm(weeklyAlarms[position])
             }
 }
