@@ -1,13 +1,13 @@
 package com.isolity.toastalarm
 
-import android.app.TimePickerDialog
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
-import android.widget.*
+import android.support.v7.app.AppCompatActivity
+import android.util.Log
+import android.widget.ListView
+import android.widget.Toast
 import com.isolity.toastalarm.adapter.WeeklyAlarmListAdapter
 import com.isolity.toastalarm.model.WeeklyAlarm
-import android.widget.Toast
 import com.isolity.toastalarm.view.TimePickerManager
 
 /**
@@ -15,6 +15,8 @@ import com.isolity.toastalarm.view.TimePickerManager
  */
 
 class MainActivity : AppCompatActivity() {
+
+    private val TAG = MainActivity::class.java.simpleName
 
     val weeklyAlarmListView by lazy {
         findViewById(R.id.weekly_alarm_list_view) as ListView
@@ -38,18 +40,23 @@ class MainActivity : AppCompatActivity() {
         TimePickerManager.fragmentManager = supportFragmentManager
 
 
-        addWeeklyAlarmButton.setOnClickListener {
-            var weeklyAlarm = WeeklyAlarmCreator.createWeeklyAlarm()
-            WeeklyAlarmManager.addWeeklyAlarm(weeklyAlarm)
-            var weeklyAlarms = WeeklyAlarmManager.weeklyAlarms.toTypedArray()
-            showWeeklyAlarmList(weeklyAlarms)
-
-            Toast.makeText(applicationContext, "Add", Toast.LENGTH_SHORT).show()
-        }
-
+        addWeeklyAlarmButton.setOnClickListener { onClickAddButton() }
 
         // DEBUG
 //        closeApplication()
+
+        Log.v(TAG, "end onCreate")
+    }
+
+    private fun onClickAddButton() {
+        Log.v(TAG, "start onClickAddButton")
+        var weeklyAlarm = WeeklyAlarmCreator.createWeeklyAlarm()
+        WeeklyAlarmManager.addWeeklyAlarm(weeklyAlarm)
+        var weeklyAlarms = WeeklyAlarmManager.weeklyAlarms.toTypedArray()
+        showWeeklyAlarmList(weeklyAlarms)
+
+        Toast.makeText(applicationContext, "Add", Toast.LENGTH_SHORT).show()
+        Log.v(TAG, "end onClickAddButton")
     }
 
     private fun showWeeklyAlarmList(weeklyAlarms: Array<WeeklyAlarm>) {

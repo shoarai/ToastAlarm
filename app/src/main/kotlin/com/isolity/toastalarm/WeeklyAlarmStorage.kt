@@ -1,11 +1,11 @@
 package com.isolity.toastalarm
 
 import android.content.Context
-import com.isolity.toastalarm.model.WeeklyAlarm
 import android.preference.PreferenceManager
 import com.google.gson.Gson
 import com.isolity.toastalarm.model.TimeAlarm
 import com.isolity.toastalarm.model.TimeOfDay
+import com.isolity.toastalarm.model.WeeklyAlarm
 import java.lang.IllegalStateException
 import java.util.*
 
@@ -29,6 +29,11 @@ object WeeklyAlarmStorage {
     }
 
     fun getWeeklyAlarm(): Array<WeeklyAlarm> {
+        // DEBUG: ========
+        return getDefaultWeeklyAlarm()
+        //================
+
+
         if (context === null) {
             throw IllegalStateException("context is null")
         }

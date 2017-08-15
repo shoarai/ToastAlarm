@@ -24,26 +24,6 @@ object WeeklyAlarmManager {
         updateStorage()
     }
 
-    fun createWeeklyAlarmId(): Int {
-        for (i in 0..Int.MAX_VALUE) {
-            if (!weeklyAlarms.any { it.id === i }) {
-                continue
-            }
-            return i
-        }
-        throw IllegalAccessException("Can't create unique id")
-    }
-
-    fun createTimeAlarmId(): Int {
-        for (i in 0..Int.MAX_VALUE) {
-            if (!weeklyAlarms.any { it.timeAlarms.any { it.id === i } }) {
-                continue
-            }
-            return i
-        }
-        throw IllegalAccessException("Can't create unique id")
-    }
-
     fun hasPowerOn(): Boolean {
         weeklyAlarms
                 .filter { it.weeks.isNotEmpty() }
