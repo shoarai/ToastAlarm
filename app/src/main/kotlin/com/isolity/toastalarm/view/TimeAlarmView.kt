@@ -9,7 +9,7 @@ import android.widget.Switch
 import android.widget.TextView
 import com.isolity.toastalarm.R
 import com.isolity.toastalarm.WeeklyAlarmManager
-import com.isolity.toastalarm.model.TimeAlarm
+import com.isolity.toastalarm.model.DailyAlarm
 import com.isolity.toastalarm.model.TimeOfDay
 
 /**
@@ -27,26 +27,26 @@ class TimeAlarmView : FrameLayout {
         LayoutInflater.from(context).inflate(R.layout.view_time_alarm, this)
     }
 
-    fun setTimeAlarm(timeAlarm: TimeAlarm) {
-        timeTextView.text = timeAlarm.timeOfDay.toString()
-        powerSwitch.isChecked = timeAlarm.isPowerOn
+    fun setTimeAlarm(dailyAlarm: DailyAlarm) {
+        timeTextView.text = dailyAlarm.timeOfDay.toString()
+        powerSwitch.isChecked = dailyAlarm.isPowerOn
 
         timeTextView.setOnClickListener {
-            var timeOfDay = timeAlarm.timeOfDay
+            var timeOfDay = dailyAlarm.timeOfDay
             TimePickerManager.show(timeOfDay.hour, timeOfDay.minute, TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
                 var newTimeOfDay = TimeOfDay(hourOfDay, minute)
 
-                WeeklyAlarmManager.setTimeOfDay(timeAlarm.id, newTimeOfDay)
+                WeeklyAlarmManager.setTimeOfDay(dailyAlarm.id, newTimeOfDay)
                 timeTextView.text = newTimeOfDay.toString()
             })
         }
 
         powerSwitch.setOnCheckedChangeListener { _, isChecked ->
-            WeeklyAlarmManager.setPower(timeAlarm.id, isChecked)
+            WeeklyAlarmManager.setPower(dailyAlarm.id, isChecked)
         }
 
         deleteButton.setOnClickListener {
-            WeeklyAlarmManager.remove(timeAlarm.id)
+            //            WeeklyAlarmManager.remove(dailyAlarmSetting.id)
         }
     }
 }

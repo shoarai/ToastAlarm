@@ -51,10 +51,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun onClickAddButton() {
         Log.v(TAG, "start onClickAddButton")
-        var weeklyAlarm = WeeklyAlarmCreator.createWeeklyAlarm()
-        WeeklyAlarmManager.addWeeklyAlarm(weeklyAlarm)
+        val alarms = WeeklyAlarmManager.weeklyAlarms
+        val newAlarm = WeeklyAlarmCreator.createWeeklyAlarm(alarms.toTypedArray())
+        WeeklyAlarmManager.addWeeklyAlarm(newAlarm)
 
-//        listAdapter.add(weeklyAlarm)
         listAdapter.notifyAlarmSetChanged()
 
         Toast.makeText(applicationContext, "Add", Toast.LENGTH_SHORT).show()

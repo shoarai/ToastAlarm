@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.widget.*
 import com.isolity.toastalarm.R
 import com.isolity.toastalarm.WeeklyAlarmManager
-import com.isolity.toastalarm.model.TimeAlarm
+import com.isolity.toastalarm.model.DailyAlarm
 import com.isolity.toastalarm.model.TimeOfDay
 import com.isolity.toastalarm.model.WeeklyAlarm
 import java.util.*
@@ -30,7 +30,7 @@ class WeeklyAlarmView : FrameLayout {
 
     fun setWeeklyAlarm(weeklyAlarm: WeeklyAlarm) {
         // TODO: Support multiple time alarm
-        setTimeAlarm(weeklyAlarm.timeAlarms[0])
+        setTimeAlarm(weeklyAlarm.dailyAlarms[0])
 
         showWeekCheckboxState(weeklyAlarm.weeks)
 
@@ -44,26 +44,26 @@ class WeeklyAlarmView : FrameLayout {
         }
     }
 
-    fun setTimeAlarm(timeAlarm: TimeAlarm) {
-        timeTextView.text = timeAlarm.timeOfDay.toString()
-        powerSwitch.isChecked = timeAlarm.isPowerOn
+    fun setTimeAlarm(dailyAlarm: DailyAlarm) {
+        timeTextView.text = dailyAlarm.timeOfDay.toString()
+        powerSwitch.isChecked = dailyAlarm.isPowerOn
 
         timeTextView.setOnClickListener {
-            var timeOfDay = timeAlarm.timeOfDay
+            var timeOfDay = dailyAlarm.timeOfDay
             TimePickerManager.show(timeOfDay.hour, timeOfDay.minute, TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
                 var newTimeOfDay = TimeOfDay(hourOfDay, minute)
 
-                WeeklyAlarmManager.setTimeOfDay(timeAlarm.id, newTimeOfDay)
+                WeeklyAlarmManager.setTimeOfDay(dailyAlarm.id, newTimeOfDay)
                 timeTextView.text = newTimeOfDay.toString()
             })
         }
 
         powerSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
-            WeeklyAlarmManager.setPower(timeAlarm.id, isChecked)
+            WeeklyAlarmManager.setPower(dailyAlarm.id, isChecked)
         }
 
         deleteButton.setOnClickListener {
-            WeeklyAlarmManager.remove(timeAlarm.id)
+            WeeklyAlarmManager.remove(dailyAlarm.id)
         }
     }
 

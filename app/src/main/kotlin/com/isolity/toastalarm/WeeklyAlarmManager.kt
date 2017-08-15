@@ -1,15 +1,21 @@
 package com.isolity.toastalarm
 
 import android.content.Context
+import android.util.Log
+import com.google.gson.JsonSyntaxException
+import com.isolity.toastalarm.model.DailyAlarm
 import com.isolity.toastalarm.model.TimeOfDay
 import com.isolity.toastalarm.model.WeeklyAlarm
 import com.isolity.toastalarm.model.WeeklyAlarmList
+import java.util.*
 
 /**
  * Created by shoarai on 2017/04/22.
  */
 
 object WeeklyAlarmManager {
+    private val TAG = WeeklyAlarmManager::class.java.simpleName
+
     var weeklyAlarmList: WeeklyAlarmList
 
     var weeklyAlarms: MutableList<WeeklyAlarm> = mutableListOf()
@@ -18,8 +24,38 @@ object WeeklyAlarmManager {
         }
 
     init {
-        val weeklyAlarms = WeeklyAlarmStorage.getWeeklyAlarm().toMutableList()
-        weeklyAlarmList = WeeklyAlarmList(weeklyAlarms.toTypedArray())
+        var weeklyAlarms: Array<WeeklyAlarm>
+        try {
+            weeklyAlarms = WeeklyAlarmStorage.restoreWeeklyAlarm()
+        } catch (e: JsonSyntaxException) {
+            Log.v(TAG, e.toString())
+            weeklyAlarms = WeeklyAlarmCreator.createDefaultWeeklyAlarms()
+            updateStorage()
+        }
+
+        // DEBUG: Create test data ====
+//        weeklyAlarms = getTestAlarm()
+        // ============================
+
+        weeklyAlarmList = WeeklyAlarmList(weeklyAlarms)
+    }
+
+    private fun getTestAlarm(): Array<WeeklyAlarm> {
+        var alarm1 = DailyAlarm(0, TimeOfDay(8, 0))
+        alarm1.powerOn()
+        var alarm2 = DailyAlarm(1, TimeOfDay(12, 0))
+        alarm2.powerOn()
+        var weeklyAlarm = WeeklyAlarm(0, alarm1)
+        // TODO: Support multiple alarm by week.
+//        weeklyAlarm.addTimeAlarm(alarm2)
+        weeklyAlarm.addWeek(Calendar.MONDAY, Calendar.TUESDAY,
+                Calendar.WEDNESDAY, Calendar.THURSDAY, Calendar.FRIDAY
+        )
+
+        var alarm3 = DailyAlarm(3, TimeOfDay(23, 53))
+        var weeklyAlarm2 = WeeklyAlarm(1, alarm3)
+
+        return arrayOf(weeklyAlarm, weeklyAlarm2)
     }
 
     fun addWeeklyAlarm(weeklyAlarm: WeeklyAlarm) {

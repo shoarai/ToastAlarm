@@ -13,7 +13,7 @@ class WeeklyAlarmList {
 
     fun hasPowerOn(): Boolean {
         weeklyAlarms.any {
-            it.weeks.isNotEmpty() && it.timeAlarms.any { it.isPowerOn }
+            it.weeks.isNotEmpty() && it.dailyAlarms.any { it.isPowerOn }
         }
         return false
     }
@@ -27,15 +27,15 @@ class WeeklyAlarmList {
     }
 
     fun findWeeklyAlarmByTimeAlarmId(timeAlarmId: Int): WeeklyAlarm {
-        var weeklyAlarm = weeklyAlarms.firstOrNull { it.timeAlarms.any { it.id == timeAlarmId } }
+        var weeklyAlarm = weeklyAlarms.firstOrNull { it.dailyAlarms.any { it.id == timeAlarmId } }
         if (weeklyAlarm === null) {
             throw IllegalArgumentException("weekly alarm is not found")
         }
         return weeklyAlarm
     }
 
-    fun findTimeAlarm(timeAlarmId: Int): TimeAlarm {
-        var timeAlarm = weeklyAlarms.flatMap { it.timeAlarms }
+    fun findTimeAlarm(timeAlarmId: Int): DailyAlarm {
+        var timeAlarm = weeklyAlarms.flatMap { it.dailyAlarms }
                 .firstOrNull { it.id == timeAlarmId }
         if (timeAlarm === null) {
             throw IllegalArgumentException("time alarm is not found")

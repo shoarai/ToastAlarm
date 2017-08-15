@@ -4,7 +4,7 @@ import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
-import com.isolity.toastalarm.model.TimeAlarm
+import com.isolity.toastalarm.model.DailyAlarm
 import com.isolity.toastalarm.view.TimeAlarmView
 
 /**
@@ -13,16 +13,16 @@ import com.isolity.toastalarm.view.TimeAlarmView
 
 class TimeAlarmListAdapter(private val context: Context) : BaseAdapter() {
 
-    var timeAlarms: List<TimeAlarm> = emptyList()
+    var dailyAlarms: List<DailyAlarm> = emptyList()
 
-    override fun getCount(): Int = timeAlarms.size
+    override fun getCount(): Int = dailyAlarms.size
 
-    override fun getItem(position: Int): Any? = timeAlarms[position]
+    override fun getItem(position: Int): Any? = dailyAlarms[position]
 
     override fun getItemId(position: Int): Long = 0
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View =
             ((convertView as? TimeAlarmView) ?: TimeAlarmView(context)).apply {
-                setTimeAlarm(timeAlarms[position])
+                setTimeAlarm(dailyAlarms[position])
             }
 }

@@ -36,7 +36,7 @@ object WeeklyAlarmFilter {
         var calendar: Calendar? = null
 
         weeklyAlarm.weeks.forEach { week ->
-            weeklyAlarm.timeAlarms
+            weeklyAlarm.dailyAlarms
                     .filter { it.isPowerOn }
                     .forEach {
                         var cal = toCalendarAfterNow(it.timeOfDay, week)

@@ -4,8 +4,8 @@ package com.isolity.toastalarm.model
  * Created by shoarai on 2017/04/22.
  */
 
-class WeeklyAlarm(val id: Int, timeAlarm: TimeAlarm) {
-    var timeAlarms: MutableList<TimeAlarm> = mutableListOf(timeAlarm)
+class WeeklyAlarm(val id: Int, dailyAlarm: DailyAlarm) {
+    var dailyAlarms: MutableList<DailyAlarm> = mutableListOf(dailyAlarm)
 
     var weeks: MutableSet<Int> = mutableSetOf()
         private set
@@ -19,14 +19,14 @@ class WeeklyAlarm(val id: Int, timeAlarm: TimeAlarm) {
     }
 
     fun setTimeAlarm(id: Int, timeOfDay: TimeOfDay) {
-        timeAlarms.first { it.id == id }.timeOfDay = timeOfDay
+        dailyAlarms.first { it.id == id }.timeOfDay = timeOfDay
     }
 
-    fun addTimeAlarm(timeAlarm: TimeAlarm) {
-        timeAlarms.add(timeAlarm)
+    fun addTimeAlarm(dailyAlarm: DailyAlarm) {
+        dailyAlarms.add(dailyAlarm)
     }
 
     fun removeTimeAlarm(id: Int) {
-        timeAlarms.removeAll { it.id === id }
+        dailyAlarms.removeAll { it.id === id }
     }
 }

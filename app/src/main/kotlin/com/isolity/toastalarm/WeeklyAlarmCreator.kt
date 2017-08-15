@@ -1,6 +1,6 @@
 package com.isolity.toastalarm
 
-import com.isolity.toastalarm.model.TimeAlarm
+import com.isolity.toastalarm.model.DailyAlarm
 import com.isolity.toastalarm.model.TimeOfDay
 import com.isolity.toastalarm.model.WeeklyAlarm
 import java.util.*
@@ -13,26 +13,36 @@ object WeeklyAlarmCreator {
     /**
      * Create weekly alarm for current time.
      */
-    fun createWeeklyAlarm(): WeeklyAlarm {
-        val weeklyAlarms = WeeklyAlarmManager.weeklyAlarms.toTypedArray()
+    fun createWeeklyAlarm(weeklyAlarms: Array<WeeklyAlarm>): WeeklyAlarm {
+        var timeAlarm = createDailyAlarmSetting(weeklyAlarms)
+        var weeklyAlarm = WeeklyAlarm(createUniqueId(weeklyAlarms), timeAlarm)
+        weeklyAlarm.addWeek(
+                Calendar.SUNDAY,
+                Calendar.MONDAY,
+                Calendar.TUESDAY,
+                Calendar.WEDNESDAY,
+                Calendar.THURSDAY,
+                Calendar.FRIDAY,
+                Calendar.SATURDAY
+        )
+        return weeklyAlarm
+    }
 
+    /**
+     * Create default weekly alarms at first running.
+     */
+    fun createDefaultWeeklyAlarms(): Array<WeeklyAlarm> {
+        return emptyArray()
+    }
+
+    private fun createDailyAlarmSetting(weeklyAlarms: Array<WeeklyAlarm>): DailyAlarm {
         var c = Calendar.getInstance()
         var timeOfDay = TimeOfDay(
                 c.get((Calendar.HOUR_OF_DAY)),
                 c.get((Calendar.MINUTE)))
-        var timeAlarm = TimeAlarm(createTimeAlarmId(weeklyAlarms), timeOfDay)
+        var timeAlarm = DailyAlarm(createTimeAlarmId(weeklyAlarms), timeOfDay)
         timeAlarm.powerOn()
-        var weeklyAlarm = WeeklyAlarm(createUniqueId(weeklyAlarms), timeAlarm)
-//        weeklyAlarm.addWeek(
-//                Calendar.SUNDAY,
-//                Calendar.MONDAY,
-//                Calendar.TUESDAY,
-//                Calendar.WEDNESDAY,
-//                Calendar.THURSDAY,
-//                Calendar.FRIDAY,
-//                Calendar.SATURDAY
-//        )
-        return weeklyAlarm
+        return timeAlarm
     }
 
     /**
@@ -55,7 +65,7 @@ object WeeklyAlarmCreator {
     fun createTimeAlarmId(weeklyAlarms: Array<WeeklyAlarm>): Int {
         var i = 1
         while (true) {
-            if (weeklyAlarms.any { it.timeAlarms.any { it.id === i } }) {
+            if (weeklyAlarms.any { it.dailyAlarms.any { it.id === i } }) {
                 i++
                 continue
             }
