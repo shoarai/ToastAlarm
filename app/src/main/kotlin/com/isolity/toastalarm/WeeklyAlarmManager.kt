@@ -56,9 +56,9 @@ object WeeklyAlarmManager {
             throw IllegalArgumentException("week is not found")
         }
         if (isSet) {
-            weeklyAlarm.weeks.add(week)
+            weeklyAlarm.addWeek(week)
         } else {
-            weeklyAlarm.weeks.remove(week)
+            weeklyAlarm.removeWeek(week)
         }
 
         updateStorage()

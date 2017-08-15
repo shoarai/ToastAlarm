@@ -11,8 +11,8 @@ class WeeklyAlarm(val id: Int, timeAlarm: TimeAlarm) {
     var weeks: MutableSet<Int> = mutableSetOf()
         private set
 
-    fun addWeek(week: Int) {
-        weeks.add(week)
+    fun addWeek(vararg week: Int) {
+        weeks.addAll(week.toList())
     }
 
     fun removeWeek(week: Int) {

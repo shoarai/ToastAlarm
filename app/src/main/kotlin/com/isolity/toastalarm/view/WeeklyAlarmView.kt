@@ -1,15 +1,13 @@
 package com.isolity.toastalarm.view
 
+import android.app.TimePickerDialog
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
-import android.widget.CheckBox
-import android.widget.FrameLayout
-import android.widget.ListView
-import android.widget.Toast
+import android.widget.*
 import com.isolity.toastalarm.R
 import com.isolity.toastalarm.WeeklyAlarmManager
-import com.isolity.toastalarm.adapter.TimeAlarmListAdapter
+import com.isolity.toastalarm.model.TimeAlarm
+import com.isolity.toastalarm.model.TimeOfDay
 import com.isolity.toastalarm.model.WeeklyAlarm
 import java.util.*
 
@@ -20,20 +18,18 @@ import java.util.*
 class WeeklyAlarmView : FrameLayout {
     constructor(context: Context?) : super(context)
 
-    val timeAlarmListView: ListView by bindView(R.id.time_alarm_list_view)
+//    val timeAlarmListView: ListView by bindView(R.id.time_alarm_list_view)
+
+    val timeTextView: TextView by bindView(R.id.time_text_view)
+    val powerSwitch: Switch by bindView(R.id.power_switch)
+    val deleteButton: ImageButton by bindView(R.id.delete_button)
 
     init {
         LayoutInflater.from(context).inflate(R.layout.view_weekly_alarm, this)
     }
 
     fun setWeeklyAlarm(weeklyAlarm: WeeklyAlarm) {
-        var listAdapter = TimeAlarmListAdapter(context)
-        listAdapter.timeAlarms = weeklyAlarm.timeAlarms.toList()
-        timeAlarmListView.adapter = listAdapter
-
-        timeAlarmListView.setOnItemClickListener { parent, view, position, id ->
-            Toast.makeText(context, "timeAlarmListView:$position", Toast.LENGTH_SHORT).show()
-        }
+        setTimeAlarm(weeklyAlarm.timeAlarms[0])
 
         showWeekCheckboxState(weeklyAlarm.weeks)
 
@@ -47,6 +43,51 @@ class WeeklyAlarmView : FrameLayout {
         }
     }
 
+    fun setTimeAlarm(timeAlarm: TimeAlarm) {
+        timeTextView.text = timeAlarm.timeOfDay.toString()
+        powerSwitch.isChecked = timeAlarm.isPowerOn
+
+        timeTextView.setOnClickListener {
+            var timeOfDay = timeAlarm.timeOfDay
+            TimePickerManager.show(timeOfDay.hour, timeOfDay.minute, TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
+                var newTimeOfDay = TimeOfDay(hourOfDay, minute)
+
+                WeeklyAlarmManager.setTimeOfDay(timeAlarm.id, newTimeOfDay)
+                timeTextView.text = newTimeOfDay.toString()
+            })
+        }
+
+        powerSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+            WeeklyAlarmManager.setPower(timeAlarm.id, isChecked)
+        }
+
+        deleteButton.setOnClickListener {
+            WeeklyAlarmManager.remove(timeAlarm.id)
+        }
+    }
+
+
+//    fun setWeeklyAlarm(weeklyAlarm: WeeklyAlarm) {
+//        var listAdapter = TimeAlarmListAdapter(context)
+//        listAdapter.timeAlarms = weeklyAlarm.timeAlarms.toList()
+//        timeAlarmListView.adapter = listAdapter
+//
+//        timeAlarmListView.setOnItemClickListener { parent, view, position, id ->
+//            Toast.makeText(context, "timeAlarmListView:$position", Toast.LENGTH_SHORT).show()
+//        }
+//
+//        showWeekCheckboxState(weeklyAlarm.weeks)
+//
+//        getWeeks().forEach {
+//            var checkboxId = getWeekCheckboxId(it)
+//            var checkbox = findViewById(checkboxId) as CheckBox
+//            checkbox.setOnCheckedChangeListener { buttonView, isChecked ->
+//                var week = getWeek(buttonView.id)
+//                WeeklyAlarmManager.setWeek(weeklyAlarm.id, week, isChecked)
+//            }
+//        }
+//    }
+
     private fun getWeeks(): Array<Int> {
         return arrayOf(
                 Calendar.SUNDAY,
@@ -59,27 +100,27 @@ class WeeklyAlarmView : FrameLayout {
         )
     }
 
-    override fun onWindowFocusChanged(hasWindowFocus: Boolean) {
-        super.onWindowFocusChanged(hasWindowFocus)
+//    override fun onWindowFocusChanged(hasWindowFocus: Boolean) {
+//        super.onWindowFocusChanged(hasWindowFocus)
+//
+//        if (hasWindowFocus) {
+//            fitListViewHeightToItems()
+//        }
+//    }
 
-        if (hasWindowFocus) {
-            fitListViewHeightToItems()
-        }
-    }
-
-    private fun fitListViewHeightToItems() {
-        val listViewItem = timeAlarmListView.adapter.getView(0, null, timeAlarmListView)
-        listViewItem.measure(
-                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
-                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED))
-
-        val listViewItemHeight = listViewItem.measuredHeight
-        val listViewWrapperHeight = listViewItemHeight * timeAlarmListView.count
-
-        var params = timeAlarmListView.layoutParams
-        params.height = listViewWrapperHeight
-        timeAlarmListView.layoutParams = params
-    }
+//    private fun fitListViewHeightToItems() {
+//        val listViewItem = timeAlarmListView.adapter.getView(0, null, timeAlarmListView)
+//        listViewItem.measure(
+//                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+//                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED))
+//
+//        val listViewItemHeight = listViewItem.measuredHeight
+//        val listViewWrapperHeight = listViewItemHeight * timeAlarmListView.count
+//
+//        var params = timeAlarmListView.layoutParams
+//        params.height = listViewWrapperHeight
+//        timeAlarmListView.layoutParams = params
+//    }
 
     private fun showWeekCheckboxState(weeks: Set<Int>) {
         weeks.forEach { week ->

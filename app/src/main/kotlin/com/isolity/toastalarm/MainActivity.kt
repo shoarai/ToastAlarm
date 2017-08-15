@@ -29,13 +29,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // HACK: Context
         WeeklyAlarmStorage.context = applicationContext
         WeeklyAlarmManager.context = applicationContext
 
-        showWeeklyAlarmList()
-
 
         TimePickerManager.fragmentManager = supportFragmentManager
+
+        showWeeklyAlarmList()
 
 
         addWeeklyAlarmButton.setOnClickListener { onClickAddButton() }
@@ -43,6 +44,7 @@ class MainActivity : AppCompatActivity() {
 
         WeeklyAlarmManager.update = {
             showWeeklyAlarmList()
+//            weeklyAlarmListView.refreshDrawableState()
         }
 
         // DEBUG
@@ -55,7 +57,7 @@ class MainActivity : AppCompatActivity() {
         Log.v(TAG, "start onClickAddButton")
         var weeklyAlarm = WeeklyAlarmCreator.createWeeklyAlarm()
         WeeklyAlarmManager.addWeeklyAlarm(weeklyAlarm)
-        showWeeklyAlarmList()
+//        showWeeklyAlarmList()
 
         Toast.makeText(applicationContext, "Add", Toast.LENGTH_SHORT).show()
         Log.v(TAG, "end onClickAddButton")

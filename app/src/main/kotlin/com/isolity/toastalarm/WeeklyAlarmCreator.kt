@@ -21,7 +21,17 @@ object WeeklyAlarmCreator {
                 c.get((Calendar.HOUR_OF_DAY)),
                 c.get((Calendar.MINUTE)))
         var timeAlarm = TimeAlarm(createTimeAlarmId(weeklyAlarms), timeOfDay)
+        timeAlarm.powerOn()
         var weeklyAlarm = WeeklyAlarm(createUniqueId(weeklyAlarms), timeAlarm)
+//        weeklyAlarm.addWeek(
+//                Calendar.SUNDAY,
+//                Calendar.MONDAY,
+//                Calendar.TUESDAY,
+//                Calendar.WEDNESDAY,
+//                Calendar.THURSDAY,
+//                Calendar.FRIDAY,
+//                Calendar.SATURDAY
+//        )
         return weeklyAlarm
     }
 
