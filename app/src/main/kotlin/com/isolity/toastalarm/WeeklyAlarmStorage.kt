@@ -16,7 +16,7 @@ object WeeklyAlarmStorage {
 
     var context: Context? = null
 
-    fun saveWeeklyAlarm(weeklyAlarms: Array<WeeklyAlarm>) {
+    fun save(weeklyAlarms: Array<WeeklyAlarm>) {
         if (context === null) {
             throw IllegalStateException("context is null")
         }
@@ -26,15 +26,16 @@ object WeeklyAlarmStorage {
         prefs.edit().putString(storageKey, jsonInstanceString).apply()
     }
 
-    fun restoreWeeklyAlarm(): Array<WeeklyAlarm> {
+    fun restore(): Array<WeeklyAlarm>? {
         if (context === null) {
             throw IllegalStateException("context is null")
         }
+
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-        val weeklyAlarmsString = prefs.getString(storageKey, "")
-//        if (weeklyAlarmsString.isBlank()) {
-//            return emptyArray()
-//        }
+        val weeklyAlarmsString =  prefs.getString(storageKey, "")
+        if (weeklyAlarmsString.isBlank()) {
+            return null
+        }
         val gson = Gson()
 
         try {
@@ -44,5 +45,10 @@ object WeeklyAlarmStorage {
         } catch (e: JsonSyntaxException) {
             throw e
         }
+    }
+
+    private fun restoreString():String{
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        return prefs.getString(storageKey, "")
     }
 }

@@ -26,7 +26,8 @@ object WeeklyAlarmManager {
     init {
         var weeklyAlarms: Array<WeeklyAlarm>
         try {
-            weeklyAlarms = WeeklyAlarmStorage.restoreWeeklyAlarm()
+            var alarmNullable = WeeklyAlarmStorage.restore()
+            weeklyAlarms = alarmNullable ?: WeeklyAlarmCreator.createDefaultWeeklyAlarms()
         } catch (e: JsonSyntaxException) {
             Log.v(TAG, e.toString())
             weeklyAlarms = WeeklyAlarmCreator.createDefaultWeeklyAlarms()
@@ -113,7 +114,7 @@ object WeeklyAlarmManager {
     // ===============
 
     private fun updateStorage() {
-        WeeklyAlarmStorage.saveWeeklyAlarm(weeklyAlarmList.weeklyAlarms.toTypedArray())
+        WeeklyAlarmStorage.save(weeklyAlarmList.weeklyAlarms.toTypedArray())
         if (context !== null) {
             WeeklyAlarmServiceManager.startAlarm(context as Context)
         }
