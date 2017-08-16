@@ -1,9 +1,14 @@
 package com.isolity.toastalarm
 
 import android.content.Context
+import android.view.LayoutInflater
 import android.widget.Toast
 import com.isolity.toastalarm.model.TimeOfDay
 import java.util.*
+import android.view.Gravity
+import android.widget.TextView
+
+
 
 /**
  * Created by shohei52a on 2017/08/16.
@@ -12,8 +17,25 @@ import java.util.*
 
 object ToastService{
     fun showToast(context: Context){
-        var now = getNowTime()
-        Toast.makeText(context, "$now !!", Toast.LENGTH_LONG).show()
+        val now = getNowTime()
+        val text = "$now"
+
+//        Toast.makeText(context,text, Toast.LENGTH_LONG).show()
+
+        val toast = Toast(context)
+        val inflate = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val view = inflate.inflate(R.layout.toast, null)
+//        LayoutInflater.from(context).inflate(R.layout.toast, null)
+
+        val textView = view.findViewById(R.id.message) as TextView
+        textView.text = text
+
+        toast.view = view
+        toast.run {
+            duration = Toast.LENGTH_SHORT
+            setGravity(Gravity.BOTTOM, 0, 300)
+            show()
+        }
     }
 
     private fun getNowTime(): String {
