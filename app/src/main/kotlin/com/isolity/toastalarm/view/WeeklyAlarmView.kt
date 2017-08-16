@@ -58,7 +58,7 @@ class WeeklyAlarmView : FrameLayout {
             })
         }
 
-        powerSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+        powerSwitch.setOnCheckedChangeListener { _, isChecked ->
             WeeklyAlarmManager.setPower(dailyAlarm.id, isChecked)
         }
 
@@ -126,7 +126,7 @@ class WeeklyAlarmView : FrameLayout {
     private fun showWeekCheckboxState(weeks: Set<Int>) {
         weeks.forEach { week ->
             var id = getWeekCheckboxId(week)
-            if (id === null) return
+            if (id == null) return
 
             var weekCheckbox = findViewById(id) as CheckBox
             weekCheckbox.isChecked = true

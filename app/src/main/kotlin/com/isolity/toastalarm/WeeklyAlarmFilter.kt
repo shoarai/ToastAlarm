@@ -14,11 +14,11 @@ object WeeklyAlarmFilter {
      * Get a calendar of next time from now from weekly alarm list.
      * @param weeklyAlarms weekly alarms
      */
-    fun getNextAlarmCalendar(weeklyAlarms: Array<WeeklyAlarm>): Calendar {
+    fun getNextAlarmAsCalendar(weeklyAlarms: Array<WeeklyAlarm>): Calendar {
         var calendar: Calendar? = null
 
         weeklyAlarms.forEach {
-            var cal = getNextAlarmCalendar(it)
+            var cal = getNextAlarmAsCalendar(it)
             if (cal === null) {
                 return@forEach
             }
@@ -33,7 +33,7 @@ object WeeklyAlarmFilter {
         return calendar as Calendar
     }
 
-    private fun getNextAlarmCalendar(weeklyAlarm: WeeklyAlarm): Calendar? {
+    private fun getNextAlarmAsCalendar(weeklyAlarm: WeeklyAlarm): Calendar? {
         var calendar: Calendar? = null
 
         weeklyAlarm.weeks.forEach { week ->

@@ -3,7 +3,6 @@ package com.isolity.toastalarm
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
-import com.isolity.toastalarm.model.TimeOfDay
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -16,22 +15,26 @@ object WeeklyAlarmServiceManager {
     private val TAG = WeeklyAlarmServiceManager::class.java.simpleName
 
     /**
-     * Start alarm.
-     * @param context Context
+     * Start a next alarm with power on.
+     * If there is no powered on, do not do anything.
+     * @param context context
      */
-    fun startAlarm(context: Context) {
-        Log.v(TAG, "startAlarm")
+    fun startNextAlarmWithPowerOn(context: Context) {
+        Log.v(TAG, "start startNextAlarmWithPowerOn")
+
+        WeeklyAlarmManager.init(context)
 
         if (WeeklyAlarmManager.hasPowerOn()) {
-            var weeklyAlarms = WeeklyAlarmManager.weeklyAlarms
-            val calendar = WeeklyAlarmFilter.getNextAlarmCalendar(weeklyAlarms.toTypedArray())
+            var weeklyAlarms = WeeklyAlarmManager.weeklyAlarms.toTypedArray()
+            val calendar = WeeklyAlarmFilter.getNextAlarmAsCalendar(weeklyAlarms)
             AlarmService.startAlarm(context, calendar)
 
 //            showNextTime(context, calendar)
         } else {
             AlarmService.stopAlarm()
-//            Toast.makeText(context, "Stop all alarm", 0).show()
         }
+
+        Log.v(TAG, "end startNextAlarmWithPowerOn")
     }
 
     private fun showNextTime(context: Context, calendar: Calendar){

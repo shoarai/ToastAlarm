@@ -30,7 +30,7 @@ class AlarmService : IntentService("AlarmService") {
             val context = applicationContext
             ToastService.showToast(context)
 
-            WeeklyAlarmServiceManager.startAlarm(context)
+            WeeklyAlarmServiceManager.startNextAlarmWithPowerOn(context)
         })
     }
 
@@ -40,21 +40,27 @@ class AlarmService : IntentService("AlarmService") {
         private val REQUEST_CODE = 0
         private val TAG = AlarmService::class.java.simpleName
 
-        var alarmMgr: AlarmManager? = null
-        var alarmIntent: PendingIntent? = null
+        private var alarmMgr: AlarmManager? = null
+        private var alarmIntent: PendingIntent? = null
 
         /**
          * Start alarm.
+         * @param context context
+         * @param calendar calendar
          */
         fun startAlarm(context: Context, calendar: Calendar) {
             alarmMgr = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-            var intent = Intent(context, AlarmService::class.java)
+            val intent = Intent(context, AlarmService::class.java)
             alarmIntent = PendingIntent.getService(
                     context, REQUEST_CODE, intent,
                     PendingIntent.FLAG_UPDATE_CURRENT)
 
-            alarmMgr?.setExact(AlarmManager.RTC, calendar.timeInMillis, alarmIntent)
+            alarmMgr?.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, alarmIntent)
+//            alarmMgr?.setExact(AlarmManager.RTC, calendar.timeInMillis, alarmIntent)
+
+
+            ToastService.showDebugToast(context, "startAlarm" + calendar.toString())
         }
 
         /**

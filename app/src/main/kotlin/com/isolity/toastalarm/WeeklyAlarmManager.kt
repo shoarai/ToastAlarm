@@ -16,7 +16,7 @@ import java.util.*
 object WeeklyAlarmManager {
     private val TAG = WeeklyAlarmManager::class.java.simpleName
 
-    var weeklyAlarmList: WeeklyAlarmList
+    private var weeklyAlarmList: WeeklyAlarmList
 
     var weeklyAlarms: MutableList<WeeklyAlarm> = mutableListOf()
         get () {
@@ -24,6 +24,15 @@ object WeeklyAlarmManager {
         }
 
     init {
+        weeklyAlarmList = WeeklyAlarmList(emptyArray())
+    }
+
+    fun init(context: Context) {
+        if (WeeklyAlarmStorage.context != null) {
+            return
+        }
+        WeeklyAlarmStorage.context = context
+
         var weeklyAlarms: Array<WeeklyAlarm>
         try {
             var alarmNullable = WeeklyAlarmStorage.restore()
@@ -31,7 +40,7 @@ object WeeklyAlarmManager {
         } catch (e: JsonSyntaxException) {
             Log.v(TAG, e.toString())
             weeklyAlarms = WeeklyAlarmCreator.createDefaultWeeklyAlarms()
-            updateStorage()
+            onUpdateData()
         }
 
         // DEBUG: Create test data ====
@@ -62,7 +71,7 @@ object WeeklyAlarmManager {
 
     fun addWeeklyAlarm(weeklyAlarm: WeeklyAlarm) {
         weeklyAlarmList.weeklyAlarms.add(weeklyAlarm)
-        updateStorage()
+        onUpdateData()
     }
 
     fun removeByTimeAlarmId(timeAlarmId: Int) {
@@ -70,14 +79,14 @@ object WeeklyAlarmManager {
         val alarmToDelete = weeklyAlarmList.findWeeklyAlarmByTimeAlarmId(timeAlarmId)
         weeklyAlarmList.weeklyAlarms.remove(alarmToDelete)
 
-        updateStorage()
+        onUpdateData()
     }
 
     fun remove(weeklyAlarmId: Int) {
         val alarmToDeleted = weeklyAlarmList.findWeeklyAlarm(weeklyAlarmId)
         weeklyAlarmList.weeklyAlarms.remove(alarmToDeleted)
 
-        updateStorage()
+        onUpdateData()
     }
 
     fun hasPowerOn(): Boolean {
@@ -93,27 +102,24 @@ object WeeklyAlarmManager {
             }
         }
 
-        updateStorage()
+        onUpdateData()
     }
 
     fun setTimeOfDay(timeAlarmId: Int, timeOfDay: TimeOfDay) {
         weeklyAlarmList.findTimeAlarm(timeAlarmId).timeOfDay = timeOfDay
 
-        updateStorage()
+        onUpdateData()
     }
 
     fun setPower(timeAlarmId: Int, power: Boolean) {
         weeklyAlarmList.findTimeAlarm(timeAlarmId).isPowerOn = power
 
-        updateStorage()
+        onUpdateData()
     }
 
-    var context: Context? = null
+    var onUpdate :((Array<WeeklyAlarm>)->Unit)? = null
 
-    private fun updateStorage() {
-        WeeklyAlarmStorage.store(weeklyAlarmList.weeklyAlarms.toTypedArray())
-        if (context !== null) {
-            WeeklyAlarmServiceManager.startAlarm(context as Context)
-        }
+    private fun onUpdateData() {
+        onUpdate?.invoke(weeklyAlarmList.weeklyAlarms.toTypedArray())
     }
 }

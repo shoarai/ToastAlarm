@@ -18,8 +18,10 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         Log.v(TAG, "onReceive")
 
-        if (intent.action.equals("android.intent.action.BOOT_COMPLETED")) {
-            WeeklyAlarmServiceManager.startAlarm(context)
+        if (intent.action == "android.intent.action.BOOT_COMPLETED") {
+            Log.v(TAG, "onReceive action:android.intent.action.BOOT_COMPLETED")
+
+            WeeklyAlarmServiceManager.startNextAlarmWithPowerOn(context)
         }
     }
 }

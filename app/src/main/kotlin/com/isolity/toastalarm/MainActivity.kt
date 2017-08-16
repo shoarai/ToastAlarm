@@ -1,11 +1,13 @@
 package com.isolity.toastalarm
 
+import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.widget.ListView
 import com.isolity.toastalarm.adapter.WeeklyAlarmListAdapter
+import com.isolity.toastalarm.model.WeeklyAlarm
 import com.isolity.toastalarm.view.TimePickerManager
 
 
@@ -34,12 +36,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        Log.v(TAG, "start onCreate")
+
         // HACK: Context
-        WeeklyAlarmStorage.context = applicationContext
-        WeeklyAlarmManager.context = applicationContext
         TimePickerManager.fragmentManager = supportFragmentManager
 
-        initWeeklyAlarmList()
+        WeeklyAlarmManager.init(applicationContext)
+        WeeklyAlarmManager.onUpdate = {weeklyAlarms -> onUpdateWeeklyAlarm(weeklyAlarms)}
+
+        initWeeklyAlarmListView()
 
         addWeeklyAlarmButton.setOnClickListener { onClickAddButton() }
         debugToastButton.setOnClickListener { onClickDebugToastButton() }
@@ -50,13 +55,14 @@ class MainActivity : AppCompatActivity() {
         Log.v(TAG, "end onCreate")
     }
 
-    private fun initWeeklyAlarmList() {
+    private fun initWeeklyAlarmListView() {
         Log.v(TAG, "start showWeeklyAlarmList")
         listAdapter.weeklyAlarms = WeeklyAlarmManager.weeklyAlarms
-        weeklyAlarmListView.adapter = listAdapter
 
         listAdapter.onClickDeleteButton = {
             weeklyAlarmId -> onClickDeleteButton(weeklyAlarmId)}
+
+        weeklyAlarmListView.adapter = listAdapter
 
         // HACK: Get event from child list view
 //        weeklyAlarmListView.setOnItemClickListener { parent, view, pos, id ->
@@ -69,6 +75,11 @@ class MainActivity : AppCompatActivity() {
 //        }
 
         Log.v(TAG, "end showWeeklyAlarmList")
+    }
+
+    private fun onUpdateWeeklyAlarm(weeklyAlarms:Array<WeeklyAlarm>){
+        WeeklyAlarmStorage.store(weeklyAlarms)
+        WeeklyAlarmServiceManager.startNextAlarmWithPowerOn(applicationContext)
     }
 
     private fun onClickAddButton() {

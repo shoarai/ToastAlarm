@@ -1,6 +1,7 @@
 package com.isolity.toastalarm
 
 import android.content.Context
+import android.os.Debug
 import android.view.LayoutInflater
 import android.widget.Toast
 import com.isolity.toastalarm.model.TimeOfDay
@@ -46,5 +47,21 @@ object ToastService{
         val now = Calendar.getInstance()
         val time = TimeOfDay(now.get(Calendar.HOUR), now.get(Calendar.MINUTE))
         return time.toString()
+    }
+
+    fun showDebugToast(context : Context, text: String){
+        return
+
+        val toast = Toast(context)
+        val inflate = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val view = inflate.inflate(R.layout.toast, null)
+        val textView = view.findViewById(R.id.message) as TextView
+        textView.text = text
+        toast.view = view
+        toast.run {
+            duration = Toast.LENGTH_SHORT
+            setGravity(Gravity.BOTTOM, 0, 300)
+            show()
+        }
     }
 }

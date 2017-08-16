@@ -12,7 +12,7 @@ import java.lang.IllegalStateException
  * Created by shoarai on 2017/04/30.
  */
 object WeeklyAlarmStorage {
-    const val storageKey = "WEEKLY_ALARMS"
+    private const val storageKey = "WEEKLY_ALARMS"
 
     var context: Context? = null
 
