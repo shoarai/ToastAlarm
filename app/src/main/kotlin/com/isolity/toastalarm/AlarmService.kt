@@ -43,6 +43,9 @@ class AlarmService : IntentService("AlarmService") {
         var alarmMgr: AlarmManager? = null
         var alarmIntent: PendingIntent? = null
 
+        /**
+         * Start alarm.
+         */
         fun startAlarm(context: Context, calendar: Calendar) {
             alarmMgr = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
@@ -54,6 +57,9 @@ class AlarmService : IntentService("AlarmService") {
             alarmMgr?.setExact(AlarmManager.RTC, calendar.timeInMillis, alarmIntent)
         }
 
+        /**
+         * Stop alarm.
+         */
         fun stopAlarm() {
             alarmMgr?.cancel(alarmIntent)
         }

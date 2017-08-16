@@ -6,12 +6,14 @@ import com.isolity.toastalarm.model.WeeklyAlarm
 import java.util.*
 
 /**
- * Created by shohei52a on 2017/08/13.
+ * Created by shoarai on 2017/08/13.
  */
 
 object WeeklyAlarmCreator {
     /**
      * Create weekly alarm for current time.
+     * @param weeklyAlarms weekly alarms
+     * @return new weekly alarm
      */
     fun createWeeklyAlarm(weeklyAlarms: Array<WeeklyAlarm>): WeeklyAlarm {
         var timeAlarm = createDailyAlarmSetting(weeklyAlarms)
@@ -30,6 +32,7 @@ object WeeklyAlarmCreator {
 
     /**
      * Create default weekly alarms at first running.
+     * @return default weekly alarm
      */
     fun createDefaultWeeklyAlarms(): Array<WeeklyAlarm> {
         return emptyArray()
@@ -48,7 +51,7 @@ object WeeklyAlarmCreator {
     /**
      * Create unique ID for weekly alarm.
      */
-    fun createUniqueId(weeklyAlarms: Array<WeeklyAlarm>): Int {
+    private fun createUniqueId(weeklyAlarms: Array<WeeklyAlarm>): Int {
         var i = 1
         while (true) {
             if (weeklyAlarms.any { it.id === i }) {
@@ -62,7 +65,7 @@ object WeeklyAlarmCreator {
     /**
      * Create unique ID for time alarm.
      */
-    fun createTimeAlarmId(weeklyAlarms: Array<WeeklyAlarm>): Int {
+    private  fun createTimeAlarmId(weeklyAlarms: Array<WeeklyAlarm>): Int {
         var i = 1
         while (true) {
             if (weeklyAlarms.any { it.dailyAlarms.any { it.id === i } }) {

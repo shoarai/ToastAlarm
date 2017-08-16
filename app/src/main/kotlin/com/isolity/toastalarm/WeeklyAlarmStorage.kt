@@ -9,14 +9,18 @@ import java.lang.IllegalStateException
 
 
 /**
- * Created by shohei52a on 2017/04/30.
+ * Created by shoarai on 2017/04/30.
  */
 object WeeklyAlarmStorage {
-    val storageKey = "WEEKLY_ALARMS"
+    const val storageKey = "WEEKLY_ALARMS"
 
     var context: Context? = null
 
-    fun save(weeklyAlarms: Array<WeeklyAlarm>) {
+    /**
+     * Store weekly alarms.
+     * @param weeklyAlarms weeklyAlarms to store
+     */
+    fun store(weeklyAlarms: Array<WeeklyAlarm>) {
         if (context === null) {
             throw IllegalStateException("context is null")
         }
@@ -26,6 +30,11 @@ object WeeklyAlarmStorage {
         prefs.edit().putString(storageKey, jsonInstanceString).apply()
     }
 
+    /**
+     * Restore weekly alarms from the stored json string.
+     * @return weekly alarms
+     * @throws JsonSyntaxException if json is not a valid representation for weekly alarms
+     */
     fun restore(): Array<WeeklyAlarm>? {
         if (context === null) {
             throw IllegalStateException("context is null")
@@ -45,10 +54,5 @@ object WeeklyAlarmStorage {
         } catch (e: JsonSyntaxException) {
             throw e
         }
-    }
-
-    private fun restoreString():String{
-        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-        return prefs.getString(storageKey, "")
     }
 }

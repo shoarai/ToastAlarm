@@ -11,11 +11,15 @@ import android.widget.TextView
 
 
 /**
- * Created by shohei52a on 2017/08/16.
+ * Created by shoarai on 2017/08/16.
  */
 
 
 object ToastService{
+    /**
+     * Show toast.
+     * @param context context
+     */
     fun showToast(context: Context){
         val now = getNowTime()
         val text = "$now"

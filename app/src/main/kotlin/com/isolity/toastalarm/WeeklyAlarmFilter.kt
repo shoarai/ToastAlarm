@@ -12,6 +12,7 @@ import java.util.*
 object WeeklyAlarmFilter {
     /**
      * Get a calendar of next time from now from weekly alarm list.
+     * @param weeklyAlarms weekly alarms
      */
     fun getNextAlarmCalendar(weeklyAlarms: Array<WeeklyAlarm>): Calendar {
         var calendar: Calendar? = null

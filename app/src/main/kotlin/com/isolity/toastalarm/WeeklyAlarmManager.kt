@@ -115,7 +115,7 @@ object WeeklyAlarmManager {
     // ===============
 
     private fun updateStorage() {
-        WeeklyAlarmStorage.save(weeklyAlarmList.weeklyAlarms.toTypedArray())
+        WeeklyAlarmStorage.store(weeklyAlarmList.weeklyAlarms.toTypedArray())
         if (context !== null) {
             WeeklyAlarmServiceManager.startAlarm(context as Context)
         }

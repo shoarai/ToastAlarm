@@ -15,6 +15,10 @@ object WeeklyAlarmServiceManager {
 
     private val TAG = WeeklyAlarmServiceManager::class.java.simpleName
 
+    /**
+     * Start alarm.
+     * @param context Context
+     */
     fun startAlarm(context: Context) {
         Log.v(TAG, "startAlarm")
 
@@ -30,7 +34,7 @@ object WeeklyAlarmServiceManager {
         }
     }
 
-    fun showNextTime(context: Context, calendar: Calendar){
+    private fun showNextTime(context: Context, calendar: Calendar){
 //            Toast.makeText(context, "Next alarm: " + toString(calendar), 0).show()
 
         val now = Calendar.getInstance()
