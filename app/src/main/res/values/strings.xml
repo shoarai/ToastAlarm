@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ToastAlarm</string>
+    <string name="app_name">Toast Alarm</string>
     <string name="week_sunday_short">Sun</string>
     <string name="week_monday_short">Mon</string>
     <string name="week_tues_short">Tue</string>

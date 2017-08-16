@@ -25,6 +25,10 @@ class MainActivity : AppCompatActivity() {
         findViewById(R.id.add_weekly_alarm_button) as FloatingActionButton
     }
 
+    val debugToastButton by lazy {
+        findViewById(R.id.debug_toast_button) as FloatingActionButton
+    }
+
     val listAdapter by lazy {
         WeeklyAlarmListAdapter(applicationContext)
     }
@@ -41,6 +45,7 @@ class MainActivity : AppCompatActivity() {
         initWeeklyAlarmList()
 
         addWeeklyAlarmButton.setOnClickListener { onClickAddButton() }
+        debugToastButton.setOnClickListener { onClickDebugToastButton() }
 
         // DEBUG
 //        closeApplication()
@@ -58,6 +63,10 @@ class MainActivity : AppCompatActivity() {
 
 //        Toast.makeText(applicationContext, "Add", Toast.LENGTH_SHORT).show()
         Log.v(TAG, "end onClickAddButton")
+    }
+
+    private fun onClickDebugToastButton() {
+        ToastService.showToast(applicationContext)
     }
 
     private fun initWeeklyAlarmList() {

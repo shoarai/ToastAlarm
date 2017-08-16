@@ -12,10 +12,9 @@ class WeeklyAlarmList {
     }
 
     fun hasPowerOn(): Boolean {
-        weeklyAlarms.any {
+       return weeklyAlarms.any {
             it.weeks.isNotEmpty() && it.dailyAlarms.any { it.isPowerOn }
         }
-        return false
     }
 
     fun findWeeklyAlarm(weeklyAlarmId: Int): WeeklyAlarm {

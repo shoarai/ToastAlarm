@@ -24,20 +24,14 @@ class AlarmService : IntentService("AlarmService") {
     override fun onHandleIntent(intent: Intent) {
         Log.v(TAG, "onHandleIntent!!!")
 
-        var context = applicationContext
-        mHandler.post(Runnable {
+        mHandler.post({
             Log.v(TAG, "time:" + SystemClock.elapsedRealtime())
 
-            var now = getNowTime()
-            Toast.makeText(context, "$now !!", Toast.LENGTH_LONG).show()
+            val context = applicationContext
+            ToastService.showToast(context)
 
             WeeklyAlarmServiceManager.startAlarm(context)
         })
-    }
-
-    private fun getNowTime(): String {
-        var now = Calendar.getInstance()
-        return now.get(Calendar.HOUR).toString() + ":" + now.get(Calendar.MINUTE)
     }
 
     companion object {

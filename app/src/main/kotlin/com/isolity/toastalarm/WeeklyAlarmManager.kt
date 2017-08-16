@@ -49,7 +49,8 @@ object WeeklyAlarmManager {
         var weeklyAlarm = WeeklyAlarm(0, alarm1)
         // TODO: Support multiple alarm by week.
 //        weeklyAlarm.addTimeAlarm(alarm2)
-        weeklyAlarm.addWeek(Calendar.MONDAY, Calendar.TUESDAY,
+        weeklyAlarm.addWeek(
+                Calendar.MONDAY, Calendar.TUESDAY,
                 Calendar.WEDNESDAY, Calendar.THURSDAY, Calendar.FRIDAY
         )
 
