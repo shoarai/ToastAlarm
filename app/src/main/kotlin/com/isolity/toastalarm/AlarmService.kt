@@ -12,7 +12,6 @@ import android.os.SystemClock
 import com.isolity.toastalarm.model.TimeOfDay
 import java.util.*
 
-
 /**
  * Created by shoarai on 2017/04/22.
  */

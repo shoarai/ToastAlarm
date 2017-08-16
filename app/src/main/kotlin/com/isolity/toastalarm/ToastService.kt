@@ -34,7 +34,7 @@ object ToastService{
 
         toast.view = view
         toast.run {
-            duration = Toast.LENGTH_SHORT
+            duration = Toast.LENGTH_LONG
             setGravity(Gravity.BOTTOM, 0, 300)
             show()
         }
