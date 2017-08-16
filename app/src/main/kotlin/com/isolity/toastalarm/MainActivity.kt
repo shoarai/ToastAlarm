@@ -20,15 +20,12 @@ class MainActivity : AppCompatActivity() {
     val weeklyAlarmListView by lazy {
         findViewById(R.id.weekly_alarm_list_view) as ListView
     }
-
     val addWeeklyAlarmButton by lazy {
         findViewById(R.id.add_weekly_alarm_button) as FloatingActionButton
     }
-
     val debugToastButton by lazy {
         findViewById(R.id.debug_toast_button) as FloatingActionButton
     }
-
     val listAdapter by lazy {
         WeeklyAlarmListAdapter(applicationContext)
     }
@@ -53,35 +50,13 @@ class MainActivity : AppCompatActivity() {
         Log.v(TAG, "end onCreate")
     }
 
-    private fun onClickAddButton() {
-        Log.v(TAG, "start onClickAddButton")
-        val alarms = WeeklyAlarmManager.weeklyAlarms
-        val newAlarm = WeeklyAlarmCreator.createWeeklyAlarm(alarms.toTypedArray())
-        WeeklyAlarmManager.addWeeklyAlarm(newAlarm)
-
-        listAdapter.notifyAlarmSetChanged()
-
-//        Toast.makeText(applicationContext, "Add", Toast.LENGTH_SHORT).show()
-        Log.v(TAG, "end onClickAddButton")
-    }
-
-    private fun onClickDebugToastButton() {
-        ToastService.showToast(applicationContext)
-    }
-
     private fun initWeeklyAlarmList() {
         Log.v(TAG, "start showWeeklyAlarmList")
         listAdapter.weeklyAlarms = WeeklyAlarmManager.weeklyAlarms
         weeklyAlarmListView.adapter = listAdapter
 
-        WeeklyAlarmManager.update = {
-            listAdapter.notifyDataSetChanged()
-        }
-
-        listAdapter.onClickDeleteButton = { weeklyAlarmId ->
-            WeeklyAlarmManager.remove(weeklyAlarmId)
-            listAdapter.notifyAlarmSetChanged()
-        }
+        listAdapter.onClickDeleteButton = {
+            weeklyAlarmId -> onClickDeleteButton(weeklyAlarmId)}
 
 //        weeklyAlarmListView.setOnItemClickListener { parent, view, pos, id ->
 //            val alarm = listAdapter.getItem(pos)
@@ -93,6 +68,27 @@ class MainActivity : AppCompatActivity() {
 //        }
 
         Log.v(TAG, "end showWeeklyAlarmList")
+    }
+
+    private fun onClickAddButton() {
+        Log.v(TAG, "start onClickAddButton")
+        val alarms = WeeklyAlarmManager.weeklyAlarms
+        val newAlarm = WeeklyAlarmCreator.createWeeklyAlarm(alarms.toTypedArray())
+        WeeklyAlarmManager.addWeeklyAlarm(newAlarm)
+
+        listAdapter.notifyAlarmSetChanged()
+        Log.v(TAG, "end onClickAddButton")
+    }
+
+    private fun onClickDeleteButton(weeklyAlarmId: Int) {
+        Log.v(TAG, "start onClickDeleteButton")
+        WeeklyAlarmManager.remove(weeklyAlarmId)
+        listAdapter.notifyAlarmSetChanged()
+        Log.v(TAG, "end onClickDeleteButton")
+    }
+
+    private fun onClickDebugToastButton() {
+        ToastService.showToast(applicationContext)
     }
 
     private fun closeApplication() {

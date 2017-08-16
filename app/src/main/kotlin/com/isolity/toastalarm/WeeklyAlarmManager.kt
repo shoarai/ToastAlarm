@@ -110,17 +110,10 @@ object WeeklyAlarmManager {
 
     var context: Context? = null
 
-    // DEBUG: ========
-    var update: (() -> Unit)? = null
-    // ===============
-
     private fun updateStorage() {
         WeeklyAlarmStorage.store(weeklyAlarmList.weeklyAlarms.toTypedArray())
         if (context !== null) {
             WeeklyAlarmServiceManager.startAlarm(context as Context)
         }
-
-        // DEBUG:
-        update?.invoke()
     }
 }

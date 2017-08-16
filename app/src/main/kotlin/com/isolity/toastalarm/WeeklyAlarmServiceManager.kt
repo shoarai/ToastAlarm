@@ -27,7 +27,7 @@ object WeeklyAlarmServiceManager {
             val calendar = WeeklyAlarmFilter.getNextAlarmCalendar(weeklyAlarms.toTypedArray())
             AlarmService.startAlarm(context, calendar)
 
-            showNextTime(context, calendar)
+//            showNextTime(context, calendar)
         } else {
             AlarmService.stopAlarm()
 //            Toast.makeText(context, "Stop all alarm", 0).show()
