@@ -74,8 +74,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@null"
-            android:src="@android:drawable/ic_menu_delete"
-            android:tint="@color/colorBase"
+            android:src="@drawable/delete_button_selector"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="40dp" />
 
