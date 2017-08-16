@@ -28,7 +28,7 @@ class WeeklyAlarmListAdapter(private val context: Context) : BaseAdapter() {
         val view = WeeklyAlarmView(context)
         view.setWeeklyAlarm(weeklyAlarms[position])
 
-        val deleteButton = view?.findViewById(R.id.delete_button) as ImageButton
+        val deleteButton = view.findViewById(R.id.delete_button) as ImageButton
         deleteButton.setOnClickListener {
             val item = getItem(position) as WeeklyAlarm
             onClickDeleteButton?.invoke(item.id)

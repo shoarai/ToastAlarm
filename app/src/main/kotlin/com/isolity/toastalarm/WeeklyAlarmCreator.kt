@@ -54,7 +54,7 @@ object WeeklyAlarmCreator {
     private fun createUniqueId(weeklyAlarms: Array<WeeklyAlarm>): Int {
         var i = 1
         while (true) {
-            if (weeklyAlarms.any { it.id === i }) {
+            if (weeklyAlarms.any { it.id == i }) {
                 i++
                 continue
             }
@@ -68,7 +68,7 @@ object WeeklyAlarmCreator {
     private  fun createTimeAlarmId(weeklyAlarms: Array<WeeklyAlarm>): Int {
         var i = 1
         while (true) {
-            if (weeklyAlarms.any { it.dailyAlarms.any { it.id === i } }) {
+            if (weeklyAlarms.any { it.dailyAlarms.any { it.id == i } }) {
                 i++
                 continue
             }

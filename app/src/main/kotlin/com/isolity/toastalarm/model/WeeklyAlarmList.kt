@@ -18,7 +18,7 @@ class WeeklyAlarmList {
     }
 
     fun findWeeklyAlarm(weeklyAlarmId: Int): WeeklyAlarm {
-        var weeklyAlarm = weeklyAlarms.firstOrNull { it.id === weeklyAlarmId }
+        var weeklyAlarm = weeklyAlarms.firstOrNull { it.id == weeklyAlarmId }
         if (weeklyAlarm === null) {
             throw IllegalArgumentException("weekly alarm is not found")
         }

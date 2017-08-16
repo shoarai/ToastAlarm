@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorBaseDark">#000000</color>
+    <color name="colorBaseDark">#222</color>
+    <color name="colorBaseMiddleDark">#333</color>
     <color name="colorBase">#ddd</color>
-    <color name="colorControl">#0f78f9</color>
-    <color name="colorPressed">#7dfff2</color>
+    <color name="colorControl">#0f8cf9</color>
+    <color name="colorPressed">@color/accent_material_dark</color>
 
 
     <color name="colorPrimary">#3F51B5</color>

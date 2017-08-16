@@ -17,16 +17,16 @@ class MainActivity : AppCompatActivity() {
 
     private val TAG = MainActivity::class.java.simpleName
 
-    val weeklyAlarmListView by lazy {
+    private val weeklyAlarmListView by lazy {
         findViewById(R.id.weekly_alarm_list_view) as ListView
     }
-    val addWeeklyAlarmButton by lazy {
+    private val addWeeklyAlarmButton by lazy {
         findViewById(R.id.add_weekly_alarm_button) as FloatingActionButton
     }
-    val debugToastButton by lazy {
+    private val debugToastButton by lazy {
         findViewById(R.id.debug_toast_button) as FloatingActionButton
     }
-    val listAdapter by lazy {
+    private val listAdapter by lazy {
         WeeklyAlarmListAdapter(applicationContext)
     }
 
@@ -58,6 +58,7 @@ class MainActivity : AppCompatActivity() {
         listAdapter.onClickDeleteButton = {
             weeklyAlarmId -> onClickDeleteButton(weeklyAlarmId)}
 
+        // HACK: Get event from child list view
 //        weeklyAlarmListView.setOnItemClickListener { parent, view, pos, id ->
 //            val alarm = listAdapter.getItem(pos)
 //            when (view.id) {

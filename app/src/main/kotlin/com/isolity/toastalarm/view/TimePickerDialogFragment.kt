@@ -11,14 +11,12 @@ import android.widget.TimePicker
  */
 
 class TimePickerDialogFragment(
-        val hour: Int, val minute: Int,
-        val onTimeSetListener: TimePickerDialog.OnTimeSetListener)
+        private val hour: Int, private val minute: Int,
+        private val onTimeSetListener: TimePickerDialog.OnTimeSetListener)
     : DialogFragment(), TimePickerDialog.OnTimeSetListener {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val timePickerDialog = TimePickerDialog(
-                activity, this, hour, minute, true)
-        return timePickerDialog
+        return TimePickerDialog(activity, this, hour, minute, true)
     }
 
     override fun onTimeSet(view: TimePicker, hourOfDay: Int, minute: Int) {
