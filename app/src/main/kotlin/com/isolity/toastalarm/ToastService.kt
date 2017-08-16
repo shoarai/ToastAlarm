@@ -9,12 +9,9 @@ import java.util.*
 import android.view.Gravity
 import android.widget.TextView
 
-
-
 /**
  * Created by shoarai on 2017/08/16.
  */
-
 
 object ToastService{
     /**
@@ -45,7 +42,7 @@ object ToastService{
 
     private fun getNowTime(): String {
         val now = Calendar.getInstance()
-        val time = TimeOfDay(now.get(Calendar.HOUR), now.get(Calendar.MINUTE))
+        val time = TimeOfDay(now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE))
         return time.toString()
     }
 

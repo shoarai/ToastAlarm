@@ -9,6 +9,7 @@ import android.widget.ListView
 import com.isolity.toastalarm.adapter.WeeklyAlarmListAdapter
 import com.isolity.toastalarm.model.WeeklyAlarm
 import com.isolity.toastalarm.view.TimePickerManager
+import java.util.*
 
 
 /**
@@ -17,7 +18,9 @@ import com.isolity.toastalarm.view.TimePickerManager
 
 class MainActivity : AppCompatActivity() {
 
-    private val TAG = MainActivity::class.java.simpleName
+    companion object {
+        private val TAG = MainActivity::class.java.simpleName
+    }
 
     private val weeklyAlarmListView by lazy {
         findViewById(R.id.weekly_alarm_list_view) as ListView
@@ -27,6 +30,9 @@ class MainActivity : AppCompatActivity() {
     }
     private val debugToastButton by lazy {
         findViewById(R.id.debug_toast_button) as FloatingActionButton
+    }
+    private  val debugStartAlarmButton by lazy{
+        findViewById(R.id.debug_start_alarm_button) as FloatingActionButton
     }
     private val listAdapter by lazy {
         WeeklyAlarmListAdapter(applicationContext)
@@ -48,6 +54,7 @@ class MainActivity : AppCompatActivity() {
 
         addWeeklyAlarmButton.setOnClickListener { onClickAddButton() }
         debugToastButton.setOnClickListener { onClickDebugToastButton() }
+        debugStartAlarmButton.setOnClickListener { onClickDebugStartAlarmButton() }
 
         // DEBUG
 //        closeApplication()
@@ -97,6 +104,12 @@ class MainActivity : AppCompatActivity() {
         WeeklyAlarmManager.remove(weeklyAlarmId)
         listAdapter.notifyAlarmSetChanged()
         Log.v(TAG, "end onClickDeleteButton")
+    }
+
+    private fun onClickDebugStartAlarmButton(){
+        val cal = Calendar.getInstance()
+        cal.add(Calendar.SECOND, 10)
+        AlarmService.startAlarm(applicationContext, cal)
     }
 
     private fun onClickDebugToastButton() {

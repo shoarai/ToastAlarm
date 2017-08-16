@@ -35,6 +35,17 @@
         android:layout_marginBottom="10dp"
         app:backgroundTint="@color/colorControl" />
 
+    <!--DEBUG: Start alarm manually-->
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/debug_start_alarm_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@android:drawable/btn_star"
+        android:tint="@color/colorBase"
+        android:layout_gravity="left|bottom"
+        android:layout_marginBottom="10dp"
+        app:backgroundTint="@color/colorControl" />
+
     <!--DEBUG: Show toast manually-->
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/debug_toast_button"

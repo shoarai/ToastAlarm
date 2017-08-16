@@ -16,11 +16,11 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
     }
 
     override fun onReceive(context: Context, intent: Intent) {
-        Log.v(TAG, "onReceive")
+        Log.v(TAG, "onReceive action:" + intent.action )
+
+        ToastService.showDebugToast(context, "onReceive action:" + intent.action)
 
         if (intent.action == "android.intent.action.BOOT_COMPLETED") {
-            Log.v(TAG, "onReceive action:android.intent.action.BOOT_COMPLETED")
-
             WeeklyAlarmServiceManager.startNextAlarmWithPowerOn(context)
         }
     }

@@ -27,10 +27,8 @@ class AlarmService : IntentService("AlarmService") {
         mHandler.post({
             Log.v(TAG, "time:" + SystemClock.elapsedRealtime())
 
-            val context = applicationContext
-            ToastService.showToast(context)
-
-            WeeklyAlarmServiceManager.startNextAlarmWithPowerOn(context)
+            ToastService.showToast(applicationContext)
+            WeeklyAlarmServiceManager.startNextAlarmWithPowerOn(applicationContext)
         })
     }
 
@@ -50,7 +48,6 @@ class AlarmService : IntentService("AlarmService") {
          */
         fun startAlarm(context: Context, calendar: Calendar) {
             alarmMgr = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-
             val intent = Intent(context, AlarmService::class.java)
             alarmIntent = PendingIntent.getService(
                     context, REQUEST_CODE, intent,
@@ -59,6 +56,11 @@ class AlarmService : IntentService("AlarmService") {
             alarmMgr?.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, alarmIntent)
 //            alarmMgr?.setExact(AlarmManager.RTC, calendar.timeInMillis, alarmIntent)
 
+            // HACK: Use BroadCastReceiver not Service
+//            alarmMgr = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+//            val intent = Intent(context, AlarmBroadcastReceiver::class.java)
+//            alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0)
+//            alarmMgr?.setExact(AlarmManager.RTC_WAKEUP,calendar.timeInMillis, alarmIntent);
 
             ToastService.showDebugToast(context, "startAlarm" + calendar.toString())
         }
