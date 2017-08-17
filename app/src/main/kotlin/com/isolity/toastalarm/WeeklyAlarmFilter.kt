@@ -53,7 +53,7 @@ object WeeklyAlarmFilter {
     private fun toCalendarAfterNow(timeOfDay: TimeOfDay, week: Int): Calendar {
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.DAY_OF_WEEK, week)
-        calendar.set(Calendar.HOUR_OF_DAY, timeOfDay.hour)
+        calendar.set(Calendar.HOUR_OF_DAY, timeOfDay.hourOfDay)
         calendar.set(Calendar.MINUTE, timeOfDay.minute)
         calendar.set(Calendar.SECOND, 0)
 

@@ -45,6 +45,8 @@
         android:layout_marginBottom="10dp"
         app:backgroundTint="@color/colorControl" />
 
+    <!--android:visibility="invisible"-->
+
     <!--DEBUG: Start alarm manually-->
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/debug_start_alarm_button"
@@ -54,6 +56,7 @@
         android:tint="@color/colorBase"
         android:layout_gravity="left|bottom"
         android:layout_marginBottom="10dp"
+        android:visibility="invisible"
         app:backgroundTint="@color/colorControl" />
 
     <!--DEBUG: Show toast manually-->
@@ -65,6 +68,7 @@
         android:tint="@color/colorBase"
         android:layout_gravity="right|bottom"
         android:layout_marginBottom="10dp"
+        android:visibility="invisible"
         app:backgroundTint="@color/colorControl" />
 
 </android.support.design.widget.CoordinatorLayout>

@@ -1,5 +1,6 @@
 package com.isolity.toastalarm
 
+import android.app.TimePickerDialog
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.app.AppCompatActivity
@@ -8,6 +9,7 @@ import android.widget.ListView
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.isolity.toastalarm.adapter.WeeklyAlarmListAdapter
+import com.isolity.toastalarm.model.TimeOfDay
 import com.isolity.toastalarm.model.WeeklyAlarm
 import com.isolity.toastalarm.view.TimePickerManager
 import java.util.*
@@ -97,11 +99,19 @@ class MainActivity : AppCompatActivity() {
 
     private fun onClickAddButton() {
         Log.v(TAG, "start onClickAddButton")
-        val alarms = WeeklyAlarmManager.weeklyAlarms
-        val newAlarm = WeeklyAlarmCreator.createWeeklyAlarm(alarms.toTypedArray())
-        WeeklyAlarmManager.addWeeklyAlarm(newAlarm)
 
-        listAdapter.notifyAlarmSetChanged()
+        val now = Calendar.getInstance()
+        val hourOfDay = now.get(Calendar.HOUR_OF_DAY)
+        val minute = now.get(Calendar.MINUTE)
+
+        TimePickerManager.show(hourOfDay, minute, TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
+            val alarms = WeeklyAlarmManager.weeklyAlarms
+            val newAlarm = WeeklyAlarmCreator.createWeeklyAlarm(alarms.toTypedArray())
+            newAlarm.dailyAlarms.first().timeOfDay = TimeOfDay(hourOfDay, minute)
+            WeeklyAlarmManager.addWeeklyAlarm(newAlarm)
+            listAdapter.notifyAlarmSetChanged()
+        })
+
         Log.v(TAG, "end onClickAddButton")
     }
 
