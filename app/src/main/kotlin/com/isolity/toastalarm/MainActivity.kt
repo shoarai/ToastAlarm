@@ -1,16 +1,16 @@
 package com.isolity.toastalarm
 
-import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.widget.ListView
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
 import com.isolity.toastalarm.adapter.WeeklyAlarmListAdapter
 import com.isolity.toastalarm.model.WeeklyAlarm
 import com.isolity.toastalarm.view.TimePickerManager
 import java.util.*
-
 
 /**
  * Created by shoarai on 2017/04/17.
@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
     private val debugToastButton by lazy {
         findViewById(R.id.debug_toast_button) as FloatingActionButton
     }
-    private  val debugStartAlarmButton by lazy{
+    private val debugStartAlarmButton by lazy {
         findViewById(R.id.debug_start_alarm_button) as FloatingActionButton
     }
     private val listAdapter by lazy {
@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
         TimePickerManager.fragmentManager = supportFragmentManager
 
         WeeklyAlarmManager.init(applicationContext)
-        WeeklyAlarmManager.onUpdate = {weeklyAlarms -> onUpdateWeeklyAlarm(weeklyAlarms)}
+        WeeklyAlarmManager.onUpdate = { weeklyAlarms -> onUpdateWeeklyAlarm(weeklyAlarms) }
 
         initWeeklyAlarmListView()
 
@@ -56,18 +56,24 @@ class MainActivity : AppCompatActivity() {
         debugToastButton.setOnClickListener { onClickDebugToastButton() }
         debugStartAlarmButton.setOnClickListener { onClickDebugStartAlarmButton() }
 
+//        showAdView()
         // DEBUG
 //        closeApplication()
 
         Log.v(TAG, "end onCreate")
     }
 
+    private fun showAdView() {
+        val mAdView = findViewById(R.id.adView) as AdView
+        val adRequest = AdRequest.Builder().build()
+        mAdView.loadAd(adRequest)
+    }
+
     private fun initWeeklyAlarmListView() {
         Log.v(TAG, "start showWeeklyAlarmList")
         listAdapter.weeklyAlarms = WeeklyAlarmManager.weeklyAlarms
 
-        listAdapter.onClickDeleteButton = {
-            weeklyAlarmId -> onClickDeleteButton(weeklyAlarmId)}
+        listAdapter.onClickDeleteButton = { weeklyAlarmId -> onClickDeleteButton(weeklyAlarmId) }
 
         weeklyAlarmListView.adapter = listAdapter
 
@@ -84,7 +90,7 @@ class MainActivity : AppCompatActivity() {
         Log.v(TAG, "end showWeeklyAlarmList")
     }
 
-    private fun onUpdateWeeklyAlarm(weeklyAlarms:Array<WeeklyAlarm>){
+    private fun onUpdateWeeklyAlarm(weeklyAlarms: Array<WeeklyAlarm>) {
         WeeklyAlarmStorage.store(weeklyAlarms)
         WeeklyAlarmServiceManager.startNextAlarmWithPowerOn(applicationContext)
     }
@@ -106,7 +112,7 @@ class MainActivity : AppCompatActivity() {
         Log.v(TAG, "end onClickDeleteButton")
     }
 
-    private fun onClickDebugStartAlarmButton(){
+    private fun onClickDebugStartAlarmButton() {
         val cal = Calendar.getInstance()
         cal.add(Calendar.SECOND, 10)
         AlarmService.startAlarm(applicationContext, cal)
