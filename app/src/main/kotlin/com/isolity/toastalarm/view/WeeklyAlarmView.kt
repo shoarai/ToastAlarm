@@ -20,9 +20,9 @@ class WeeklyAlarmView : FrameLayout {
 
 //    val timeAlarmListView: ListView by bindView(R.id.time_alarm_list_view)
 
-    val timeTextView: TextView by bindView(R.id.time_text_view)
-    val powerSwitch: Switch by bindView(R.id.power_switch)
-    val deleteButton: ImageButton by bindView(R.id.delete_button)
+    private val timeTextView: TextView by bindView(R.id.time_text_view)
+    private val powerSwitch: Switch by bindView(R.id.power_switch)
+    private val deleteButton: ImageButton by bindView(R.id.delete_button)
 
     init {
         LayoutInflater.from(context).inflate(R.layout.view_weekly_alarm, this)
@@ -44,7 +44,7 @@ class WeeklyAlarmView : FrameLayout {
         }
     }
 
-    fun setTimeAlarm(dailyAlarm: DailyAlarm) {
+    private fun setTimeAlarm(dailyAlarm: DailyAlarm) {
         timeTextView.text = dailyAlarm.timeOfDay.toString()
         powerSwitch.isChecked = dailyAlarm.isPowerOn
 
@@ -126,8 +126,6 @@ class WeeklyAlarmView : FrameLayout {
     private fun showWeekCheckboxState(weeks: Set<Int>) {
         weeks.forEach { week ->
             var id = getWeekCheckboxId(week)
-            if (id == null) return
-
             var weekCheckbox = findViewById(id) as CheckBox
             weekCheckbox.isChecked = true
         }

@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
         debugToastButton.setOnClickListener { onClickDebugToastButton() }
         debugStartAlarmButton.setOnClickListener { onClickDebugStartAlarmButton() }
 
-//        showAdView()
+        showAdView()
         // DEBUG
 //        closeApplication()
 
