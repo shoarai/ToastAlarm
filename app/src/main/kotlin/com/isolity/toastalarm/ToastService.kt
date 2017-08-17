@@ -1,6 +1,7 @@
 package com.isolity.toastalarm
 
 import android.content.Context
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.widget.TextView
@@ -16,11 +17,14 @@ import java.util.*
  */
 
 object ToastService {
+    private val TAG = ToastService::class.java.simpleName
+
     /**
      * Show toast.
      * @param context context
      */
     fun showToast(context: Context) {
+        Log.v(TAG, "start showToast")
         val now = getNowTime()
         val text = "$now"
 
@@ -34,30 +38,42 @@ object ToastService {
         val textView = view.findViewById(R.id.message) as TextView
         textView.text = text
 
+        toast.view = view
 
         val mAdView = view.findViewById(R.id.adView) as AdView
         val adRequest = AdRequest.Builder().build()
         mAdView.adListener = object : AdListener() {
             override fun onAdLoaded() {
                 super.onAdLoaded()
-                toast.view = view
-                toast.run {
-                    duration = Toast.LENGTH_LONG
-                    setGravity(Gravity.BOTTOM, 0, 350)
-                    show()
+                showToast(toast)
+            }
+
+            override fun onAdFailedToLoad(errorCode: Int) {
+                super.onAdFailedToLoad(errorCode)
+                when (errorCode) {
+                    AdRequest.ERROR_CODE_INTERNAL_ERROR ->
+                        Log.v(TAG, "onAdFailedToLoad errorCode:ERROR_CODE_INTERNAL_ERROR")
+                    AdRequest.ERROR_CODE_INVALID_REQUEST ->
+                        Log.v(TAG, "onAdFailedToLoad errorCode:ERROR_CODE_INVALID_REQUEST")
+                    AdRequest.ERROR_CODE_NETWORK_ERROR ->
+                        Log.v(TAG, "onAdFailedToLoad errorCode:ERROR_CODE_NETWORK_ERROR")
+                    AdRequest.ERROR_CODE_NO_FILL ->
+                        Log.v(TAG, "onAdFailedToLoad errorCode:ERROR_CODE_NO_FILL")
                 }
+                showToast(toast)
             }
         }
         mAdView.loadAd(adRequest)
-
-
+        Log.v(TAG, "end showToast")
     }
 
-//    class CustomAdListener: AdListener() {
-//        override fun onAdLoaded(){
-//
-//        }
-//    }
+    private fun showToast(toast: Toast) {
+        toast.run {
+            duration = Toast.LENGTH_LONG
+            setGravity(Gravity.BOTTOM, 0, 250)
+            show()
+        }
+    }
 
     private fun getNowTime(): String {
         val now = Calendar.getInstance()

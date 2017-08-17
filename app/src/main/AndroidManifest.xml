@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.isolity.toastalarm">
 
+    <!--Firebase needs?-->
+    <!--<uses-permission android:name="android.permission.INTERNET" />-->
+    <!--<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />-->
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <!--<uses-permission android:name="android.permission.DISABLE_KEYGUARD" />-->
@@ -22,7 +25,8 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".AlarmBroadcastReceiver"
+        <receiver
+            android:name=".AlarmBroadcastReceiver"
             android:process=":false">
             <!--Add the receiver to your app's manifest file with an intent filter that filters on the ACTION_BOOT_COMPLETED action:-->
             <!--②はデバイス起動時とアプリ更新時に発生する broadcast を受け取ってください。
@@ -30,7 +34,6 @@
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
-
 
 
             <!--①の時間が遅れる問題は時間が自動設定されているときに発生するので、
@@ -51,7 +54,7 @@
 
 
             <!--<intent-filter>-->
-                <!--<action android:name="ToastAlarmAction"></action>-->
+            <!--<action android:name="ToastAlarmAction"></action>-->
             <!--</intent-filter>-->
         </receiver>
         <!--
@@ -60,7 +63,7 @@
         -->
         <service
             android:name=".AlarmService"
-            android:exported="false"/>
+            android:exported="false" />
 
 
     </application>
