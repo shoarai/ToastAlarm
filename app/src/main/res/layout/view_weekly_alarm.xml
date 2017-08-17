@@ -84,7 +84,7 @@
             android:layout_height="wrap_content"
             android:text="10:10"
             android:textAlignment="center"
-            android:textSize="50sp"
+            android:textSize="45sp"
             android:textColor="@color/colorBase"
             android:layout_weight="1" />
 

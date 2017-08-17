@@ -3,9 +3,9 @@
     <color name="colorBaseDark">#222</color>
     <color name="colorBaseMiddleDark">#333</color>
     <color name="colorBase">#ddd</color>
-    <color name="colorControl">#0f8cf9</color>
-    <color name="colorPressed">@color/accent_material_dark</color>
-
+    <!--<color name="colorControl">@color/accent_material_light</color>&lt;!&ndash;009688&ndash;&gt;-->
+    <color name="colorControl">#4ab5aa</color>
+    <color name="colorPressed">@color/accent_material_dark</color><!--80cbc4-->
 
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>

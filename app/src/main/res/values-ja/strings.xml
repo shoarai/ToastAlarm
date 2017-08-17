@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Toast Alarm</string>
+    <string name="app_name">Popup Alarm</string>
     <string name="week_sunday_short">日</string>
     <string name="week_monday_short">月</string>
     <string name="week_tues_short">火</string>
