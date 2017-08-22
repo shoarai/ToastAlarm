@@ -1,75 +1,42 @@
 package com.isolity.toastalarm
 
-import android.content.Intent;
-import android.util.Log;
-import android.widget.Toast
-import android.app.IntentService
+import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
-import android.os.Handler
-import android.app.AlarmManager
-import android.os.SystemClock
-import com.isolity.toastalarm.model.TimeOfDay
+import android.content.Intent
 import java.util.*
 
 /**
  * Created by shoarai on 2017/04/22.
  */
 
-class AlarmService : IntentService("AlarmService") {
-
-    private var mHandler: Handler = Handler()
-
-    override fun onHandleIntent(intent: Intent) {
-        Log.v(TAG, "onHandleIntent!!!")
-
-        mHandler.post({
-            Log.v(TAG, "time:" + SystemClock.elapsedRealtime())
-
-            ToastService.showToast(applicationContext)
-            WeeklyAlarmServiceManager.startNextAlarmWithPowerOn(applicationContext)
-        })
+class AlarmService {
+    companion object {
+        private const val REQUEST_CODE = 0
     }
 
-    companion object {
-        // This value is defined and consumed by app code, so any value will work.
-        // There's no significance to this sample using 0.
-        private val REQUEST_CODE = 0
-        private val TAG = AlarmService::class.java.simpleName
+    private var alarmMgr: AlarmManager? = null
+    private var alarmIntent: PendingIntent? = null
 
-        private var alarmMgr: AlarmManager? = null
-        private var alarmIntent: PendingIntent? = null
+    /**
+     * Start alarm.
+     * @param context context
+     * @param calendar calendar
+     */
+    fun startAlarm(context: Context, calendar: Calendar) {
+        alarmMgr = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(context, AlarmBroadcastReceiver::class.java)
+        alarmIntent = PendingIntent.getBroadcast(
+                context, REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
-        /**
-         * Start alarm.
-         * @param context context
-         * @param calendar calendar
-         */
-        fun startAlarm(context: Context, calendar: Calendar) {
-            alarmMgr = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            val intent = Intent(context, AlarmService::class.java)
-            alarmIntent = PendingIntent.getService(
-                    context, REQUEST_CODE, intent,
-                    PendingIntent.FLAG_UPDATE_CURRENT)
+        alarmMgr?.setExact(AlarmManager.RTC, calendar.timeInMillis, alarmIntent)
+    }
 
-            alarmMgr?.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, alarmIntent)
-//            alarmMgr?.setExact(AlarmManager.RTC, calendar.timeInMillis, alarmIntent)
-
-            // HACK: Use BroadCastReceiver not Service
-//            alarmMgr = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-//            val intent = Intent(context, AlarmBroadcastReceiver::class.java)
-//            alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0)
-//            alarmMgr?.setExact(AlarmManager.RTC_WAKEUP,calendar.timeInMillis, alarmIntent);
-
-            ToastService.showDebugToast(context, "startAlarm" + calendar.toString())
-        }
-
-        /**
-         * Stop alarm.
-         */
-        fun stopAlarm() {
-            alarmMgr?.cancel(alarmIntent)
-        }
+    /**
+     * Stop alarm.
+     */
+    fun stopAlarm() {
+        alarmMgr?.cancel(alarmIntent)
     }
 }
 

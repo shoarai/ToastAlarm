@@ -3,6 +3,8 @@ package com.isolity.toastalarm
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.os.Handler
+import android.os.SystemClock
 import android.util.Log
 
 /**
@@ -16,12 +18,33 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
     }
 
     override fun onReceive(context: Context, intent: Intent) {
-        Log.v(TAG, "onReceive action:" + intent.action )
+        Log.v(TAG, "onReceive action:" + intent.action)
 
-        ToastService.showDebugToast(context, "onReceive action:" + intent.action)
+        when (intent.action) {
+            null ->
+                Handler().post({
+                    Log.v(TAG, "time:" + SystemClock.elapsedRealtime())
 
-        if (intent.action == "android.intent.action.BOOT_COMPLETED") {
-            WeeklyAlarmServiceManager.startNextAlarmWithPowerOn(context)
+                    ToastService.showToast(context)
+                    WeeklyAlarmServiceManager.startNextAlarmWithPowerOn(context)
+                })
+
+            "android.intent.action.BOOT_COMPLETED" ->
+                WeeklyAlarmServiceManager.startNextAlarmWithPowerOn(context)
         }
     }
+
+
+//    private var mHandler: Handler = Handler()
+//
+//    fun onTime(intent: Intent) {
+//        Log.v(TAG, "onHandleIntent!!!")
+//
+//        mHandler.post({
+//            Log.v(AlarmService.TAG, "time:" + SystemClock.elapsedRealtime())
+//
+//            ToastService.showToast(applicationContext)
+//            WeeklyAlarmServiceManager.startNextAlarmWithPowerOn(applicationContext)
+//        })
+//    }
 }

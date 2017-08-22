@@ -125,7 +125,7 @@ class MainActivity : AppCompatActivity() {
     private fun onClickDebugStartAlarmButton() {
         val cal = Calendar.getInstance()
         cal.add(Calendar.SECOND, 10)
-        AlarmService.startAlarm(applicationContext, cal)
+        AlarmService().startAlarm(applicationContext, cal)
     }
 
     private fun onClickDebugToastButton() {
