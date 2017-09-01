@@ -10,7 +10,7 @@ import java.util.*
  * Created by shoarai on 2017/04/22.
  */
 
-class AlarmService {
+class OnceAlarmStarter {
     companion object {
         private const val REQUEST_CODE = 0
     }
@@ -28,7 +28,6 @@ class AlarmService {
         val intent = Intent(context, AlarmBroadcastReceiver::class.java)
         alarmIntent = PendingIntent.getBroadcast(
                 context, REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-
         alarmMgr?.setExact(AlarmManager.RTC, calendar.timeInMillis, alarmIntent)
     }
 

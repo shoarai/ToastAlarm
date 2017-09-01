@@ -59,8 +59,11 @@ class MainActivity : AppCompatActivity() {
         debugStartAlarmButton.setOnClickListener { onClickDebugStartAlarmButton() }
 
         showAdView()
-        // DEBUG
+
+        // DEBUG =========
+//        startDebugAlarm()
 //        closeApplication()
+        // ===============
 
         Log.v(TAG, "end onCreate")
     }
@@ -89,12 +92,14 @@ class MainActivity : AppCompatActivity() {
 //            }
 //        }
 
+        WeeklyAlarmStarter.startNextAlarmWithPowerOn(applicationContext)
+
         Log.v(TAG, "end showWeeklyAlarmList")
     }
 
     private fun onUpdateWeeklyAlarm(weeklyAlarms: Array<WeeklyAlarm>) {
         WeeklyAlarmStorage.store(weeklyAlarms)
-        WeeklyAlarmServiceManager.startNextAlarmWithPowerOn(applicationContext)
+        WeeklyAlarmStarter.startNextAlarmWithPowerOn(applicationContext)
     }
 
     private fun onClickAddButton() {
@@ -123,9 +128,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onClickDebugStartAlarmButton() {
+        startDebugAlarm()
+    }
+
+    private fun startDebugAlarm() {
         val cal = Calendar.getInstance()
         cal.add(Calendar.SECOND, 10)
-        AlarmService().startAlarm(applicationContext, cal)
+        OnceAlarmStarter().startAlarm(applicationContext, cal)
     }
 
     private fun onClickDebugToastButton() {
@@ -134,8 +143,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun closeApplication() {
         finishAndRemoveTask()
+//        finishActivity(0)
+//        finishAndRemoveTask()
 //        finish()
 //        moveTaskToBack(true);
     }
 }
-

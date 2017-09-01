@@ -10,11 +10,11 @@ import java.util.concurrent.TimeUnit
  * Created by shoarai on 2017/04/29.
  */
 
-object WeeklyAlarmServiceManager {
+object WeeklyAlarmStarter {
 
-    private val TAG = WeeklyAlarmServiceManager::class.java.simpleName
+    private val TAG = WeeklyAlarmStarter::class.java.simpleName
 
-    private val alarmService = AlarmService()
+    private val alarmService = OnceAlarmStarter()
 
     /**
      * Start a next alarm with power on.
