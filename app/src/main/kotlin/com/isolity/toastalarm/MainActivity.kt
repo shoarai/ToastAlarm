@@ -9,9 +9,14 @@ import android.widget.ListView
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.isolity.toastalarm.adapter.WeeklyAlarmListAdapter
+import com.isolity.toastalarm.alarm.OnceAlarmManager
+import com.isolity.toastalarm.alarm.WeeklyAlarmManager
 import com.isolity.toastalarm.model.TimeOfDay
 import com.isolity.toastalarm.model.WeeklyAlarm
+import com.isolity.toastalarm.model.WeeklyAlarmCreator
+import com.isolity.toastalarm.repository.WeeklyAlarmRepository
 import com.isolity.toastalarm.view.TimePickerManager
+import com.isolity.toastalarm.view.ToastView
 import java.util.*
 
 /**
@@ -19,7 +24,6 @@ import java.util.*
  */
 
 class MainActivity : AppCompatActivity() {
-
     companion object {
         private val TAG = MainActivity::class.java.simpleName
     }
@@ -49,14 +53,12 @@ class MainActivity : AppCompatActivity() {
         // HACK: Context
         TimePickerManager.fragmentManager = supportFragmentManager
 
-        WeeklyAlarmManager.init(applicationContext)
-        WeeklyAlarmManager.onUpdate = { weeklyAlarms -> onUpdateWeeklyAlarm(weeklyAlarms) }
+        WeeklyAlarmDataManager.init(applicationContext)
+        WeeklyAlarmDataManager.onUpdate = { weeklyAlarms -> onUpdateWeeklyAlarm(weeklyAlarms) }
 
         initWeeklyAlarmListView()
 
-        addWeeklyAlarmButton.setOnClickListener { onClickAddButton() }
-        debugToastButton.setOnClickListener { onClickDebugToastButton() }
-        debugStartAlarmButton.setOnClickListener { onClickDebugStartAlarmButton() }
+        setListener()
 
         showAdView()
 
@@ -68,6 +70,12 @@ class MainActivity : AppCompatActivity() {
         Log.v(TAG, "end onCreate")
     }
 
+    private fun setListener() {
+        addWeeklyAlarmButton.setOnClickListener { onClickAddButton() }
+        debugToastButton.setOnClickListener { onClickDebugToastButton() }
+        debugStartAlarmButton.setOnClickListener { onClickDebugStartAlarmButton() }
+    }
+
     private fun showAdView() {
         val mAdView = findViewById(R.id.adView) as AdView
         val adRequest = AdRequest.Builder().build()
@@ -76,7 +84,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun initWeeklyAlarmListView() {
         Log.v(TAG, "start showWeeklyAlarmList")
-        listAdapter.weeklyAlarms = WeeklyAlarmManager.weeklyAlarms
+        listAdapter.weeklyAlarms = WeeklyAlarmDataManager.weeklyAlarms
 
         listAdapter.onClickDeleteButton = { weeklyAlarmId -> onClickDeleteButton(weeklyAlarmId) }
 
@@ -92,14 +100,14 @@ class MainActivity : AppCompatActivity() {
 //            }
 //        }
 
-        WeeklyAlarmStarter.startNextAlarmWithPowerOn(applicationContext)
+        WeeklyAlarmManager.startNextAlarm(applicationContext)
 
         Log.v(TAG, "end showWeeklyAlarmList")
     }
 
     private fun onUpdateWeeklyAlarm(weeklyAlarms: Array<WeeklyAlarm>) {
-        WeeklyAlarmStorage.store(weeklyAlarms)
-        WeeklyAlarmStarter.startNextAlarmWithPowerOn(applicationContext)
+        WeeklyAlarmRepository.update(applicationContext, weeklyAlarms)
+        WeeklyAlarmManager.startNextAlarm(applicationContext)
     }
 
     private fun onClickAddButton() {
@@ -110,10 +118,10 @@ class MainActivity : AppCompatActivity() {
         val minute = now.get(Calendar.MINUTE)
 
         TimePickerManager.show(hourOfDay, minute, TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
-            val alarms = WeeklyAlarmManager.weeklyAlarms
+            val alarms = WeeklyAlarmDataManager.weeklyAlarms
             val newAlarm = WeeklyAlarmCreator.createWeeklyAlarm(alarms.toTypedArray())
             newAlarm.dailyAlarms.first().timeOfDay = TimeOfDay(hourOfDay, minute)
-            WeeklyAlarmManager.addWeeklyAlarm(newAlarm)
+            WeeklyAlarmDataManager.addWeeklyAlarm(newAlarm)
             listAdapter.notifyAlarmSetChanged()
         })
 
@@ -122,7 +130,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun onClickDeleteButton(weeklyAlarmId: Int) {
         Log.v(TAG, "start onClickDeleteButton")
-        WeeklyAlarmManager.remove(weeklyAlarmId)
+        WeeklyAlarmDataManager.remove(weeklyAlarmId)
         listAdapter.notifyAlarmSetChanged()
         Log.v(TAG, "end onClickDeleteButton")
     }
@@ -134,18 +142,10 @@ class MainActivity : AppCompatActivity() {
     private fun startDebugAlarm() {
         val cal = Calendar.getInstance()
         cal.add(Calendar.SECOND, 10)
-        OnceAlarmStarter().startAlarm(applicationContext, cal)
+        OnceAlarmManager.startAlarm(applicationContext, cal)
     }
 
     private fun onClickDebugToastButton() {
-        ToastService.showToast(applicationContext)
-    }
-
-    private fun closeApplication() {
-        finishAndRemoveTask()
-//        finishActivity(0)
-//        finishAndRemoveTask()
-//        finish()
-//        moveTaskToBack(true);
+        ToastView.showToast(applicationContext)
     }
 }

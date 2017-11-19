@@ -1,4 +1,4 @@
-package com.isolity.toastalarm.view
+package com.isolity.toastalarm.extension
 
 import android.support.annotation.IdRes
 import android.view.View

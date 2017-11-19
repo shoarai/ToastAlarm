@@ -5,7 +5,8 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.widget.*
 import com.isolity.toastalarm.R
-import com.isolity.toastalarm.WeeklyAlarmManager
+import com.isolity.toastalarm.WeeklyAlarmDataManager
+import com.isolity.toastalarm.extension.bindView
 import com.isolity.toastalarm.model.DailyAlarm
 import com.isolity.toastalarm.model.TimeOfDay
 import com.isolity.toastalarm.model.WeeklyAlarm
@@ -17,8 +18,6 @@ import java.util.*
 
 class WeeklyAlarmView : FrameLayout {
     constructor(context: Context?) : super(context)
-
-//    val timeAlarmListView: ListView by bindView(R.id.time_alarm_list_view)
 
     private val timeTextView: TextView by bindView(R.id.time_text_view)
     private val powerSwitch: Switch by bindView(R.id.power_switch)
@@ -39,7 +38,7 @@ class WeeklyAlarmView : FrameLayout {
             var checkbox = findViewById(checkboxId) as CheckBox
             checkbox.setOnCheckedChangeListener { buttonView, isChecked ->
                 var week = getWeek(buttonView.id)
-                WeeklyAlarmManager.setWeek(weeklyAlarm.id, week, isChecked)
+                WeeklyAlarmDataManager.setWeek(weeklyAlarm.id, week, isChecked)
             }
         }
     }
@@ -53,17 +52,17 @@ class WeeklyAlarmView : FrameLayout {
             TimePickerManager.show(timeOfDay.hourOfDay, timeOfDay.minute, TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
                 var newTimeOfDay = TimeOfDay(hourOfDay, minute)
 
-                WeeklyAlarmManager.setTimeOfDay(dailyAlarm.id, newTimeOfDay)
+                WeeklyAlarmDataManager.setTimeOfDay(dailyAlarm.id, newTimeOfDay)
                 timeTextView.text = newTimeOfDay.toString()
             })
         }
 
         powerSwitch.setOnCheckedChangeListener { _, isChecked ->
-            WeeklyAlarmManager.setPower(dailyAlarm.id, isChecked)
+            WeeklyAlarmDataManager.setPower(dailyAlarm.id, isChecked)
         }
 
         deleteButton.setOnClickListener {
-            WeeklyAlarmManager.remove(dailyAlarm.id)
+            WeeklyAlarmDataManager.remove(dailyAlarm.id)
         }
     }
 

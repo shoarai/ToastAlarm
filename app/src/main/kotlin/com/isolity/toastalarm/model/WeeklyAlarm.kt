@@ -17,16 +17,4 @@ class WeeklyAlarm(val id: Int, dailyAlarm: DailyAlarm) {
     fun removeWeek(week: Int) {
         weeks.remove(week)
     }
-
-    fun setTimeAlarm(id: Int, timeOfDay: TimeOfDay) {
-        dailyAlarms.first { it.id == id }.timeOfDay = timeOfDay
-    }
-
-    fun addTimeAlarm(dailyAlarm: DailyAlarm) {
-        dailyAlarms.add(dailyAlarm)
-    }
-
-    fun removeTimeAlarm(id: Int) {
-        dailyAlarms.removeAll { it.id == id }
-    }
 }

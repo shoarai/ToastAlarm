@@ -9,10 +9,8 @@ import android.support.v4.app.FragmentManager
 object TimePickerManager {
     var fragmentManager: FragmentManager? = null
 
-    fun show(hour:Int, minute:Int, onTimeSetListener: TimePickerDialog.OnTimeSetListener) {
-
+    fun show(hour: Int, minute: Int, onTimeSetListener: TimePickerDialog.OnTimeSetListener) {
         val timePicker = TimePickerDialogFragment(hour, minute, onTimeSetListener)
         timePicker.show(fragmentManager, "timePicker")
     }
-
 }

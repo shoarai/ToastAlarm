@@ -1,14 +1,16 @@
-package com.isolity.toastalarm
+package com.isolity.toastalarm.view
 
 import android.content.Context
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
+import com.isolity.toastalarm.R
 import com.isolity.toastalarm.model.TimeOfDay
 import java.util.*
 
@@ -16,8 +18,8 @@ import java.util.*
  * Created by shoarai on 2017/08/16.
  */
 
-object ToastService {
-    private val TAG = ToastService::class.java.simpleName
+object ToastView {
+    private val TAG = ToastView::class.java.simpleName
 
     /**
      * Show toast.
@@ -28,24 +30,20 @@ object ToastService {
         val now = getNowTime()
         val text = "$now"
 
-//        Toast.makeText(context,text, Toast.LENGTH_LONG).show()
+//        Toast.makeText(context, text, Toast.LENGTH_LONG).show()
+//        return
 
-        val toast = Toast(context)
         val inflate = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val view = inflate.inflate(R.layout.toast, null)
-//        LayoutInflater.from(context).inflate(R.layout.toast, null)
 
+        val view = inflate.inflate(R.layout.toast, null)
         val textView = view.findViewById(R.id.message) as TextView
         textView.text = text
 
-        toast.view = view
-
-        val mAdView = view.findViewById(R.id.adView) as AdView
-        val adRequest = AdRequest.Builder().build()
-        mAdView.adListener = object : AdListener() {
+        val adView = view.findViewById(R.id.adView) as AdView
+        adView.adListener = object : AdListener() {
             override fun onAdLoaded() {
                 super.onAdLoaded()
-                showToast(toast)
+                showToast(context, view)
             }
 
             override fun onAdFailedToLoad(errorCode: Int) {
@@ -60,15 +58,17 @@ object ToastService {
                     AdRequest.ERROR_CODE_NO_FILL ->
                         Log.v(TAG, "onAdFailedToLoad errorCode:ERROR_CODE_NO_FILL")
                 }
-                showToast(toast)
+                showToast(context, view)
             }
         }
-        mAdView.loadAd(adRequest)
+        val adRequest = AdRequest.Builder().build()
+        adView.loadAd(adRequest)
         Log.v(TAG, "end showToast")
     }
 
-    private fun showToast(toast: Toast) {
-        toast.run {
+    private fun showToast(context: Context, view: View) {
+        Toast(context).run {
+            this.view = view
             duration = Toast.LENGTH_LONG
             setGravity(Gravity.BOTTOM, 0, 250)
             show()
@@ -79,21 +79,5 @@ object ToastService {
         val now = Calendar.getInstance()
         val time = TimeOfDay(now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE))
         return time.toString()
-    }
-
-    fun showDebugToast(context: Context, text: String) {
-        return
-
-        val toast = Toast(context)
-        val inflate = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val view = inflate.inflate(R.layout.toast, null)
-        val textView = view.findViewById(R.id.message) as TextView
-        textView.text = text
-        toast.view = view
-        toast.run {
-            duration = Toast.LENGTH_SHORT
-            setGravity(Gravity.BOTTOM, 0, 300)
-            show()
-        }
     }
 }

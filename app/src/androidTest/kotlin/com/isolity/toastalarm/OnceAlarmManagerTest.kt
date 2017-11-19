@@ -1,13 +1,11 @@
 package com.isolity.toastalarm
 
-import android.content.Context
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
-
+import com.isolity.toastalarm.alarm.OnceAlarmManager
 import org.junit.Test
 import org.junit.runner.RunWith
-
-import org.junit.Assert.assertEquals
+import java.util.*
 
 /**
  * Instrumentation test, which will execute on an Android device.
@@ -15,14 +13,25 @@ import org.junit.Assert.assertEquals
  * @see [Testing documentation](http://d.android.com/tools/testing)
  */
 @RunWith(AndroidJUnit4::class)
-class AlarmStarterTest {
+class OnceAlarmManagerTest {
+    private val delayTime = 1000
+
+//    @Before
+//    fun setUp() {
+//
+//    }
+
     @Test
-    @Throws(Exception::class)
-    fun useAppContext() {
+//    @Throws(Exception::class)
+    fun startAlarm() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getTargetContext()
+        val calendar = Calendar.getInstance()
+        calendar.add(Calendar.MILLISECOND, delayTime)
+
+        OnceAlarmManager.startAlarm(appContext, calendar)
 
 
-        assertEquals("com.isolity.toastalarm", appContext.packageName)
+//        assertEquals("com.isolity.toastalarm", appContext.packageName)
     }
 }

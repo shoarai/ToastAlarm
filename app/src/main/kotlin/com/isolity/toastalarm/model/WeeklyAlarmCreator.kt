@@ -1,8 +1,5 @@
-package com.isolity.toastalarm
+package com.isolity.toastalarm.model
 
-import com.isolity.toastalarm.model.DailyAlarm
-import com.isolity.toastalarm.model.TimeOfDay
-import com.isolity.toastalarm.model.WeeklyAlarm
 import java.util.*
 
 /**
@@ -11,7 +8,7 @@ import java.util.*
 
 object WeeklyAlarmCreator {
     /**
-     * Create weekly alarm for current time.
+     * Create a weekly alarm at current time.
      * @param weeklyAlarms weekly alarms
      * @return new weekly alarm
      */
@@ -49,7 +46,7 @@ object WeeklyAlarmCreator {
     }
 
     /**
-     * Create unique ID for weekly alarm.
+     * Create an unique ID for new weekly alarm.
      */
     private fun createUniqueId(weeklyAlarms: Array<WeeklyAlarm>): Int {
         var i = 1
@@ -63,9 +60,9 @@ object WeeklyAlarmCreator {
     }
 
     /**
-     * Create unique ID for time alarm.
+     * Create an unique ID for new time alarm.
      */
-    private  fun createTimeAlarmId(weeklyAlarms: Array<WeeklyAlarm>): Int {
+    private fun createTimeAlarmId(weeklyAlarms: Array<WeeklyAlarm>): Int {
         var i = 1
         while (true) {
             if (weeklyAlarms.any { it.dailyAlarms.any { it.id == i } }) {

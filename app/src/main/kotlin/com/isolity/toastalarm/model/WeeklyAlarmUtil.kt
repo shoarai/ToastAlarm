@@ -1,7 +1,5 @@
-package com.isolity.toastalarm
+package com.isolity.toastalarm.model
 
-import com.isolity.toastalarm.model.TimeOfDay
-import com.isolity.toastalarm.model.WeeklyAlarm
 import java.lang.IllegalStateException
 import java.util.*
 
@@ -9,12 +7,27 @@ import java.util.*
  * Created by shoarai on 2017/04/22.
  */
 
-object WeeklyAlarmFilter {
+object WeeklyAlarmUtil {
+    fun hasPowerOn(alarms: List<WeeklyAlarm>): Boolean {
+        return alarms.any {
+            it.weeks.isNotEmpty() && it.dailyAlarms.any { it.isPowerOn }
+        }
+    }
+
+    fun findTimeAlarm(alarms: List<WeeklyAlarm>, timeAlarmId: Int): DailyAlarm {
+        var timeAlarm = alarms.flatMap { it.dailyAlarms }
+                .firstOrNull { it.id == timeAlarmId }
+        if (timeAlarm === null) {
+            throw IllegalArgumentException("time alarm is not found")
+        }
+        return timeAlarm
+    }
+
     /**
      * Get a calendar of next time from now from weekly alarm list.
      * @param weeklyAlarms weekly alarms
      */
-    fun getNextAlarmAsCalendar(weeklyAlarms: Array<WeeklyAlarm>): Calendar {
+    fun getNextAlarmAsCalendar(weeklyAlarms: List<WeeklyAlarm>): Calendar {
         var calendar: Calendar? = null
 
         weeklyAlarms.forEach {

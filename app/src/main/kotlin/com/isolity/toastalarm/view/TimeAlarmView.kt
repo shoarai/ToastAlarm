@@ -8,7 +8,8 @@ import android.widget.ImageButton
 import android.widget.Switch
 import android.widget.TextView
 import com.isolity.toastalarm.R
-import com.isolity.toastalarm.WeeklyAlarmManager
+import com.isolity.toastalarm.WeeklyAlarmDataManager
+import com.isolity.toastalarm.extension.bindView
 import com.isolity.toastalarm.model.DailyAlarm
 import com.isolity.toastalarm.model.TimeOfDay
 
@@ -36,13 +37,13 @@ class TimeAlarmView : FrameLayout {
             TimePickerManager.show(timeOfDay.hourOfDay, timeOfDay.minute, TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
                 var newTimeOfDay = TimeOfDay(hourOfDay, minute)
 
-                WeeklyAlarmManager.setTimeOfDay(dailyAlarm.id, newTimeOfDay)
+                WeeklyAlarmDataManager.setTimeOfDay(dailyAlarm.id, newTimeOfDay)
                 timeTextView.text = newTimeOfDay.toString()
             })
         }
 
         powerSwitch.setOnCheckedChangeListener { _, isChecked ->
-            WeeklyAlarmManager.setPower(dailyAlarm.id, isChecked)
+            WeeklyAlarmDataManager.setPower(dailyAlarm.id, isChecked)
         }
 
         deleteButton.setOnClickListener {
