@@ -66,28 +66,6 @@ class WeeklyAlarmView : FrameLayout {
         }
     }
 
-
-//    fun setWeeklyAlarm(weeklyAlarm: WeeklyAlarm) {
-//        var listAdapter = TimeAlarmListAdapter(context)
-//        listAdapter.timeAlarms = weeklyAlarm.timeAlarms.toList()
-//        timeAlarmListView.adapter = listAdapter
-//
-//        timeAlarmListView.setOnItemClickListener { parent, view, position, id ->
-//            Toast.makeText(context, "timeAlarmListView:$position", Toast.LENGTH_SHORT).show()
-//        }
-//
-//        showWeekCheckboxState(weeklyAlarm.weeks)
-//
-//        getWeeks().forEach {
-//            var checkboxId = getWeekCheckboxId(it)
-//            var checkbox = findViewById(checkboxId) as CheckBox
-//            checkbox.setOnCheckedChangeListener { buttonView, isChecked ->
-//                var week = getWeek(buttonView.id)
-//                WeeklyAlarmManager.setWeek(weeklyAlarm.id, week, isChecked)
-//            }
-//        }
-//    }
-
     private fun getWeeks(): Array<Int> {
         return arrayOf(
                 Calendar.SUNDAY,
@@ -99,28 +77,6 @@ class WeeklyAlarmView : FrameLayout {
                 Calendar.SATURDAY
         )
     }
-
-//    override fun onWindowFocusChanged(hasWindowFocus: Boolean) {
-//        super.onWindowFocusChanged(hasWindowFocus)
-//
-//        if (hasWindowFocus) {
-//            fitListViewHeightToItems()
-//        }
-//    }
-
-//    private fun fitListViewHeightToItems() {
-//        val listViewItem = timeAlarmListView.adapter.getView(0, null, timeAlarmListView)
-//        listViewItem.measure(
-//                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
-//                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED))
-//
-//        val listViewItemHeight = listViewItem.measuredHeight
-//        val listViewWrapperHeight = listViewItemHeight * timeAlarmListView.count
-//
-//        var params = timeAlarmListView.layoutParams
-//        params.height = listViewWrapperHeight
-//        timeAlarmListView.layoutParams = params
-//    }
 
     private fun showWeekCheckboxState(weeks: Set<Int>) {
         weeks.forEach { week ->
