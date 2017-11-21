@@ -27,14 +27,6 @@ object WeeklyAlarmCreator {
         return weeklyAlarm
     }
 
-    /**
-     * Create default weekly alarms at first running.
-     * @return default weekly alarm
-     */
-    fun createDefaultWeeklyAlarms(): Array<WeeklyAlarm> {
-        return emptyArray()
-    }
-
     private fun createDailyAlarmSetting(weeklyAlarms: Array<WeeklyAlarm>): DailyAlarm {
         var c = Calendar.getInstance()
         var timeOfDay = TimeOfDay(
