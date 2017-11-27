@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageButton
 import com.isolity.toastalarm.R
+import com.isolity.toastalarm.WeeklyAlarmDataManager
 import com.isolity.toastalarm.model.WeeklyAlarm
 import com.isolity.toastalarm.view.WeeklyAlarmView
 
@@ -17,33 +18,36 @@ class WeeklyAlarmListAdapter(private val context: Context) : BaseAdapter() {
 
     var weeklyAlarms: MutableList<WeeklyAlarm> = mutableListOf()
 
+    init {
+        weeklyAlarms = WeeklyAlarmDataManager.weeklyAlarms
+    }
+
     override fun getCount(): Int = weeklyAlarms.size
 
-    override fun getItem(position: Int): Any? = weeklyAlarms[position]
+    override fun getItem(position: Int): WeeklyAlarm = weeklyAlarms[position]
 
     override fun getItemId(position: Int): Long = 0
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-
         val view = WeeklyAlarmView(context)
         view.setWeeklyAlarm(weeklyAlarms[position])
 
         val deleteButton = view.findViewById(R.id.delete_button) as ImageButton
         deleteButton.setOnClickListener {
-            val item = getItem(position) as WeeklyAlarm
-            onClickDeleteButton?.invoke(item.id)
+            val item = getItem(position)
+            remove(item.id)
         }
 
         return view
-
-//        return (convertView as? WeeklyAlarmView ?: WeeklyAlarmView(context)).apply {
-//            setWeeklyAlarm(weeklyAlarms[position])
-//        }
     }
 
-    var onClickDeleteButton: ((weeklyAlarmId: Int) -> Unit)? = null
+    fun add(weeklyAlarm: WeeklyAlarm) {
+        WeeklyAlarmDataManager.add(weeklyAlarm)
+        notifyDataSetChanged()
+    }
 
-    fun notifyAlarmSetChanged() {
+    private fun remove(weeklyAlarmId: Int) {
+        WeeklyAlarmDataManager.remove(weeklyAlarmId)
         notifyDataSetChanged()
     }
 }

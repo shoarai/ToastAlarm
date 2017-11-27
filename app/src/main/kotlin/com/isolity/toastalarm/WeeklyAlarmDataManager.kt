@@ -46,6 +46,7 @@ object WeeklyAlarmDataManager {
 
     fun add(alarm: WeeklyAlarm) {
         weeklyAlarms.add(alarm)
+        onUpdateData()
     }
 
     fun update(alarm: WeeklyAlarm) {
@@ -56,11 +57,6 @@ object WeeklyAlarmDataManager {
 
     fun delete(alarm: WeeklyAlarm) {
         weeklyAlarms.remove(alarm)
-    }
-
-    fun addWeeklyAlarm(weeklyAlarm: WeeklyAlarm) {
-        weeklyAlarms.add(weeklyAlarm)
-        onUpdateData()
     }
 
     fun remove(weeklyAlarmId: Int) {

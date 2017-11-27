@@ -84,9 +84,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun initWeeklyAlarmListView() {
         Log.v(TAG, "start showWeeklyAlarmList")
-        listAdapter.weeklyAlarms = WeeklyAlarmDataManager.weeklyAlarms
-
-        listAdapter.onClickDeleteButton = { weeklyAlarmId -> onClickDeleteButton(weeklyAlarmId) }
+//        listAdapter.weeklyAlarms = WeeklyAlarmDataManager.weeklyAlarms
 
         weeklyAlarmListView.adapter = listAdapter
 
@@ -95,7 +93,7 @@ class MainActivity : AppCompatActivity() {
 //            val alarm = listAdapter.getItem(pos)
 //            when (view.id) {
 //                R.id.delete_button -> {
-//                    Toast.makeText(this, "", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(this, alarm.id.toString(), Toast.LENGTH_SHORT).show()
 //                }
 //            }
 //        }
@@ -121,18 +119,11 @@ class MainActivity : AppCompatActivity() {
             val alarms = WeeklyAlarmDataManager.weeklyAlarms
             val newAlarm = WeeklyAlarmCreator.createWeeklyAlarm(alarms.toTypedArray())
             newAlarm.dailyAlarms.first().timeOfDay = TimeOfDay(hourOfDay, minute)
-            WeeklyAlarmDataManager.addWeeklyAlarm(newAlarm)
-            listAdapter.notifyAlarmSetChanged()
+
+            listAdapter.add(newAlarm)
         })
 
         Log.v(TAG, "end onClickAddButton")
-    }
-
-    private fun onClickDeleteButton(weeklyAlarmId: Int) {
-        Log.v(TAG, "start onClickDeleteButton")
-        WeeklyAlarmDataManager.remove(weeklyAlarmId)
-        listAdapter.notifyAlarmSetChanged()
-        Log.v(TAG, "end onClickDeleteButton")
     }
 
     private fun onClickDebugStartAlarmButton() {
