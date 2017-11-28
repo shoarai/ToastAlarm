@@ -5,7 +5,6 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.widget.*
 import com.isolity.toastalarm.R
-import com.isolity.toastalarm.WeeklyAlarmDataManager
 import com.isolity.toastalarm.extension.bindView
 import com.isolity.toastalarm.model.DailyAlarm
 import com.isolity.toastalarm.model.TimeOfDay
@@ -28,8 +27,7 @@ class WeeklyAlarmView : FrameLayout {
     }
 
     fun setWeeklyAlarm(weeklyAlarm: WeeklyAlarm) {
-        // TODO: Support multiple time alarm
-        setTimeAlarm(weeklyAlarm.dailyAlarms[0])
+        setTimeAlarm(weeklyAlarm, weeklyAlarm.dailyAlarms[0])
 
         showWeekCheckboxState(weeklyAlarm.weeks)
 
@@ -38,12 +36,20 @@ class WeeklyAlarmView : FrameLayout {
             var checkbox = findViewById(checkboxId) as CheckBox
             checkbox.setOnCheckedChangeListener { buttonView, isChecked ->
                 var week = getWeek(buttonView.id)
-                WeeklyAlarmDataManager.setWeek(weeklyAlarm.id, week, isChecked)
+                if (isChecked) {
+                    weeklyAlarm.addWeek(week)
+                } else {
+                    weeklyAlarm.removeWeek(week)
+                }
+                onUpdate?.invoke(weeklyAlarm)
             }
         }
     }
 
-    private fun setTimeAlarm(dailyAlarm: DailyAlarm) {
+    var onUpdate: ((weeklyAlarm: WeeklyAlarm) -> Unit)? = null
+    var onDelete: ((weeklyAlarm: WeeklyAlarm) -> Unit)? = null
+
+    private fun setTimeAlarm(weeklyAlarm: WeeklyAlarm, dailyAlarm: DailyAlarm) {
         timeTextView.text = dailyAlarm.timeOfDay.toString()
         powerSwitch.isChecked = dailyAlarm.isPowerOn
 
@@ -51,18 +57,23 @@ class WeeklyAlarmView : FrameLayout {
             var timeOfDay = dailyAlarm.timeOfDay
             TimePickerManager.show(timeOfDay.hourOfDay, timeOfDay.minute, TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
                 var newTimeOfDay = TimeOfDay(hourOfDay, minute)
-
-                WeeklyAlarmDataManager.setTimeOfDay(dailyAlarm.id, newTimeOfDay)
+                weeklyAlarm.dailyAlarms[0].timeOfDay = newTimeOfDay
                 timeTextView.text = newTimeOfDay.toString()
+                onUpdate?.invoke(weeklyAlarm)
             })
         }
 
         powerSwitch.setOnCheckedChangeListener { _, isChecked ->
-            WeeklyAlarmDataManager.setPower(dailyAlarm.id, isChecked)
+            if (isChecked) {
+                weeklyAlarm.dailyAlarms[0].powerOn()
+            } else {
+                weeklyAlarm.dailyAlarms[0].powerOff()
+            }
+            onUpdate?.invoke(weeklyAlarm)
         }
 
         deleteButton.setOnClickListener {
-            WeeklyAlarmDataManager.remove(dailyAlarm.id)
+            onDelete?.invoke(weeklyAlarm)
         }
     }
 
@@ -95,7 +106,7 @@ class WeeklyAlarmView : FrameLayout {
             Calendar.THURSDAY -> R.id.week_thu_checkbox
             Calendar.FRIDAY -> R.id.week_fri_checkbox
             Calendar.SATURDAY -> R.id.week_sat_checkbox
-            else -> throw Error("Not found")
+            else -> throw IllegalArgumentException("Not supported week")
         }
     }
 
@@ -108,7 +119,7 @@ class WeeklyAlarmView : FrameLayout {
             R.id.week_thu_checkbox -> Calendar.THURSDAY
             R.id.week_fri_checkbox -> Calendar.FRIDAY
             R.id.week_sat_checkbox -> Calendar.SATURDAY
-            else -> throw Error("Not found")
+            else -> throw IllegalArgumentException("Not supported week button id")
         }
     }
 }

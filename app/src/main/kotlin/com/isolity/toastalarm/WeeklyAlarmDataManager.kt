@@ -53,26 +53,16 @@ object WeeklyAlarmDataManager {
         val i = weeklyAlarms.indexOfFirst { it.id == alarm.id }
         if (i == -1) throw IllegalArgumentException("Not found WeeklyAlarm of ID")
         weeklyAlarms[i] = alarm
+        onUpdateData()
     }
 
     fun delete(alarm: WeeklyAlarm) {
         weeklyAlarms.remove(alarm)
+        onUpdateData()
     }
 
     fun remove(weeklyAlarmId: Int) {
         weeklyAlarms.removeAll { it.id == weeklyAlarmId }
-        onUpdateData()
-    }
-
-    fun setWeek(weeklyAlarmId: Int, week: Int, isSet: Boolean) {
-        weeklyAlarms.single { it.id == weeklyAlarmId }.apply {
-            if (isSet) {
-                addWeek(week)
-            } else {
-                removeWeek(week)
-            }
-        }
-
         onUpdateData()
     }
 
