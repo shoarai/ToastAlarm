@@ -12,9 +12,6 @@ import com.isolity.toastalarm.adapter.WeeklyAlarmListAdapter
 import com.isolity.toastalarm.alarm.OnceAlarmManager
 import com.isolity.toastalarm.alarm.WeeklyAlarmManager
 import com.isolity.toastalarm.model.TimeOfDay
-import com.isolity.toastalarm.model.WeeklyAlarm
-import com.isolity.toastalarm.model.WeeklyAlarmCreator
-import com.isolity.toastalarm.repository.WeeklyAlarmRepository
 import com.isolity.toastalarm.view.TimePickerManager
 import com.isolity.toastalarm.view.ToastView
 import java.util.*
@@ -52,9 +49,6 @@ class MainActivity : AppCompatActivity() {
 
         // HACK: Context
         TimePickerManager.fragmentManager = supportFragmentManager
-
-        WeeklyAlarmDataManager.init(applicationContext)
-        WeeklyAlarmDataManager.onUpdate = { weeklyAlarms -> onUpdateWeeklyAlarm(weeklyAlarms) }
 
         initWeeklyAlarmListView()
 
@@ -103,11 +97,6 @@ class MainActivity : AppCompatActivity() {
         Log.v(TAG, "end showWeeklyAlarmList")
     }
 
-    private fun onUpdateWeeklyAlarm(weeklyAlarms: Array<WeeklyAlarm>) {
-        WeeklyAlarmRepository.update(applicationContext, weeklyAlarms)
-        WeeklyAlarmManager.startNextAlarm(applicationContext)
-    }
-
     private fun onClickAddButton() {
         Log.v(TAG, "start onClickAddButton")
 
@@ -116,11 +105,8 @@ class MainActivity : AppCompatActivity() {
         val minute = now.get(Calendar.MINUTE)
 
         TimePickerManager.show(hourOfDay, minute, TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
-            val alarms = WeeklyAlarmDataManager.weeklyAlarms
-            val newAlarm = WeeklyAlarmCreator.createWeeklyAlarm(alarms.toTypedArray())
-            newAlarm.dailyAlarms.first().timeOfDay = TimeOfDay(hourOfDay, minute)
-
-            listAdapter.add(newAlarm)
+            val timeOfDay = TimeOfDay(hourOfDay, minute)
+            listAdapter.add(timeOfDay)
         })
 
         Log.v(TAG, "end onClickAddButton")

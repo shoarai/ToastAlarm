@@ -5,7 +5,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import com.isolity.toastalarm.WeeklyAlarmDataManager
+import com.isolity.toastalarm.alarm.WeeklyAlarmManager
+import com.isolity.toastalarm.model.TimeOfDay
 import com.isolity.toastalarm.model.WeeklyAlarm
+import com.isolity.toastalarm.model.WeeklyAlarmCreator
+import com.isolity.toastalarm.repository.WeeklyAlarmRepository
 import com.isolity.toastalarm.view.WeeklyAlarmView
 
 /**
@@ -14,10 +18,17 @@ import com.isolity.toastalarm.view.WeeklyAlarmView
 
 class WeeklyAlarmListAdapter(private val context: Context) : BaseAdapter() {
 
-    private var weeklyAlarms: MutableList<WeeklyAlarm> = mutableListOf()
+    private var weeklyAlarms: List<WeeklyAlarm> = emptyList()
 
     init {
-        weeklyAlarms = WeeklyAlarmDataManager.weeklyAlarms
+        WeeklyAlarmDataManager.init(context)
+        WeeklyAlarmDataManager.onUpdate = { weeklyAlarms -> onUpdateWeeklyAlarm(weeklyAlarms) }
+        weeklyAlarms = WeeklyAlarmDataManager.getAll()
+    }
+
+    private fun onUpdateWeeklyAlarm(weeklyAlarms: Array<WeeklyAlarm>) {
+        WeeklyAlarmRepository.update(context, weeklyAlarms)
+        WeeklyAlarmManager.startNextAlarm(context)
     }
 
     override fun getCount(): Int = weeklyAlarms.size
@@ -34,14 +45,16 @@ class WeeklyAlarmListAdapter(private val context: Context) : BaseAdapter() {
         }
     }
 
-    fun add(weeklyAlarm: WeeklyAlarm) {
-        WeeklyAlarmDataManager.add(weeklyAlarm)
+    fun add(timeOfDay: TimeOfDay) {
+        val newAlarm = WeeklyAlarmCreator.createWeeklyAlarm(weeklyAlarms.toTypedArray())
+        newAlarm.dailyAlarms.first().timeOfDay = timeOfDay
+
+        WeeklyAlarmDataManager.add(newAlarm)
         notifyDataSetChanged()
     }
 
     private fun update(weeklyAlarm: WeeklyAlarm) {
         WeeklyAlarmDataManager.update(weeklyAlarm)
-//        notifyDataSetChanged()
     }
 
     private fun delete(weeklyAlarm: WeeklyAlarm) {
