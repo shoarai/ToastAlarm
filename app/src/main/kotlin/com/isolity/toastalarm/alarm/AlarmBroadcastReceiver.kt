@@ -24,13 +24,17 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
         if (intent.action == null) {
             onTimeAlarm(context)
         }
-
-        WeeklyAlarmDataManager.init(context)
-        WeeklyAlarmManager.startNextAlarm(context)
+        startNextAlarm(context)
     }
 
     private fun onTimeAlarm(context: Context) {
         Log.v(TAG, "time:" + SystemClock.elapsedRealtime())
         ToastView.showToast(context)
+    }
+
+    private fun startNextAlarm(context: Context) {
+        val weeklyAlarmDataManager = WeeklyAlarmDataManager(context)
+        val alarms = weeklyAlarmDataManager.getAll()
+        WeeklyAlarmManager.startNextAlarm(context, alarms)
     }
 }

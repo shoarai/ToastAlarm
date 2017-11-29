@@ -1,39 +1,20 @@
 package com.isolity.toastalarm
 
 import android.content.Context
-import com.isolity.toastalarm.model.TimeOfDay
 import com.isolity.toastalarm.model.WeeklyAlarm
-import com.isolity.toastalarm.model.WeeklyAlarmUtil
 import com.isolity.toastalarm.repository.WeeklyAlarmRepository
 
 /**
  * Created by shoarai on 2017/04/22.
  */
 
-object WeeklyAlarmDataManager {
-//    private val TAG = WeeklyAlarmManager::class.java.simpleName
+class WeeklyAlarmDataManager(context: Context) {
+    private val weeklyAlarmRepository = WeeklyAlarmRepository(context)
+    private val weeklyAlarms: MutableList<WeeklyAlarm>
 
-    var weeklyAlarms: MutableList<WeeklyAlarm> = mutableListOf()
-        private set
-
-//    @Inject
-//    lateinit var weeklyAlarms: MutableList<WeeklyAlarm>
-//        private set
-
-    private var hasInit = false
-
-    fun init(context: Context) {
-        if (hasInit) return
-        hasInit = true
-
-        val alarm = WeeklyAlarmRepository.getAll(context)
-        if (alarm != null) {
-            weeklyAlarms = alarm.toMutableList()
-            return
-        }
-        val defaultValue = emptyArray<WeeklyAlarm>()
-        WeeklyAlarmRepository.update(context, defaultValue)
-        weeklyAlarms = defaultValue.toMutableList()
+    init {
+        val alarm = weeklyAlarmRepository.getAll()
+        weeklyAlarms = alarm?.toMutableList() ?: mutableListOf()
     }
 
     fun getById(id: Int): WeeklyAlarm {
@@ -61,24 +42,7 @@ object WeeklyAlarmDataManager {
         onUpdateData()
     }
 
-    fun remove(weeklyAlarmId: Int) {
-        weeklyAlarms.removeAll { it.id == weeklyAlarmId }
-        onUpdateData()
-    }
-
-    fun setTimeOfDay(timeAlarmId: Int, timeOfDay: TimeOfDay) {
-        WeeklyAlarmUtil.findTimeAlarm(weeklyAlarms, timeAlarmId).timeOfDay = timeOfDay
-        onUpdateData()
-    }
-
-    fun setPower(timeAlarmId: Int, power: Boolean) {
-        WeeklyAlarmUtil.findTimeAlarm(weeklyAlarms, timeAlarmId).isPowerOn = power
-        onUpdateData()
-    }
-
-    var onUpdate: ((Array<WeeklyAlarm>) -> Unit)? = null
-
     private fun onUpdateData() {
-        onUpdate?.invoke(weeklyAlarms.toTypedArray())
+        weeklyAlarmRepository.update(weeklyAlarms.toTypedArray())
     }
 }

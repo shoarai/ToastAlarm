@@ -6,30 +6,18 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import com.isolity.toastalarm.WeeklyAlarmDataManager
 import com.isolity.toastalarm.alarm.WeeklyAlarmManager
-import com.isolity.toastalarm.model.TimeOfDay
 import com.isolity.toastalarm.model.WeeklyAlarm
-import com.isolity.toastalarm.model.WeeklyAlarmCreator
-import com.isolity.toastalarm.repository.WeeklyAlarmRepository
 import com.isolity.toastalarm.view.WeeklyAlarmView
 
 /**
  * Created by shoarai on 2017/04/29.
  */
 
-class WeeklyAlarmListAdapter(private val context: Context) : BaseAdapter() {
+class WeeklyAlarmListAdapter(
+        private val context: Context,
+        private val weeklyAlarmDataManager: WeeklyAlarmDataManager) : BaseAdapter() {
 
-    private var weeklyAlarms: List<WeeklyAlarm> = emptyList()
-
-    init {
-        WeeklyAlarmDataManager.init(context)
-        WeeklyAlarmDataManager.onUpdate = { weeklyAlarms -> onUpdateWeeklyAlarm(weeklyAlarms) }
-        weeklyAlarms = WeeklyAlarmDataManager.getAll()
-    }
-
-    private fun onUpdateWeeklyAlarm(weeklyAlarms: Array<WeeklyAlarm>) {
-        WeeklyAlarmRepository.update(context, weeklyAlarms)
-        WeeklyAlarmManager.startNextAlarm(context)
-    }
+    private val weeklyAlarms = weeklyAlarmDataManager.getAll()
 
     override fun getCount(): Int = weeklyAlarms.size
 
@@ -45,20 +33,23 @@ class WeeklyAlarmListAdapter(private val context: Context) : BaseAdapter() {
         }
     }
 
-    fun add(timeOfDay: TimeOfDay) {
-        val newAlarm = WeeklyAlarmCreator.createWeeklyAlarm(weeklyAlarms.toTypedArray())
-        newAlarm.dailyAlarms.first().timeOfDay = timeOfDay
-
-        WeeklyAlarmDataManager.add(newAlarm)
+    fun add(weeklyAlarm: WeeklyAlarm) {
+        weeklyAlarmDataManager.add(weeklyAlarm)
         notifyDataSetChanged()
+
+        WeeklyAlarmManager.startNextAlarm(context, weeklyAlarms)
     }
 
     private fun update(weeklyAlarm: WeeklyAlarm) {
-        WeeklyAlarmDataManager.update(weeklyAlarm)
+        weeklyAlarmDataManager.update(weeklyAlarm)
+
+        WeeklyAlarmManager.startNextAlarm(context, weeklyAlarms)
     }
 
     private fun delete(weeklyAlarm: WeeklyAlarm) {
-        WeeklyAlarmDataManager.delete(weeklyAlarm)
+        weeklyAlarmDataManager.delete(weeklyAlarm)
         notifyDataSetChanged()
+
+        WeeklyAlarmManager.startNextAlarm(context, weeklyAlarms)
     }
 }

@@ -3,8 +3,7 @@ package com.isolity.toastalarm.alarm
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
-import com.isolity.toastalarm.WeeklyAlarmDataManager
-import com.isolity.toastalarm.WeeklyAlarmDataManager.weeklyAlarms
+import com.isolity.toastalarm.model.WeeklyAlarm
 import com.isolity.toastalarm.model.WeeklyAlarmUtil
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -20,12 +19,12 @@ object WeeklyAlarmManager {
      * Start a next alarm with power on.
      * If there is no powered on, do not do anything.
      * @param context Context
+     * @param weeklyAlarms List of weekly alarm
      */
-    fun startNextAlarm(context: Context) {
+    fun startNextAlarm(context: Context, weeklyAlarms: List<WeeklyAlarm>) {
         Log.v(TAG, "start startNextAlarmWithPowerOn")
 
         if (WeeklyAlarmUtil.hasPowerOn(weeklyAlarms)) {
-            val weeklyAlarms = WeeklyAlarmDataManager.getAll()
             val calendar = WeeklyAlarmUtil.getNextAlarmAsCalendar(weeklyAlarms)
             OnceAlarmManager.startAlarm(context, calendar)
         } else {

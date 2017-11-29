@@ -9,7 +9,7 @@ import com.google.gson.reflect.TypeToken
 /**
  * Created by shoarai on 2017/04/30.
  */
-class PreferenceStorage<T>(private val storageKey: String) {
+class PreferenceStore<T>(private val storageKey: String) {
     /**
      * Save data.
      * @param context Context

@@ -12,17 +12,19 @@ import com.isolity.toastalarm.model.WeeklyAlarm
 /**
  * Created by shoarai on 2017/04/30.
  */
-object WeeklyAlarmRepository {
-    private val TAG = WeeklyAlarmRepository::class.java.simpleName
-    private const val storageKey = "WEEKLY_ALARMS"
+class WeeklyAlarmRepository(private val context: Context) {
+    companion object {
+        private val TAG = WeeklyAlarmRepository::class.java.simpleName
+        private const val storageKey = "WEEKLY_ALARMS"
+    }
 
-    private val preference = PreferenceStorage<WeeklyAlarm>(storageKey)
+//    private val preference = PreferenceStore<WeeklyAlarm>(storageKey)
 
     /**
      * Get all weekly alarms from the stored json string.
      * @return weekly alarms
      */
-    fun getAll(context: Context): Array<WeeklyAlarm>? {
+    fun getAll(): Array<WeeklyAlarm>? {
 //        return try {
 //            preference.restore(context)
 //        } catch (e: JsonSyntaxException) {
@@ -50,7 +52,7 @@ object WeeklyAlarmRepository {
      * Update weekly alarms.
      * @param weeklyAlarms weeklyAlarms to store
      */
-    fun update(context: Context, weeklyAlarms: Array<WeeklyAlarm>) {
+    fun update(weeklyAlarms: Array<WeeklyAlarm>) {
 //        preference.save(context, weeklyAlarms)
 
         val gson = Gson()
