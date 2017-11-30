@@ -1,13 +1,11 @@
 package com.isolity.toastalarm.view
 
-import android.app.TimePickerDialog
 import android.content.Context
 import android.view.LayoutInflater
 import android.widget.*
 import com.isolity.toastalarm.R
 import com.isolity.toastalarm.extension.bindView
 import com.isolity.toastalarm.model.DailyAlarm
-import com.isolity.toastalarm.model.TimeOfDay
 import com.isolity.toastalarm.model.WeeklyAlarm
 import java.util.*
 
@@ -38,8 +36,7 @@ class WeeklyAlarmView(context: Context?) : FrameLayout(context) {
 
         timeTextView.setOnClickListener {
             var timeOfDay = dailyAlarm.timeOfDay
-            TimePickerManager.show(timeOfDay.hourOfDay, timeOfDay.minute, TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
-                var newTimeOfDay = TimeOfDay(hourOfDay, minute)
+            TimePickerManager.show(timeOfDay, { newTimeOfDay ->
                 weeklyAlarm.dailyAlarms[0].timeOfDay = newTimeOfDay
                 timeTextView.text = newTimeOfDay.toString()
                 onUpdate?.invoke(weeklyAlarm)

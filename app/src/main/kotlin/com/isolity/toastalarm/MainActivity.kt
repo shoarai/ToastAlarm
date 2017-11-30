@@ -1,6 +1,5 @@
 package com.isolity.toastalarm
 
-import android.app.TimePickerDialog
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.app.AppCompatActivity
@@ -96,8 +95,8 @@ class MainActivity : AppCompatActivity() {
         val hourOfDay = now.get(Calendar.HOUR_OF_DAY)
         val minute = now.get(Calendar.MINUTE)
 
-        TimePickerManager.show(hourOfDay, minute, TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
-            addWeeklyAlarm(TimeOfDay(hourOfDay, minute))
+        TimePickerManager.show(hourOfDay, minute, { newTimeOfDay ->
+            addWeeklyAlarm(newTimeOfDay)
         })
 
         Log.v(TAG, "end onClickAddButton")
