@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity() {
         // HACK: Context
         TimePickerManager.fragmentManager = supportFragmentManager
 
-        initWeeklyAlarmListView()
+        setWeeklyAlarmListView()
 
         val weeklyAlarms = weeklyAlarmDataManager.getAll()
         WeeklyAlarmManager.startNextAlarm(applicationContext, weeklyAlarms)
@@ -78,9 +78,12 @@ class MainActivity : AppCompatActivity() {
         mAdView.loadAd(adRequest)
     }
 
-    private fun initWeeklyAlarmListView() {
+    private fun setWeeklyAlarmListView() {
         Log.v(TAG, "start showWeeklyAlarmList")
 
+        listAdapter.onChangeAlarms = { weeklyAlarms ->
+            WeeklyAlarmManager.startNextAlarm(applicationContext, weeklyAlarms)
+        }
         weeklyAlarmListView.adapter = listAdapter
 
         Log.v(TAG, "end showWeeklyAlarmList")

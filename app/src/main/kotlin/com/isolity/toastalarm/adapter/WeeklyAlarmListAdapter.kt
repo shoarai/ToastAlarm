@@ -5,7 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import com.isolity.toastalarm.WeeklyAlarmDataManager
-import com.isolity.toastalarm.alarm.WeeklyAlarmManager
 import com.isolity.toastalarm.model.WeeklyAlarm
 import com.isolity.toastalarm.view.WeeklyAlarmView
 
@@ -33,23 +32,26 @@ class WeeklyAlarmListAdapter(
         }
     }
 
+    var onChangeAlarms: ((weeklyAlarms: List<WeeklyAlarm>) -> Unit)? = null
+
     fun add(weeklyAlarm: WeeklyAlarm) {
         weeklyAlarmDataManager.add(weeklyAlarm)
         notifyDataSetChanged()
-
-        WeeklyAlarmManager.startNextAlarm(context, weeklyAlarms)
+        dispatchOnChangeAlarms()
     }
 
     private fun update(weeklyAlarm: WeeklyAlarm) {
         weeklyAlarmDataManager.update(weeklyAlarm)
-
-        WeeklyAlarmManager.startNextAlarm(context, weeklyAlarms)
+        dispatchOnChangeAlarms()
     }
 
     private fun delete(weeklyAlarm: WeeklyAlarm) {
         weeklyAlarmDataManager.delete(weeklyAlarm)
         notifyDataSetChanged()
+        dispatchOnChangeAlarms()
+    }
 
-        WeeklyAlarmManager.startNextAlarm(context, weeklyAlarms)
+    private fun dispatchOnChangeAlarms() {
+        onChangeAlarms?.invoke(weeklyAlarms.toList())
     }
 }

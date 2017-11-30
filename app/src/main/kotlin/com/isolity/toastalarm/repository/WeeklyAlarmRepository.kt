@@ -39,9 +39,8 @@ class WeeklyAlarmRepository(private val context: Context) {
         }
 
         return try {
-            val gson = Gson()
             val type = object : TypeToken<Array<WeeklyAlarm>>() {}.type
-            return gson.fromJson<Array<WeeklyAlarm>>(stringData, type)
+            return Gson().fromJson<Array<WeeklyAlarm>>(stringData, type)
         } catch (e: JsonSyntaxException) {
             Log.v(TAG, e.toString())
             null
@@ -53,10 +52,9 @@ class WeeklyAlarmRepository(private val context: Context) {
      * @param weeklyAlarms weeklyAlarms to store
      */
     fun update(weeklyAlarms: Array<WeeklyAlarm>) {
-//        preference.save(context, weeklyAlarms)
+//        preference.save(context, weeklyAlarms) return
 
-        val gson = Gson()
-        val jsonInstanceString = gson.toJson(weeklyAlarms)
+        val jsonInstanceString = Gson().toJson(weeklyAlarms)
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
         prefs.edit().putString(storageKey, jsonInstanceString).apply()
     }

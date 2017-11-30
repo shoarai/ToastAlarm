@@ -15,9 +15,7 @@ import java.util.*
  * Created by shoarai on 2017/04/29.
  */
 
-class WeeklyAlarmView : FrameLayout {
-    constructor(context: Context?) : super(context)
-
+class WeeklyAlarmView(context: Context?) : FrameLayout(context) {
     private val timeTextView: TextView by bindView(R.id.time_text_view)
     private val powerSwitch: Switch by bindView(R.id.power_switch)
     private val deleteButton: ImageButton by bindView(R.id.delete_button)
@@ -28,22 +26,7 @@ class WeeklyAlarmView : FrameLayout {
 
     fun setWeeklyAlarm(weeklyAlarm: WeeklyAlarm) {
         setTimeAlarm(weeklyAlarm, weeklyAlarm.dailyAlarms[0])
-
-        showWeekCheckboxState(weeklyAlarm.weeks)
-
-        getWeeks().forEach {
-            var checkboxId = getWeekCheckboxId(it)
-            var checkbox = findViewById(checkboxId) as CheckBox
-            checkbox.setOnCheckedChangeListener { buttonView, isChecked ->
-                var week = getWeek(buttonView.id)
-                if (isChecked) {
-                    weeklyAlarm.addWeek(week)
-                } else {
-                    weeklyAlarm.removeWeek(week)
-                }
-                onUpdate?.invoke(weeklyAlarm)
-            }
-        }
+        setWeek(weeklyAlarm)
     }
 
     var onUpdate: ((weeklyAlarm: WeeklyAlarm) -> Unit)? = null
@@ -77,7 +60,29 @@ class WeeklyAlarmView : FrameLayout {
         }
     }
 
-    private fun getWeeks(): Array<Int> {
+    private fun setWeek(weeklyAlarm: WeeklyAlarm) {
+        weeklyAlarm.weeks.forEach { week ->
+            var id = weekToWeekCheckboxId(week)
+            var weekCheckbox = findViewById(id) as CheckBox
+            weekCheckbox.isChecked = true
+        }
+
+        getAllWeeks().forEach {
+            var checkboxId = weekToWeekCheckboxId(it)
+            var checkbox = findViewById(checkboxId) as CheckBox
+            checkbox.setOnCheckedChangeListener { buttonView, isChecked ->
+                var week = weekCheckboxIdToWeek(buttonView.id)
+                if (isChecked) {
+                    weeklyAlarm.addWeek(week)
+                } else {
+                    weeklyAlarm.removeWeek(week)
+                }
+                onUpdate?.invoke(weeklyAlarm)
+            }
+        }
+    }
+
+    private fun getAllWeeks(): Array<Int> {
         return arrayOf(
                 Calendar.SUNDAY,
                 Calendar.MONDAY,
@@ -89,15 +94,7 @@ class WeeklyAlarmView : FrameLayout {
         )
     }
 
-    private fun showWeekCheckboxState(weeks: Set<Int>) {
-        weeks.forEach { week ->
-            var id = getWeekCheckboxId(week)
-            var weekCheckbox = findViewById(id) as CheckBox
-            weekCheckbox.isChecked = true
-        }
-    }
-
-    private fun getWeekCheckboxId(week: Int): Int {
+    private fun weekToWeekCheckboxId(week: Int): Int {
         return when (week) {
             Calendar.SUNDAY -> R.id.week_sun_checkbox
             Calendar.MONDAY -> R.id.week_mon_checkbox
@@ -110,8 +107,8 @@ class WeeklyAlarmView : FrameLayout {
         }
     }
 
-    private fun getWeek(id: Int): Int {
-        return when (id) {
+    private fun weekCheckboxIdToWeek(checkboxId: Int): Int {
+        return when (checkboxId) {
             R.id.week_sun_checkbox -> Calendar.SUNDAY
             R.id.week_mon_checkbox -> Calendar.MONDAY
             R.id.week_tue_checkbox -> Calendar.TUESDAY

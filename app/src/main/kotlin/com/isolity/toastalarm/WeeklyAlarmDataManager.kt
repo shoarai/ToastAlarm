@@ -10,11 +10,10 @@ import com.isolity.toastalarm.repository.WeeklyAlarmRepository
 
 class WeeklyAlarmDataManager(context: Context) {
     private val weeklyAlarmRepository = WeeklyAlarmRepository(context)
-    private val weeklyAlarms: MutableList<WeeklyAlarm>
 
-    init {
+    private val weeklyAlarms: MutableList<WeeklyAlarm> by lazy {
         val alarm = weeklyAlarmRepository.getAll()
-        weeklyAlarms = alarm?.toMutableList() ?: mutableListOf()
+        alarm?.toMutableList() ?: mutableListOf()
     }
 
     fun getById(id: Int): WeeklyAlarm {
