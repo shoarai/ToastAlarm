@@ -91,11 +91,7 @@ class MainActivity : AppCompatActivity() {
     private fun onClickAddButton() {
         Log.v(TAG, "start onClickAddButton")
 
-        val now = Calendar.getInstance()
-        val hourOfDay = now.get(Calendar.HOUR_OF_DAY)
-        val minute = now.get(Calendar.MINUTE)
-
-        TimePickerManager.show(hourOfDay, minute, { newTimeOfDay ->
+        TimePickerManager.showCurrentTime({ newTimeOfDay ->
             addWeeklyAlarm(newTimeOfDay)
         })
 
