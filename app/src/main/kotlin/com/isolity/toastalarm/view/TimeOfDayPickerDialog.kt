@@ -7,7 +7,7 @@ import java.util.*
 /**
  * Created by shohei52a on 2017/05/03.
  */
-object TimePickerManager {
+object TimeOfDayPickerDialog {
     var fragmentManager: FragmentManager? = null
 
     fun show(timeOfDay: TimeOfDay, onTimeSet: (timeOfDay: TimeOfDay) -> Unit) {

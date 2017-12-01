@@ -36,7 +36,7 @@ class WeeklyAlarmView(context: Context?) : FrameLayout(context) {
 
         timeTextView.setOnClickListener {
             var timeOfDay = dailyAlarm.timeOfDay
-            TimePickerManager.show(timeOfDay, { newTimeOfDay ->
+            TimeOfDayPickerDialog.show(timeOfDay, { newTimeOfDay ->
                 weeklyAlarm.dailyAlarms[0].timeOfDay = newTimeOfDay
                 timeTextView.text = newTimeOfDay.toString()
                 onUpdate?.invoke(weeklyAlarm)

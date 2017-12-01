@@ -12,7 +12,7 @@ import com.isolity.toastalarm.alarm.OnceAlarmManager
 import com.isolity.toastalarm.alarm.WeeklyAlarmManager
 import com.isolity.toastalarm.model.TimeOfDay
 import com.isolity.toastalarm.model.WeeklyAlarmCreator
-import com.isolity.toastalarm.view.TimePickerManager
+import com.isolity.toastalarm.view.TimeOfDayPickerDialog
 import com.isolity.toastalarm.view.ToastView
 import java.util.*
 
@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         // HACK: Context
-        TimePickerManager.fragmentManager = supportFragmentManager
+        TimeOfDayPickerDialog.fragmentManager = supportFragmentManager
 
         setWeeklyAlarmListView()
 
@@ -91,7 +91,7 @@ class MainActivity : AppCompatActivity() {
     private fun onClickAddButton() {
         Log.v(TAG, "start onClickAddButton")
 
-        TimePickerManager.showCurrentTime({ newTimeOfDay ->
+        TimeOfDayPickerDialog.showCurrentTime({ newTimeOfDay ->
             addWeeklyAlarm(newTimeOfDay)
         })
 
