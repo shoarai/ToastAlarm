@@ -1,5 +1,6 @@
 package com.isolity.toastalarm.domain.service
 
+import com.isolity.toastalarm.domain.entity.TimeOfDay
 import com.isolity.toastalarm.domain.entity.WeeklyAlarm
 import org.junit.Assert
 import org.junit.Test
@@ -10,18 +11,23 @@ import org.junit.Test
 class WeeklyAlarmCreatorTest {
     @Test
     fun createWeeklyAlarm() {
-        val alarm = WeeklyAlarmCreator.createWeeklyAlarm(emptyArray())
+        val timeOfDay = TimeOfDay(10, 10)
+        val alarm = WeeklyAlarmCreator.create(emptyArray(), timeOfDay)
+
         Assert.assertEquals(1, alarm.dailyAlarms.size)
+        Assert.assertEquals(timeOfDay, alarm.dailyAlarms[0].timeOfDay)
         Assert.assertTrue(alarm.dailyAlarms[0].isPowerOn)
     }
 
     @Test
     fun createWeeklyAlarmNotDuplicatedId() {
         val alarms = mutableListOf<WeeklyAlarm>()
-        for (i in 1..100) {
-            alarms.add(WeeklyAlarmCreator.createWeeklyAlarm(alarms.toTypedArray()))
+        val num = 100
+        for (i in 1..num) {
+            alarms.add(WeeklyAlarmCreator.create(
+                    alarms.toTypedArray(), TimeOfDay(10, 10)))
         }
-        Assert.assertEquals(100, alarms.map { it.id }.distinct().size)
-        Assert.assertEquals(100, alarms.map { it.dailyAlarms[0].id }.distinct().size)
+        Assert.assertEquals(num, alarms.map { it.id }.distinct().size)
+        Assert.assertEquals(num, alarms.map { it.dailyAlarms.map { it.id } }.distinct().size)
     }
 }

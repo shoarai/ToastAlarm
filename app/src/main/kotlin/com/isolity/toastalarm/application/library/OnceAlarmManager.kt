@@ -6,16 +6,18 @@ import android.content.Context
 import android.content.Intent
 import com.isolity.toastalarm.application.AlarmBroadcastReceiver
 import java.util.*
+import kotlin.reflect.KClass
 
 /**
  * Created by shoarai on 2017/04/22.
  */
 
 object OnceAlarmManager {
-    //private val receiver: KClass<*>) {
     private const val REQUEST_CODE = 0
     private var alarmManager: AlarmManager? = null
     private var pendingIntent: PendingIntent? = null
+
+    private val receiver: KClass<*> = AlarmBroadcastReceiver::class
 
     /**
      * Start an alarm.
@@ -25,7 +27,7 @@ object OnceAlarmManager {
      */
     fun startAlarm(context: Context, calendar: Calendar) {
         alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val intent = Intent(context, AlarmBroadcastReceiver::class.java)
+        val intent = Intent(context, receiver.java)
         pendingIntent = PendingIntent.getBroadcast(
                 context, REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT)
         alarmManager?.setExact(AlarmManager.RTC, calendar.timeInMillis, pendingIntent)

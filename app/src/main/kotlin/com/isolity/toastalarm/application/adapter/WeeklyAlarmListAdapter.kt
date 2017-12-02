@@ -4,9 +4,10 @@ import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import com.isolity.toastalarm.application.`interface`.IWeeklyAlarmAppService
 import com.isolity.toastalarm.application.view.WeeklyAlarmView
+import com.isolity.toastalarm.domain.entity.TimeOfDay
 import com.isolity.toastalarm.domain.entity.WeeklyAlarm
-import com.isolity.toastalarm.domain.service.WeeklyAlarmService
 
 /**
  * Created by shoarai on 2017/04/29.
@@ -14,7 +15,7 @@ import com.isolity.toastalarm.domain.service.WeeklyAlarmService
 
 class WeeklyAlarmListAdapter(
         private val context: Context,
-        private val weeklyAlarmService: WeeklyAlarmService) : BaseAdapter() {
+        private val weeklyAlarmService: IWeeklyAlarmAppService) : BaseAdapter() {
 
     private val weeklyAlarms = weeklyAlarmService.getAll()
 
@@ -34,8 +35,8 @@ class WeeklyAlarmListAdapter(
 
     var onChangeAlarms: ((weeklyAlarms: List<WeeklyAlarm>) -> Unit)? = null
 
-    fun add(weeklyAlarm: WeeklyAlarm) {
-        weeklyAlarmService.add(weeklyAlarm)
+    fun add(timeOfDay: TimeOfDay) {
+        weeklyAlarmService.create(timeOfDay)
         notifyDataSetChanged()
         dispatchOnChangeAlarms()
     }

@@ -5,7 +5,10 @@ import android.content.Context
 import android.content.Intent
 import android.os.SystemClock
 import android.util.Log
+import com.isolity.toastalarm.application.`interface`.IWeeklyAlarmAppService
+import com.isolity.toastalarm.application.service.WeeklyAlarmAppService
 import com.isolity.toastalarm.application.view.ToastView
+import com.isolity.toastalarm.domain.service.WeeklyAlarmService
 import com.isolity.toastalarm.repository.WeeklyAlarmRepository
 
 
@@ -33,8 +36,13 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
     }
 
     private fun startNextAlarm(context: Context) {
-        val weeklyAlarmDataManager = WeeklyAlarmRepository(context)
-        val alarms = weeklyAlarmDataManager.getAll()
+        val alarms = getAppService(context).getAll()
         WeeklyAlarmManager.startNextAlarm(context, alarms)
+    }
+
+    private fun getAppService(context: Context): IWeeklyAlarmAppService {
+        val repository = WeeklyAlarmRepository(context)
+        val service = WeeklyAlarmService(repository)
+        return WeeklyAlarmAppService(service)
     }
 }

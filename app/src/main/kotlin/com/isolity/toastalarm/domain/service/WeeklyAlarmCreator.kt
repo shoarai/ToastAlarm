@@ -3,7 +3,7 @@ package com.isolity.toastalarm.domain.service
 import com.isolity.toastalarm.domain.entity.DailyAlarm
 import com.isolity.toastalarm.domain.entity.TimeOfDay
 import com.isolity.toastalarm.domain.entity.WeeklyAlarm
-import java.util.*
+import java.lang.IllegalStateException
 
 /**
  * Created by shoarai on 2017/08/13.
@@ -13,58 +13,41 @@ object WeeklyAlarmCreator {
     /**
      * Create a weekly alarm at current time.
      * @param weeklyAlarms weekly alarms
+     * @param timeOfDay time
      * @return new weekly alarm
      */
-    fun createWeeklyAlarm(weeklyAlarms: Array<WeeklyAlarm>): WeeklyAlarm {
-        var timeAlarm = createDailyAlarmSetting(weeklyAlarms)
-        var weeklyAlarm = WeeklyAlarm(createUniqueId(weeklyAlarms), timeAlarm)
-        weeklyAlarm.addWeek(
-                Calendar.SUNDAY,
-                Calendar.MONDAY,
-                Calendar.TUESDAY,
-                Calendar.WEDNESDAY,
-                Calendar.THURSDAY,
-                Calendar.FRIDAY,
-                Calendar.SATURDAY
-        )
-        return weeklyAlarm
+    fun create(weeklyAlarms: Array<WeeklyAlarm>, timeOfDay: TimeOfDay): WeeklyAlarm {
+        var timeAlarm = createDailyAlarmSetting(weeklyAlarms, timeOfDay)
+        return WeeklyAlarm(createUniqueId(weeklyAlarms), timeAlarm)
     }
 
-    private fun createDailyAlarmSetting(weeklyAlarms: Array<WeeklyAlarm>): DailyAlarm {
-        var c = Calendar.getInstance()
-        var timeOfDay = TimeOfDay(
-                c.get((Calendar.HOUR_OF_DAY)),
-                c.get((Calendar.MINUTE)))
-        var timeAlarm = DailyAlarm(createTimeAlarmId(weeklyAlarms), timeOfDay)
-        timeAlarm.powerOn()
-        return timeAlarm
+    private fun createDailyAlarmSetting(weeklyAlarms: Array<WeeklyAlarm>, timeOfDay: TimeOfDay): DailyAlarm {
+        return DailyAlarm(createTimeAlarmId(weeklyAlarms), timeOfDay).apply {
+            powerOn()
+        }
     }
 
     /**
      * Create an unique ID for new weekly alarm.
      */
     private fun createUniqueId(weeklyAlarms: Array<WeeklyAlarm>): Int {
-        var i = 1
-        while (true) {
-            if (weeklyAlarms.any { it.id == i }) {
-                i++
-                continue
+        for (i in 1..Int.MAX_VALUE) {
+            if (!weeklyAlarms.any { it.id == i }) {
+                return i
             }
-            return i
         }
+        throw IllegalStateException("Overflow of time alarm ID")
     }
 
     /**
      * Create an unique ID for new time alarm.
      */
     private fun createTimeAlarmId(weeklyAlarms: Array<WeeklyAlarm>): Int {
-        var i = 1
-        while (true) {
-            if (weeklyAlarms.any { it.dailyAlarms.any { it.id == i } }) {
-                i++
-                continue
+        for (i in 1..Int.MAX_VALUE) {
+            if (!weeklyAlarms.any { it.dailyAlarms.any { it.id == i } }) {
+                return i
             }
-            return i
         }
+        throw IllegalStateException("Overflow of weekly alarm ID")
     }
 }

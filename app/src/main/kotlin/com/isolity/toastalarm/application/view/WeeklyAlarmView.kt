@@ -13,7 +13,7 @@ import java.util.*
  * Created by shoarai on 2017/04/29.
  */
 
-class WeeklyAlarmView(context: Context?) : FrameLayout(context) {
+class WeeklyAlarmView(context: Context) : FrameLayout(context) {
     private val timeTextView: TextView by bindView(R.id.time_text_view)
     private val powerSwitch: Switch by bindView(R.id.power_switch)
     private val deleteButton: ImageButton by bindView(R.id.delete_button)

@@ -10,10 +10,10 @@ import com.google.android.gms.ads.AdView
 import com.isolity.toastalarm.application.WeeklyAlarmManager
 import com.isolity.toastalarm.application.adapter.WeeklyAlarmListAdapter
 import com.isolity.toastalarm.application.library.OnceAlarmManager
+import com.isolity.toastalarm.application.service.WeeklyAlarmAppService
 import com.isolity.toastalarm.application.view.TimeOfDayPickerDialog
 import com.isolity.toastalarm.application.view.ToastView
 import com.isolity.toastalarm.domain.entity.TimeOfDay
-import com.isolity.toastalarm.domain.service.WeeklyAlarmCreator
 import com.isolity.toastalarm.domain.service.WeeklyAlarmService
 import com.isolity.toastalarm.repository.WeeklyAlarmRepository
 import java.util.*
@@ -44,7 +44,8 @@ class MainActivity : AppCompatActivity() {
     }
     private val alarmService by lazy {
         val repository = WeeklyAlarmRepository(applicationContext)
-        WeeklyAlarmService(repository)
+        val service = WeeklyAlarmService(repository)
+        WeeklyAlarmAppService(service)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -102,10 +103,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun addWeeklyAlarm(timeOfDay: TimeOfDay) {
-        val weeklyAlarms = alarmService.getAll()
-        val newAlarm = WeeklyAlarmCreator.createWeeklyAlarm(weeklyAlarms.toTypedArray())
-        newAlarm.dailyAlarms.first().timeOfDay = timeOfDay
-        listAdapter.add(newAlarm)
+        listAdapter.add(timeOfDay)
     }
 
     private fun onClickDebugStartAlarmButton() {
