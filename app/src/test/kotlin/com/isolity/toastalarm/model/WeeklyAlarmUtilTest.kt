@@ -8,16 +8,6 @@ import java.util.*
  * Created by shohei52a on 2017/11/08.
  */
 class WeeklyAlarmUtilTest {
-//    private val time = TimeOfDay(10, 20)
-//    private val daily = DailyAlarm(1, time)
-//    private val weeklyAlarm = WeeklyAlarm(0, daily)
-//
-//    @Before
-//    fun setUp() {
-//        val weeklyAlarms = arrayOf(weeklyAlarm)
-//        alarmList = WeeklyAlarmList(weeklyAlarms)
-//    }
-
     @Test
     fun hasPowerOnIsTrue() {
         val time = TimeOfDay(10, 20)
@@ -27,7 +17,7 @@ class WeeklyAlarmUtilTest {
         weeklyAlarm.addWeek(Calendar.MONDAY)
         val weeklyAlarms = listOf(weeklyAlarm)
 
-        Assert.assertEquals(true, WeeklyAlarmUtil.hasPowerOn(weeklyAlarms))
+        Assert.assertTrue(WeeklyAlarmUtil.hasPowerOn(weeklyAlarms))
     }
 
     @Test
@@ -38,48 +28,119 @@ class WeeklyAlarmUtilTest {
         weeklyAlarm.addWeek(Calendar.MONDAY)
         val weeklyAlarms = listOf(weeklyAlarm)
 
-        Assert.assertEquals(true, WeeklyAlarmUtil.hasPowerOn(weeklyAlarms))
+        Assert.assertFalse(WeeklyAlarmUtil.hasPowerOn(weeklyAlarms))
+    }
+
+    @Test
+    fun getNextAlarmAsCalendar() {
+        val now = Calendar.getInstance()
+        val nextMinute = 10
+        var expected = (now.clone() as Calendar).apply {
+            add(Calendar.MINUTE, nextMinute)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }
+
+        val alarms = arrayListOf(now.let {
+            val cal = (now.clone() as Calendar).apply {
+                add(Calendar.DATE, -1)
+                add(Calendar.MINUTE, nextMinute / 2)
+            }
+            WeeklyAlarm(2,
+                    DailyAlarm(2, TimeOfDay(
+                            cal.get(Calendar.HOUR_OF_DAY),
+                            cal.get(Calendar.MINUTE))
+                    ).apply { powerOn() }
+            ).apply {
+                addWeek(cal.get(Calendar.DAY_OF_WEEK))
+            }
+        }, now.let {
+            val cal = (now.clone() as Calendar).apply {
+                add(Calendar.MINUTE, -nextMinute)
+            }
+            WeeklyAlarm(2,
+                    DailyAlarm(2, TimeOfDay(
+                            cal.get(Calendar.HOUR_OF_DAY),
+                            cal.get(Calendar.MINUTE))
+                    ).apply { powerOn() }
+            ).apply {
+                addWeek(cal.get(Calendar.DAY_OF_WEEK))
+            }
+        }, now.let {
+            val cal = (now.clone() as Calendar).apply {
+                add(Calendar.MINUTE, nextMinute / 2)
+            }
+            WeeklyAlarm(2,
+                    DailyAlarm(2, TimeOfDay(
+                            cal.get(Calendar.HOUR_OF_DAY),
+                            cal.get(Calendar.MINUTE))
+                    ).apply { powerOff() }
+            ).apply {
+                addWeek(cal.get(Calendar.DAY_OF_WEEK))
+            }
+        }, now.let {
+            WeeklyAlarm(1,
+                    DailyAlarm(1, TimeOfDay(
+                            expected.get(Calendar.HOUR_OF_DAY),
+                            expected.get(Calendar.MINUTE))
+                    ).apply { powerOn() }
+            ).apply {
+                addWeek(expected.get(Calendar.DAY_OF_WEEK))
+            }
+        })
+
+        val actual = WeeklyAlarmUtil.getNextAlarmCalendar(alarms)
+
+        Assert.assertNotNull(actual)
+        Assert.assertEquals(expected.timeInMillis, actual.timeInMillis)
+    }
+
+    @Test
+    fun getNextAlarmAsCalendarInNextWeek() {
+        val now = Calendar.getInstance()
+        val beforeMinute = 10
+        var expected = (now.clone() as Calendar).apply {
+            add(Calendar.DATE, 6)
+            add(Calendar.MINUTE, -beforeMinute)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }
+
+        val alarms = arrayListOf(now.let {
+            WeeklyAlarm(1,
+                    DailyAlarm(1, TimeOfDay(
+                            expected.get(Calendar.HOUR_OF_DAY),
+                            expected.get(Calendar.MINUTE))
+                    ).apply { powerOn() }
+            ).apply {
+                addWeek(expected.get(Calendar.DAY_OF_WEEK))
+            }
+        })
+
+        val actual = WeeklyAlarmUtil.getNextAlarmCalendar(alarms)
+
+        Assert.assertNotNull(actual)
+        Assert.assertEquals(expected.timeInMillis, actual.timeInMillis)
     }
 
 //    @Test
-//    fun getNextAlarmAsCalendar() {
-//        val nextMinute = 10
-//        val alarms = mutableListOf<WeeklyAlarm>()
+//    fun getNextAlarmAsCalendarWhenAllPowerOff() {
 //        val now = Calendar.getInstance()
+//        val nowHour = now.get(Calendar.HOUR_OF_DAY)
+//        val nowMinute = now.get(Calendar.MINUTE)
+//        val nowWeek = now.get(Calendar.DAY_OF_WEEK)
 //
-//        val time = TimeOfDay(now.get(Calendar.HOUR), now.get(Calendar.MINUTE) + nextMinute)
-//        val daily = DailyAlarm(10, time)
-//        daily.powerOn()
-//        val alarm = WeeklyAlarm(1, daily)
-//        alarm.addWeek(now.get(Calendar.DAY_OF_WEEK))
-//        alarms.add(alarm)
+//        val alarms = arrayListOf(
+//                WeeklyAlarm(1,
+//                        DailyAlarm(1, TimeOfDay(nowHour, nowMinute))
+//                                .apply { powerOff() }
+//                ).apply {
+//                    addWeek(nowWeek)
+//                }
+//        )
 //
-//        val time2 = TimeOfDay(now.get(Calendar.HOUR), now.get(Calendar.MINUTE) - 10)
-//        val daily2 = DailyAlarm(10, time2)
-//        daily2.powerOn()
-//        val alarm2 = WeeklyAlarm(1, daily2)
-//        alarm.addWeek(now.get(Calendar.DAY_OF_WEEK))
-//        alarms.add(alarm2)
+//        val actual = WeeklyAlarmUtil.getNextAlarmCalendar(alarms)
 //
-//        val time3 = TimeOfDay(now.get(Calendar.HOUR), now.get(Calendar.MINUTE) + nextMinute)
-//        val daily3 = DailyAlarm(10, time3)
-//        daily3.powerOn()
-//        val alarm3 = WeeklyAlarm(1, daily3)
-//        val yesterday = now
-//        yesterday.add(Calendar.DAY_OF_WEEK, -1)
-//        alarm.addWeek(yesterday.get(Calendar.DAY_OF_WEEK))
-//        alarms.add(alarm3)
-//
-//        val timeOff = TimeOfDay(now.get(Calendar.HOUR), now.get(Calendar.MINUTE) + 5)
-//        val dailyOff = DailyAlarm(10, timeOff)
-//        val alarmOff = WeeklyAlarm(1, dailyOff)
-//        alarmOff.addWeek(now.get(Calendar.DAY_OF_WEEK))
-//        alarms.add(alarmOff)
-//
-//        val actual = WeeklyAlarmUtil.getNextAlarmAsCalendar(alarms)
-//
-//        Assert.assertEquals(now.get(Calendar.DAY_OF_WEEK), actual.get(Calendar.DAY_OF_WEEK))
-//        Assert.assertEquals(now.get(Calendar.HOUR), actual.get(Calendar.HOUR))
-//        Assert.assertEquals(now.get(Calendar.MINUTE) + nextMinute, actual.get(Calendar.MINUTE))
+//        Assert.assertNull(actual)
 //    }
 }

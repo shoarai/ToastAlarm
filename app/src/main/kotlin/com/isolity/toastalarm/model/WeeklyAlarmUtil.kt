@@ -1,6 +1,5 @@
 package com.isolity.toastalarm.model
 
-import java.lang.IllegalStateException
 import java.util.*
 
 /**
@@ -27,7 +26,7 @@ object WeeklyAlarmUtil {
      * Get a calendar of next time from now from weekly alarm list.
      * @param weeklyAlarms weekly alarms
      */
-    fun getNextAlarmAsCalendar(weeklyAlarms: List<WeeklyAlarm>): Calendar {
+    fun getNextAlarmCalendar(weeklyAlarms: List<WeeklyAlarm>): Calendar {
         var calendar: Calendar? = null
 
         weeklyAlarms.forEach {
@@ -69,6 +68,7 @@ object WeeklyAlarmUtil {
         calendar.set(Calendar.HOUR_OF_DAY, timeOfDay.hourOfDay)
         calendar.set(Calendar.MINUTE, timeOfDay.minute)
         calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
 
         val now = Calendar.getInstance()
         now.set(Calendar.SECOND, 0)

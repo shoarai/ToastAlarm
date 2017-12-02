@@ -25,7 +25,7 @@ object WeeklyAlarmManager {
         Log.v(TAG, "start startNextAlarmWithPowerOn")
 
         if (WeeklyAlarmUtil.hasPowerOn(weeklyAlarms)) {
-            val calendar = WeeklyAlarmUtil.getNextAlarmAsCalendar(weeklyAlarms)
+            val calendar = WeeklyAlarmUtil.getNextAlarmCalendar(weeklyAlarms)
             OnceAlarmManager.startAlarm(context, calendar)
         } else {
             OnceAlarmManager.stopAlarm()

@@ -44,11 +44,7 @@ class WeeklyAlarmView(context: Context?) : FrameLayout(context) {
         }
 
         powerSwitch.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                weeklyAlarm.dailyAlarms[0].powerOn()
-            } else {
-                weeklyAlarm.dailyAlarms[0].powerOff()
-            }
+            weeklyAlarm.dailyAlarms[0].isPowerOn = isChecked
             onUpdate?.invoke(weeklyAlarm)
         }
 

@@ -15,10 +15,10 @@ import com.isolity.toastalarm.model.WeeklyAlarm
 class WeeklyAlarmRepository(private val context: Context) {
     companion object {
         private val TAG = WeeklyAlarmRepository::class.java.simpleName
-        private const val storageKey = "WEEKLY_ALARMS"
+        private const val STORAGE_KEY = "WEEKLY_ALARMS"
     }
 
-//    private val preference = PreferenceStore<WeeklyAlarm>(storageKey)
+//    private val preference = PreferenceStore<WeeklyAlarm>(STORAGE_KEY)
 
     /**
      * Get all weekly alarms from the stored json string.
@@ -33,14 +33,14 @@ class WeeklyAlarmRepository(private val context: Context) {
 //        }
 
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-        val stringData = prefs.getString(storageKey, "")
+        val stringData = prefs.getString(STORAGE_KEY, "")
         if (stringData.isBlank()) {
             return null
         }
 
         return try {
             val type = object : TypeToken<Array<WeeklyAlarm>>() {}.type
-            return Gson().fromJson<Array<WeeklyAlarm>>(stringData, type)
+            Gson().fromJson<Array<WeeklyAlarm>>(stringData, type)
         } catch (e: JsonSyntaxException) {
             Log.v(TAG, e.toString())
             null
@@ -56,6 +56,6 @@ class WeeklyAlarmRepository(private val context: Context) {
 
         val jsonInstanceString = Gson().toJson(weeklyAlarms)
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-        prefs.edit().putString(storageKey, jsonInstanceString).apply()
+        prefs.edit().putString(STORAGE_KEY, jsonInstanceString).apply()
     }
 }
