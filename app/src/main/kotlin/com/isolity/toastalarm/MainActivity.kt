@@ -7,13 +7,15 @@ import android.util.Log
 import android.widget.ListView
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
-import com.isolity.toastalarm.adapter.WeeklyAlarmListAdapter
-import com.isolity.toastalarm.alarm.OnceAlarmManager
-import com.isolity.toastalarm.alarm.WeeklyAlarmManager
-import com.isolity.toastalarm.model.TimeOfDay
-import com.isolity.toastalarm.model.WeeklyAlarmCreator
-import com.isolity.toastalarm.view.TimeOfDayPickerDialog
-import com.isolity.toastalarm.view.ToastView
+import com.isolity.toastalarm.application.WeeklyAlarmManager
+import com.isolity.toastalarm.application.adapter.WeeklyAlarmListAdapter
+import com.isolity.toastalarm.application.library.OnceAlarmManager
+import com.isolity.toastalarm.application.view.TimeOfDayPickerDialog
+import com.isolity.toastalarm.application.view.ToastView
+import com.isolity.toastalarm.domain.entity.TimeOfDay
+import com.isolity.toastalarm.domain.service.WeeklyAlarmCreator
+import com.isolity.toastalarm.domain.service.WeeklyAlarmService
+import com.isolity.toastalarm.repository.WeeklyAlarmRepository
 import java.util.*
 
 /**
@@ -38,10 +40,11 @@ class MainActivity : AppCompatActivity() {
         findViewById(R.id.debug_start_alarm_button) as FloatingActionButton
     }
     private val listAdapter by lazy {
-        WeeklyAlarmListAdapter(applicationContext, weeklyAlarmDataManager)
+        WeeklyAlarmListAdapter(applicationContext, alarmService)
     }
-    private val weeklyAlarmDataManager by lazy {
-        WeeklyAlarmDataManager(applicationContext)
+    private val alarmService by lazy {
+        val repository = WeeklyAlarmRepository(applicationContext)
+        WeeklyAlarmService(repository)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,7 +58,7 @@ class MainActivity : AppCompatActivity() {
 
         setWeeklyAlarmListView()
 
-        val weeklyAlarms = weeklyAlarmDataManager.getAll()
+        val weeklyAlarms = alarmService.getAll()
         WeeklyAlarmManager.startNextAlarm(applicationContext, weeklyAlarms)
 
         setListener()
@@ -99,7 +102,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun addWeeklyAlarm(timeOfDay: TimeOfDay) {
-        val weeklyAlarms = weeklyAlarmDataManager.getAll()
+        val weeklyAlarms = alarmService.getAll()
         val newAlarm = WeeklyAlarmCreator.createWeeklyAlarm(weeklyAlarms.toTypedArray())
         newAlarm.dailyAlarms.first().timeOfDay = timeOfDay
         listAdapter.add(newAlarm)

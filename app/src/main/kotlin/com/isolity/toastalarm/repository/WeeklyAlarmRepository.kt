@@ -1,61 +1,47 @@
 package com.isolity.toastalarm.repository
 
 import android.content.Context
-import android.preference.PreferenceManager
-import android.util.Log
-import com.google.gson.Gson
-import com.google.gson.JsonSyntaxException
-import com.google.gson.reflect.TypeToken
-import com.isolity.toastalarm.model.WeeklyAlarm
-
+import com.isolity.toastalarm.domain.`interface`.IWeeklyAlarmRepository
+import com.isolity.toastalarm.domain.entity.WeeklyAlarm
 
 /**
- * Created by shoarai on 2017/04/30.
+ * Created by shoarai on 2017/04/22.
  */
-class WeeklyAlarmRepository(private val context: Context) {
-    companion object {
-        private val TAG = WeeklyAlarmRepository::class.java.simpleName
-        private const val STORAGE_KEY = "WEEKLY_ALARMS"
+
+class WeeklyAlarmRepository(context: Context) : IWeeklyAlarmRepository {
+    private val weeklyAlarmRepository = WeeklyAlarmStore(context)
+
+    private val weeklyAlarmsCache: MutableList<WeeklyAlarm> by lazy {
+        val alarm = weeklyAlarmRepository.restore()
+        alarm?.toMutableList() ?: mutableListOf()
     }
 
-//    private val preference = PreferenceStore<WeeklyAlarm>(STORAGE_KEY)
-
-    /**
-     * Get all weekly alarms from the stored json string.
-     * @return weekly alarms
-     */
-    fun getAll(): Array<WeeklyAlarm>? {
-//        return try {
-//            preference.restore(context)
-//        } catch (e: JsonSyntaxException) {
-//            Log.v(TAG, e.toString())
-//            null
-//        }
-
-        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-        val stringData = prefs.getString(STORAGE_KEY, "")
-        if (stringData.isBlank()) {
-            return null
-        }
-
-        return try {
-            val type = object : TypeToken<Array<WeeklyAlarm>>() {}.type
-            Gson().fromJson<Array<WeeklyAlarm>>(stringData, type)
-        } catch (e: JsonSyntaxException) {
-            Log.v(TAG, e.toString())
-            null
-        }
+    override fun getById(id: Int): WeeklyAlarm {
+        return weeklyAlarmsCache.single { it.id == id }
     }
 
-    /**
-     * Update weekly alarms.
-     * @param weeklyAlarms weeklyAlarms to store
-     */
-    fun update(weeklyAlarms: Array<WeeklyAlarm>) {
-//        preference.save(context, weeklyAlarms) return
+    override fun getAll(): List<WeeklyAlarm> {
+        return weeklyAlarmsCache
+    }
 
-        val jsonInstanceString = Gson().toJson(weeklyAlarms)
-        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-        prefs.edit().putString(STORAGE_KEY, jsonInstanceString).apply()
+    override fun add(alarm: WeeklyAlarm) {
+        weeklyAlarmsCache.add(alarm)
+        onUpdateData()
+    }
+
+    override fun update(alarm: WeeklyAlarm) {
+        val i = weeklyAlarmsCache.indexOfFirst { it.id == alarm.id }
+        if (i == -1) throw IllegalArgumentException("Not found WeeklyAlarm of ID")
+        weeklyAlarmsCache[i] = alarm
+        onUpdateData()
+    }
+
+    override fun delete(alarm: WeeklyAlarm) {
+        weeklyAlarmsCache.remove(alarm)
+        onUpdateData()
+    }
+
+    private fun onUpdateData() {
+        weeklyAlarmRepository.save(weeklyAlarmsCache.toTypedArray())
     }
 }

@@ -2,7 +2,7 @@ package com.isolity.toastalarm
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
-import com.isolity.toastalarm.alarm.OnceAlarmManager
+import com.isolity.toastalarm.application.library.OnceAlarmManager
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.util.*
