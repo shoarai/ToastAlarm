@@ -7,7 +7,7 @@ import java.util.*
 /**
  * Created by shohei52a on 2017/11/08.
  */
-class WeeklyAlarmUtilTest {
+class NextAlarmFilterTest {
     @Test
     fun getNextAlarmCalendar() {
         val now = Calendar.getInstance()
@@ -78,7 +78,7 @@ class WeeklyAlarmUtilTest {
             }
         })
 
-        val actual = WeeklyAlarmUtil.getNextAlarmCalendar(alarms)
+        val actual = NextAlarmFilter.getNextAlarmCalendar(alarms)
 
         Assert.assertNotNull(actual)
         Assert.assertEquals(expected.timeInMillis, actual?.timeInMillis)
@@ -106,7 +106,7 @@ class WeeklyAlarmUtilTest {
             }
         })
 
-        val actual = WeeklyAlarmUtil.getNextAlarmCalendar(alarms)
+        val actual = NextAlarmFilter.getNextAlarmCalendar(alarms)
 
         Assert.assertNotNull(actual)
         Assert.assertEquals(expected.timeInMillis, actual?.timeInMillis)
@@ -128,7 +128,7 @@ class WeeklyAlarmUtilTest {
                 }
         )
 
-        val actual = WeeklyAlarmUtil.getNextAlarmCalendar(alarms)
+        val actual = NextAlarmFilter.getNextAlarmCalendar(alarms)
 
         Assert.assertNull(actual)
     }

@@ -11,37 +11,37 @@ import com.isolity.toastalarm.repository.WeeklyAlarmRepository
 class WeeklyAlarmDataManager(context: Context) {
     private val weeklyAlarmRepository = WeeklyAlarmRepository(context)
 
-    private val weeklyAlarms: MutableList<WeeklyAlarm> by lazy {
+    private val weeklyAlarmsCache: MutableList<WeeklyAlarm> by lazy {
         val alarm = weeklyAlarmRepository.getAll()
         alarm?.toMutableList() ?: mutableListOf()
     }
 
     fun getById(id: Int): WeeklyAlarm {
-        return weeklyAlarms.single { it.id == id }
+        return weeklyAlarmsCache.single { it.id == id }
     }
 
     fun getAll(): List<WeeklyAlarm> {
-        return weeklyAlarms
+        return weeklyAlarmsCache
     }
 
     fun add(alarm: WeeklyAlarm) {
-        weeklyAlarms.add(alarm)
+        weeklyAlarmsCache.add(alarm)
         onUpdateData()
     }
 
     fun update(alarm: WeeklyAlarm) {
-        val i = weeklyAlarms.indexOfFirst { it.id == alarm.id }
+        val i = weeklyAlarmsCache.indexOfFirst { it.id == alarm.id }
         if (i == -1) throw IllegalArgumentException("Not found WeeklyAlarm of ID")
-        weeklyAlarms[i] = alarm
+        weeklyAlarmsCache[i] = alarm
         onUpdateData()
     }
 
     fun delete(alarm: WeeklyAlarm) {
-        weeklyAlarms.remove(alarm)
+        weeklyAlarmsCache.remove(alarm)
         onUpdateData()
     }
 
     private fun onUpdateData() {
-        weeklyAlarmRepository.update(weeklyAlarms.toTypedArray())
+        weeklyAlarmRepository.update(weeklyAlarmsCache.toTypedArray())
     }
 }

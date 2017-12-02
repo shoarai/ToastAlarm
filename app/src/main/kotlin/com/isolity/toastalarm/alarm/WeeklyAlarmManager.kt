@@ -3,8 +3,8 @@ package com.isolity.toastalarm.alarm
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
+import com.isolity.toastalarm.model.NextAlarmFilter
 import com.isolity.toastalarm.model.WeeklyAlarm
-import com.isolity.toastalarm.model.WeeklyAlarmUtil
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -24,7 +24,7 @@ object WeeklyAlarmManager {
     fun startNextAlarm(context: Context, weeklyAlarms: List<WeeklyAlarm>) {
         Log.v(TAG, "start startNextAlarmWithPowerOn")
 
-        WeeklyAlarmUtil.getNextAlarmCalendar(weeklyAlarms)?.let {
+        NextAlarmFilter.getNextAlarmCalendar(weeklyAlarms)?.let {
             OnceAlarmManager.startAlarm(context, it)
         } ?: OnceAlarmManager.stopAlarm()
 

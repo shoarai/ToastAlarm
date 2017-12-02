@@ -6,9 +6,9 @@ import java.util.*
  * Created by shoarai on 2017/04/22.
  */
 
-object WeeklyAlarmUtil {
+object NextAlarmFilter {
     /**
-     * Get a calendar of next time from now.
+     * Get a calendar of next alarm from now.
      * @param weeklyAlarms weekly alarms
      */
     fun getNextAlarmCalendar(weeklyAlarms: List<WeeklyAlarm>): Calendar? {
