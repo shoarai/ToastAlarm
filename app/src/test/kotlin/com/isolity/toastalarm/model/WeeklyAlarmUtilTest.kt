@@ -9,29 +9,6 @@ import java.util.*
  */
 class WeeklyAlarmUtilTest {
     @Test
-    fun hasPowerOnIsTrue() {
-        val time = TimeOfDay(10, 20)
-        val daily = DailyAlarm(1, time)
-        daily.powerOn()
-        val weeklyAlarm = WeeklyAlarm(1, daily)
-        weeklyAlarm.addWeek(Calendar.MONDAY)
-        val weeklyAlarms = listOf(weeklyAlarm)
-
-        Assert.assertTrue(WeeklyAlarmUtil.hasPowerOn(weeklyAlarms))
-    }
-
-    @Test
-    fun hasPowerOnIsFalse() {
-        val time = TimeOfDay(10, 20)
-        val daily = DailyAlarm(1, time)
-        val weeklyAlarm = WeeklyAlarm(1, daily)
-        weeklyAlarm.addWeek(Calendar.MONDAY)
-        val weeklyAlarms = listOf(weeklyAlarm)
-
-        Assert.assertFalse(WeeklyAlarmUtil.hasPowerOn(weeklyAlarms))
-    }
-
-    @Test
     fun getNextAlarmCalendar() {
         val now = Calendar.getInstance()
         val nextMinute = 10
@@ -104,7 +81,7 @@ class WeeklyAlarmUtilTest {
         val actual = WeeklyAlarmUtil.getNextAlarmCalendar(alarms)
 
         Assert.assertNotNull(actual)
-        Assert.assertEquals(expected.timeInMillis, actual.timeInMillis)
+        Assert.assertEquals(expected.timeInMillis, actual?.timeInMillis)
     }
 
     @Test
@@ -132,27 +109,27 @@ class WeeklyAlarmUtilTest {
         val actual = WeeklyAlarmUtil.getNextAlarmCalendar(alarms)
 
         Assert.assertNotNull(actual)
-        Assert.assertEquals(expected.timeInMillis, actual.timeInMillis)
+        Assert.assertEquals(expected.timeInMillis, actual?.timeInMillis)
     }
 
-//    @Test
-//    fun getNextAlarmAsCalendarWhenAllPowerOff() {
-//        val now = Calendar.getInstance()
-//        val nowHour = now.get(Calendar.HOUR_OF_DAY)
-//        val nowMinute = now.get(Calendar.MINUTE)
-//        val nowWeek = now.get(Calendar.DAY_OF_WEEK)
-//
-//        val alarms = arrayListOf(
-//                WeeklyAlarm(1,
-//                        DailyAlarm(1, TimeOfDay(nowHour, nowMinute))
-//                                .apply { powerOff() }
-//                ).apply {
-//                    addWeek(nowWeek)
-//                }
-//        )
-//
-//        val actual = WeeklyAlarmUtil.getNextAlarmCalendar(alarms)
-//
-//        Assert.assertNull(actual)
-//    }
+    @Test
+    fun getNextAlarmAsCalendarWhenAllPowerOff() {
+        val now = Calendar.getInstance()
+        val nowHour = now.get(Calendar.HOUR_OF_DAY)
+        val nowMinute = now.get(Calendar.MINUTE)
+        val nowWeek = now.get(Calendar.DAY_OF_WEEK)
+
+        val alarms = arrayListOf(
+                WeeklyAlarm(1,
+                        DailyAlarm(1, TimeOfDay(nowHour, nowMinute))
+                                .apply { powerOff() }
+                ).apply {
+                    addWeek(nowWeek)
+                }
+        )
+
+        val actual = WeeklyAlarmUtil.getNextAlarmCalendar(alarms)
+
+        Assert.assertNull(actual)
+    }
 }

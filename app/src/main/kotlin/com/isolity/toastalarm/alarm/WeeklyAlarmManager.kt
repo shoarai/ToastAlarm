@@ -17,19 +17,16 @@ object WeeklyAlarmManager {
 
     /**
      * Start a next alarm with power on.
-     * If there is no powered on, do not do anything.
+     * If there is no powered on, stop the previous alarm.
      * @param context Context
      * @param weeklyAlarms List of weekly alarm
      */
     fun startNextAlarm(context: Context, weeklyAlarms: List<WeeklyAlarm>) {
         Log.v(TAG, "start startNextAlarmWithPowerOn")
 
-        if (WeeklyAlarmUtil.hasPowerOn(weeklyAlarms)) {
-            val calendar = WeeklyAlarmUtil.getNextAlarmCalendar(weeklyAlarms)
-            OnceAlarmManager.startAlarm(context, calendar)
-        } else {
-            OnceAlarmManager.stopAlarm()
-        }
+        WeeklyAlarmUtil.getNextAlarmCalendar(weeklyAlarms)?.let {
+            OnceAlarmManager.startAlarm(context, it)
+        } ?: OnceAlarmManager.stopAlarm()
 
         Log.v(TAG, "end startNextAlarmWithPowerOn")
     }

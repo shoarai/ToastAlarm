@@ -7,26 +7,11 @@ import java.util.*
  */
 
 object WeeklyAlarmUtil {
-    fun hasPowerOn(alarms: List<WeeklyAlarm>): Boolean {
-        return alarms.any {
-            it.weeks.isNotEmpty() && it.dailyAlarms.any { it.isPowerOn }
-        }
-    }
-
-    fun findTimeAlarm(alarms: List<WeeklyAlarm>, timeAlarmId: Int): DailyAlarm {
-        var timeAlarm = alarms.flatMap { it.dailyAlarms }
-                .firstOrNull { it.id == timeAlarmId }
-        if (timeAlarm === null) {
-            throw IllegalArgumentException("time alarm is not found")
-        }
-        return timeAlarm
-    }
-
     /**
      * Get a calendar of next time from now.
      * @param weeklyAlarms weekly alarms
      */
-    fun getNextAlarmCalendar(weeklyAlarms: List<WeeklyAlarm>): Calendar {
+    fun getNextAlarmCalendar(weeklyAlarms: List<WeeklyAlarm>): Calendar? {
         val now = Calendar.getInstance()
         now.add(Calendar.MINUTE, 1)
         now.set(Calendar.SECOND, 0)
@@ -42,10 +27,7 @@ object WeeklyAlarmUtil {
                 }
             }
         }
-        if (earliest == null) {
-            throw IllegalStateException("Alarm on power is not found")
-        }
-        return earliest as Calendar
+        return earliest
     }
 
     private fun toCalendarAfterNow(weeklyAlarm: WeeklyAlarm, now: Calendar): Calendar? {
