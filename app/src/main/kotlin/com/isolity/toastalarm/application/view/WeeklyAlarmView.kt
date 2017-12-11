@@ -17,6 +17,15 @@ class WeeklyAlarmView(context: Context) : FrameLayout(context) {
     private val timeTextView: TextView by bindView(R.id.time_text_view)
     private val powerSwitch: Switch by bindView(R.id.power_switch)
     private val deleteButton: ImageButton by bindView(R.id.delete_button)
+    private val weekByCheckboxId = hashMapOf(
+            R.id.week_sun_checkbox to Calendar.SUNDAY,
+            R.id.week_mon_checkbox to Calendar.MONDAY,
+            R.id.week_tue_checkbox to Calendar.TUESDAY,
+            R.id.week_wed_checkbox to Calendar.WEDNESDAY,
+            R.id.week_thu_checkbox to Calendar.THURSDAY,
+            R.id.week_fri_checkbox to Calendar.FRIDAY,
+            R.id.week_sat_checkbox to Calendar.SATURDAY
+    )
 
     init {
         LayoutInflater.from(context).inflate(R.layout.view_weekly_alarm, this)
@@ -35,16 +44,15 @@ class WeeklyAlarmView(context: Context) : FrameLayout(context) {
         powerSwitch.isChecked = dailyAlarm.isPowerOn
 
         timeTextView.setOnClickListener {
-            var timeOfDay = dailyAlarm.timeOfDay
-            TimeOfDayPickerDialog.show(timeOfDay, { newTimeOfDay ->
-                weeklyAlarm.dailyAlarms[0].timeOfDay = newTimeOfDay
+            TimeOfDayPickerDialog.show(dailyAlarm.timeOfDay, { newTimeOfDay ->
+                dailyAlarm.timeOfDay = newTimeOfDay
                 timeTextView.text = newTimeOfDay.toString()
                 onUpdate?.invoke(weeklyAlarm)
             })
         }
 
         powerSwitch.setOnCheckedChangeListener { _, isChecked ->
-            weeklyAlarm.dailyAlarms[0].isPowerOn = isChecked
+            dailyAlarm.isPowerOn = isChecked
             onUpdate?.invoke(weeklyAlarm)
         }
 
@@ -54,62 +62,23 @@ class WeeklyAlarmView(context: Context) : FrameLayout(context) {
     }
 
     private fun setWeek(weeklyAlarm: WeeklyAlarm) {
-        weeklyAlarm.weeks.forEach { week ->
-            var id = weekToWeekCheckboxId(week)
-            var weekCheckbox = findViewById(id) as CheckBox
-            weekCheckbox.isChecked = true
-        }
+        weekByCheckboxId.forEach {
+            val checkbox = findViewById(it.key) as CheckBox
 
-        getAllWeeks().forEach {
-            var checkboxId = weekToWeekCheckboxId(it)
-            var checkbox = findViewById(checkboxId) as CheckBox
-            checkbox.setOnCheckedChangeListener { buttonView, isChecked ->
-                var week = weekCheckboxIdToWeek(buttonView.id)
-                if (isChecked) {
-                    weeklyAlarm.addWeek(week)
-                } else {
-                    weeklyAlarm.removeWeek(week)
-                }
-                onUpdate?.invoke(weeklyAlarm)
+            if (weeklyAlarm.weeks.contains(it.value)) {
+                checkbox.isChecked = true
             }
-        }
-    }
 
-    private fun getAllWeeks(): Array<Int> {
-        return arrayOf(
-                Calendar.SUNDAY,
-                Calendar.MONDAY,
-                Calendar.TUESDAY,
-                Calendar.WEDNESDAY,
-                Calendar.THURSDAY,
-                Calendar.FRIDAY,
-                Calendar.SATURDAY
-        )
-    }
-
-    private fun weekToWeekCheckboxId(week: Int): Int {
-        return when (week) {
-            Calendar.SUNDAY -> R.id.week_sun_checkbox
-            Calendar.MONDAY -> R.id.week_mon_checkbox
-            Calendar.TUESDAY -> R.id.week_tue_checkbox
-            Calendar.WEDNESDAY -> R.id.week_wed_checkbox
-            Calendar.THURSDAY -> R.id.week_thu_checkbox
-            Calendar.FRIDAY -> R.id.week_fri_checkbox
-            Calendar.SATURDAY -> R.id.week_sat_checkbox
-            else -> throw IllegalArgumentException("Not supported week")
-        }
-    }
-
-    private fun weekCheckboxIdToWeek(checkboxId: Int): Int {
-        return when (checkboxId) {
-            R.id.week_sun_checkbox -> Calendar.SUNDAY
-            R.id.week_mon_checkbox -> Calendar.MONDAY
-            R.id.week_tue_checkbox -> Calendar.TUESDAY
-            R.id.week_wed_checkbox -> Calendar.WEDNESDAY
-            R.id.week_thu_checkbox -> Calendar.THURSDAY
-            R.id.week_fri_checkbox -> Calendar.FRIDAY
-            R.id.week_sat_checkbox -> Calendar.SATURDAY
-            else -> throw IllegalArgumentException("Not supported week button id")
+            checkbox.setOnCheckedChangeListener { buttonView, isChecked ->
+                weekByCheckboxId[buttonView.id]?.run {
+                    if (isChecked) {
+                        weeklyAlarm.addWeek(it.value)
+                    } else {
+                        weeklyAlarm.removeWeek(it.value)
+                    }
+                    onUpdate?.invoke(weeklyAlarm)
+                }
+            }
         }
     }
 }

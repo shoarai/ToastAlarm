@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import com.isolity.toastalarm.application.AlarmBroadcastReceiver
 import java.util.*
-import kotlin.reflect.KClass
 
 /**
  * Created by shoarai on 2017/04/22.
@@ -16,8 +15,7 @@ object OnceAlarmManager {
     private const val REQUEST_CODE = 0
     private var alarmManager: AlarmManager? = null
     private var pendingIntent: PendingIntent? = null
-
-    private val receiver: KClass<*> = AlarmBroadcastReceiver::class
+    private var receiver = AlarmBroadcastReceiver::class
 
     /**
      * Start an alarm.
